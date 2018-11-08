@@ -11,6 +11,8 @@ with the following tags indicating the components affected:
   as the RLA export.
 ## 2.0.10 - SNAPSHOT - In development
 
+- [API - Database host should be configurable][pr98]
+
 ## 2.0.9 - Bugfix release
 
 - [API - Contests that are NOT_AUDITABLE don't impede progress][pr93]
@@ -168,3 +170,4 @@ This is [FreeAndFair's most recent tag][1.1.0.3].
 [pr89]: https://github.com/democracyworks/ColoradoRLA/pull/89
 [pr90]: https://github.com/democracyworks/ColoradoRLA/pull/90
 [pr93]: https://github.com/democracyworks/ColoradoRLA/pull/93
+[pr98]: https://github.com/democracyworks/ColoradoRLA/pull/98
