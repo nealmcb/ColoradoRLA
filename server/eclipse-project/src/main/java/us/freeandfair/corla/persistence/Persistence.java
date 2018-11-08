@@ -126,6 +126,11 @@ public final class Persistence {
    */
   public static synchronized void setProperties(final Properties the_properties) {
     system_properties = the_properties;
+    final Map<String, String> env = System.getenv();
+
+    if (env.containsKey("HIBERNATE_URL")) {
+      system_properties.setProperty("hibernate.url", env.get("HIBERNATE_URL"));
+    }
   }
 
   /**
