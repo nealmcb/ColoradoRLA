@@ -60,9 +60,10 @@ import us.freeandfair.corla.persistence.PersistentEntity;
 @Cacheable(true)
 @Table(name = "comparison_audit")
 
-@SuppressWarnings({"PMD.ImmutableField", "PMD.CyclomaticComplexity", "PMD.GodClass",
-    "PMD.ModifiedCyclomaticComplexity", "PMD.StdCyclomaticComplexity", "PMD.TooManyFields",
-    "PMD.TooManyMethods", "PMD.ExcessiveImports"})
+@SuppressWarnings({"PMD.ImmutableField", "PMD.ExcessiveClassLength",
+    "PMD.CyclomaticComplexity", "PMD.GodClass", "PMD.ModifiedCyclomaticComplexity",
+    "PMD.StdCyclomaticComplexity", "PMD.TooManyFields", "PMD.TooManyMethods",
+    "PMD.ExcessiveImports"})
 public class ComparisonAudit implements PersistentEntity {
 
   /**
@@ -927,12 +928,31 @@ public class ComparisonAudit implements PersistentEntity {
 
   private OptionalInt computeAuditedBallotDiscrepancy(final CVRContestInfo the_cvr_info,
                                                       final CVRContestInfo the_acvr_info) {
-    // check for overvotes
+    // Check for overvotes.
+    //
+    // Overvotes are represented, perhaps confusingly, in the CVR as "all
+    // zeroes" for the given contest - it will look indistinguishable from a
+    // contest in which no selections were made. We therefore have to check if
+    // the number of selections the audit board found is less than or equal to
+    // the allowed votes for the given contest. If it is, then the audit board
+    // found a valid selection and we can proceed with the rest of the math as
+    // usual. If not, then the audit board recorded an overvote which we must
+    // now make match the way the CVR format records overvotes: we must record
+    // *no* selections. The code below does that by excluding the selections
+    // submitted by the audit board.
+    //
+    // If the CVR does show an overvote (no selections counted) then our
+    // zero-selection ACVR will match it and we will find no discrepancies. If,
+    // however, the CVR *did* show a selection but the audit board recorded an
+    // overvote, then we will be able to calculate the discrepancy - the CVR
+    // will have a choice (or choices) marked as selected, but the ACVR will
+    // not. The converse is also true: if the CVR shows an overvote but the
+    // audit board records a valid selection, we will calculate an expected
+    // discrepancy.
     final Set<String> acvr_choices = new HashSet<>();
-    // TODO: validate choices().size()
-    // if (the_acvr_info.choices().size() <= my_contest_result.votesAllowed()) {
-    acvr_choices.addAll(the_acvr_info.choices());
-    // } // else overvote so don't count the votes
+    if (the_acvr_info.choices().size() <= my_contest_result.winnersAllowed()) {
+      acvr_choices.addAll(the_acvr_info.choices());
+    }
 
     // avoid linear searches on CVR choices
     final Set<String> cvr_choices = new HashSet<>(the_cvr_info.choices());

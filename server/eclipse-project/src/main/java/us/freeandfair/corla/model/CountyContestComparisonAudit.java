@@ -813,12 +813,15 @@ public class CountyContestComparisonAudit implements PersistentEntity {
                      "checkstyle:methodlength"})
   private OptionalInt computeAuditedBallotDiscrepancy(final CVRContestInfo the_cvr_info,
                                                       final CVRContestInfo the_acvr_info) {
-    // check for overvotes
+    // Check for overvotes.
+    //
+    // See the ComparisonAudit class for more details. In short, if we have an
+    // overvoted ACVR we record no selections for that contest, matching the
+    // CVR format.
     final Set<String> acvr_choices = new HashSet<>();
-    // TODO: validate choices().size()
-    // if (the_acvr_info.choices().size() <= my_contest_result.votesAllowed()) {
+    if (the_acvr_info.choices().size() <= my_contest_result.winnersAllowed()) {
       acvr_choices.addAll(the_acvr_info.choices());
-    // } // else overvote so don't count the votes
+    }
 
     // avoid linear searches on CVR choices
     final Set<String> cvr_choices = new HashSet<>(the_cvr_info.choices());
