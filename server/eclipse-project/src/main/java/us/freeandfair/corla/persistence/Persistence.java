@@ -256,7 +256,8 @@ public final class Persistence {
       settings.put(Environment.ORDER_INSERTS, TRUE);
       settings.put(Environment.ORDER_UPDATES, TRUE);
       settings.put(Environment.BATCH_VERSIONED_DATA, TRUE);
-      settings.put(Environment.STATEMENT_BATCH_SIZE, "100");
+      settings.put(Environment.STATEMENT_BATCH_SIZE,
+                   system_properties.getProperty("hibernate.jdbc.batch_size", "100"));
       settings.put(Environment.BATCH_FETCH_STYLE, "DYNAMIC");
       settings.put(Environment.VALIDATE_QUERY_PARAMETERS, FALSE);
       settings.put(Environment.DEFAULT_BATCH_FETCH_SIZE, "16");
