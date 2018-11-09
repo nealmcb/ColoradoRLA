@@ -9,8 +9,10 @@ with the following tags indicating the components affected:
   etc.
 - `TOOLING` refers to changes to tooling that falls outside the UI or API, such
   as the RLA export.
+
 ## 2.0.10 - SNAPSHOT - In development
 
+- [API - Correctly identify overvotes submitted by an audit board][pr97]
 - [API - Database host should be configurable][pr98]
 
 ## 2.0.9 - Bugfix release
@@ -170,4 +172,5 @@ This is [FreeAndFair's most recent tag][1.1.0.3].
 [pr89]: https://github.com/democracyworks/ColoradoRLA/pull/89
 [pr90]: https://github.com/democracyworks/ColoradoRLA/pull/90
 [pr93]: https://github.com/democracyworks/ColoradoRLA/pull/93
+[pr97]: https://github.com/democracyworks/ColoradoRLA/pull/97
 [pr98]: https://github.com/democracyworks/ColoradoRLA/pull/98
