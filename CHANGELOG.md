@@ -10,7 +10,9 @@ with the following tags indicating the components affected:
 - `TOOLING` refers to changes to tooling that falls outside the UI or API, such
   as the RLA export.
 
-## 2.0.10 - SNAPSHOT - In development
+## 2.0.11 - SNAPSHOT - In development
+
+## 2.0.10 - Bugfix release
 
 - [API - Correctly identify overvotes submitted by an audit board][pr97]
 - [API - Database host should be configurable][pr98]
