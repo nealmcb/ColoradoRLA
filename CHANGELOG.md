@@ -12,6 +12,8 @@ with the following tags indicating the components affected:
 
 ## 2.0.11 - SNAPSHOT - In development
 
+- [UI - Fix bad audit board regex that caught just a single digit][pr100]
+
 ## 2.0.10 - Bugfix release
 
 - [API - Correctly identify overvotes submitted by an audit board][pr97]
@@ -176,3 +178,4 @@ This is [FreeAndFair's most recent tag][1.1.0.3].
 [pr93]: https://github.com/democracyworks/ColoradoRLA/pull/93
 [pr97]: https://github.com/democracyworks/ColoradoRLA/pull/97
 [pr98]: https://github.com/democracyworks/ColoradoRLA/pull/98
+[pr100]: https://github.com/democracyworks/ColoradoRLA/pull/100
