@@ -10,8 +10,12 @@ with the following tags indicating the components affected:
 - `TOOLING` refers to changes to tooling that falls outside the UI or API, such
   as the RLA export.
 
-## 2.0.11 - SNAPSHOT - In development
+## 2.0.12 - SNAPSHOT - In development
 
+## 2.0.11 - Bugfix release
+- [INFRA - smoketest to use python3][cma60b5]
+- [API - some debug logging removed][cm506cf]
+- [UI - update instruction text][pr101]
 - [UI - Fix bad audit board regex that caught just a single digit][pr100]
 
 ## 2.0.10 - Bugfix release
@@ -179,3 +183,6 @@ This is [FreeAndFair's most recent tag][1.1.0.3].
 [pr97]: https://github.com/democracyworks/ColoradoRLA/pull/97
 [pr98]: https://github.com/democracyworks/ColoradoRLA/pull/98
 [pr100]: https://github.com/democracyworks/ColoradoRLA/pull/100
+[pr101]: https://github.com/democracyworks/ColoradoRLA/pull/101
+[cm506cf]: https://github.com/democracyworks/ColoradoRLA/commit/506cf568901ce6f1ba8e2085369444d88f802ff6
+[cma60b5]: https://github.com/democracyworks/ColoradoRLA/commit/a60b5972b9f6b1a68d4b22cf06721dd41e5a7374
