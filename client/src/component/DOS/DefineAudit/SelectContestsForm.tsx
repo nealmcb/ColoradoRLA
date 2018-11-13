@@ -9,8 +9,9 @@ import counties from 'corla/data/counties';
 
 
 const auditReasons: DOS.Form.SelectContests.Reason[] = [
-    { id: 'state_wide_contest', text: 'State Contest' },
+    /* county contest should be the default because there are more of them and this will save clicks. default is first */
     { id: 'county_wide_contest', text: 'County Contest' },
+    { id: 'state_wide_contest', text: 'State Contest' },
 ];
 
 const AuditReasonSelect = Select.ofType<DOS.Form.SelectContests.Reason>();
