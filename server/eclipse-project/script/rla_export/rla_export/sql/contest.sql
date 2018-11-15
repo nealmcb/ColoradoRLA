@@ -7,7 +7,7 @@ SELECT
    --LOWER(cta.audit) AS current_audit_type,
    LOWER(ca.audit_status) as random_audit_status,
    -- cn.votes_allowed,
-   -- cn.winners_allowed,
+   cr.winners_allowed,
    cr.ballot_count AS ballot_card_count,
    -- cr.contest_ballot_count AS contest_ballot_card_count,   -- need to SUM from county_contest_results
    SUBSTRING(cr.winners, 2, LENGTH(cr.winners) - 2) AS winners,

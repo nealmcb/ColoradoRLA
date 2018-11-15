@@ -74,6 +74,9 @@ parser.add_argument('-r, --reports', dest='reports', action='store_true',
                     help='Login and export data from RLA Tool server')
 parser.add_argument('-f, --file-downloads', dest='file_downloads', action='store_true',
                     help='Download file imports - only needed once per audit, before dice are rolled')
+parser.add_argument('--ballot_list', dest='ballot_list', action='store_true',
+                    help='Generate ballot_list for each county in location order.'
+                         'Default to False until it works again')
 parser.add_argument('--no-db-export', dest='db_export', action='store_false',
                     help='Skip the exports directly from the database.')
 parser.add_argument('-u, --url', dest='url',
@@ -688,10 +691,12 @@ def pull_endpoints(args, ac):
 
             ballot_count = county_status.rounds[-1].expected_audited_prefix_length
             if ballot_count > 0:
-                filename = os.path.join(args.export_dir, 'ballot_list_%s.csv' % county_name)
-                query = ("cvr-to-audit-download?county=%d&start=0&ballot_count=%d"
-                        "&include_audited" % (county_id, ballot_count))
-                r = download_content(session, baseurl, query, filename)
+                if args.ballot_list:
+                    # This query doesn't work in 2.0.11, so leave it out by default and avoid confusion
+                    filename = os.path.join(args.export_dir, 'ballot_list_%s.csv' % county_name)
+                    query = ("cvr-to-audit-download?county=%d&start=0&ballot_count=%d"
+                            "&include_audited" % (county_id, ballot_count))
+                    r = download_content(session, baseurl, query, filename)
 
                 filename = os.path.join(args.export_dir, 'county_report_%s.xlsx' % county_name)
                 download_content(session, baseurl, "county-report?county=%d" % county_id, filename)
