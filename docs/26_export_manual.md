@@ -4,7 +4,18 @@
 
 Separate from the RLA application server and client software that supports the Department of State and the Counties in carrying out the Risk Limiting Audit, there is a command, called `rla_export`, allowing export of data from the central server and the underlying database.
 
-The command is part of a python package, whose technical description can be found in a `README.rst` file in the python site-packages directory tree wherever the package is installed.
+The rla_export tool serves multiple purposes. In general, it is designed to provide election officials and the public with the information and evidence they need to ensure that a Risk-Limiting Audit actually accomplished its goal.
+
+Recall than an RLA is designed to ensure than an election is Software Independent. See Software Independence (Wack and Rivest) at http://vote.nist.gov/SI-in-voting.pdf for more on this important goal, which is also part of VVSG 2.0.
+
+But an audit which itself forces people to believe the output of someone else's software can't be convincing.
+So we designed Public RLA Oversight Protocol (http://bcn.boulder.co.us/~neal/elections/PublicRLAOversightProtocol.pdf)
+which explains how anyone can observe an audit, obtain the evidence that the audit relied on, and check all the
+calculations themselves, or with their own software if they want.
+
+The rla_export tool extracts the necessary information from the RLATool and produces the reports which observers need to follow the Public RLA Oversight Protocol.  It produces them in both csv and json format, for the convenience of those familiar with traditional spreadsheets, or with web development languages like Javascript.
+
+The command is part of a Python package, whose technical description can be found in a `README.rst` file in the Python site-packages directory tree wherever the package is installed.
 
 The `README.rst` file gives instructions for installing the python package, and describes various run-time options. For a catalog of the exports produced by the command, see below.
 

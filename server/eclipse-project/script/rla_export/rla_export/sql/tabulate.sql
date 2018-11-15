@@ -1,7 +1,6 @@
--- Election Outcomes, Counts and Margins
+-- Vote Counts by Contest, Choice
 
 SELECT
-  -- county.name AS county_name,
   contest_result.contest_name AS contest_name,
   contest_vote_total.choice AS choice,
   contest_vote_total.vote_total AS votes
