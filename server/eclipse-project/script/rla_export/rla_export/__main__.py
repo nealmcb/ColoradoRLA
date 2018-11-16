@@ -348,7 +348,8 @@ def db_export(args, ac):
     # Note: in ColoradoRLA, the url property is used to specify the host and port,
     # but not user and password
 
-    url = ac.cp.get('p', 'hibernate.url')
+    # $HIBERNATE_URL overrides url from properties file
+    url = os.environ.get('HIBERNATE_URL', ac.cp.get('p', 'hibernate.url'))
     user = ac.cp.get('p', 'hibernate.user')
     password = ac.cp.get('p', 'hibernate.pass')
 
