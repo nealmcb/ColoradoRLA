@@ -268,8 +268,31 @@ public class SignOffAuditRound extends AbstractAuditBoardDashboardEndpoint {
       if (!cdb.id().equals(the_id)) {
         finished &= cdb.currentRound() == null;
       }
-      LOGGER.debug(String.format("[notifyRoundComplete: finished=%b, the_id=%d, cdb=%s]",
-                                 finished, the_id, cdb));
+
+      // In case this cdb was waiting for one of their cross-county audits to
+      // finish, we can say they are done now, and they won't have to start a
+      // round and sign in to find out that they have nothing to do.
+      // -!- this is the same logic in StartAuditRound
+      final CountyDashboardASM countyDashboardASM = ASMUtilities.asmFor(CountyDashboardASM.class,
+                                                                        String.valueOf(cdb.id()));
+      if (countyDashboardASM.currentState().equals(CountyDashboardState.COUNTY_AUDIT_UNDERWAY)
+            && cdb.allAuditsComplete()) {
+        final List<ComparisonAudit> terminated = cdb.endSingleCountyAudits();
+        LOGGER.debug(String.format("[notifyRoundComplete: finished=%b, the_id=%d, cdb=%s]",
+                                   finished, the_id, cdb));
+        LOGGER.debug(String.format("[notifyRoundComplete: all targeted audits finished in %s County."
+                                   + " Terminated these audits: %s]",
+                                   cdb.county().name(), terminated));
+        LOGGER.info
+          (String.format
+           ("[notifyRoundComplete: allAuditsComplete! %s County is FINISHED.]",
+            cdb.county().name()));
+        ASMUtilities.step(RISK_LIMIT_ACHIEVED_EVENT, AuditBoardDashboardASM.class,
+                          String.valueOf(cdb.id()));
+        countyDashboardASM.stepEvent(COUNTY_AUDIT_COMPLETE_EVENT);
+
+        ASMUtilities.save(countyDashboardASM);
+      }
     }
 
     if (finished) {
