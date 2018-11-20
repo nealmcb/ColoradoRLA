@@ -12,6 +12,7 @@
 package us.freeandfair.corla.query;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -426,7 +427,31 @@ public final class CastVoteRecordQueries {
 
     results.addAll(phantomRecords);
 
-    return results;
+    // this is a dummy list so we can add a cvr at a particular position(that of
+    // the tributes uris)
+    final List<CastVoteRecord> randomOrder =
+      new ArrayList<CastVoteRecord>(Collections.nCopies(uris.size(), null));
+
+    // line the cvrs back up into the random order
+    for (final CastVoteRecord cvr: results) {
+      int index = 0;
+      for (final String uri: uris) {
+        if (uri.equals(cvr.getUri())) {
+          randomOrder.add(index, cvr);
+        }
+        index++;
+      }
+    }
+
+    final List<CastVoteRecord> returnList = randomOrder.stream()
+      .filter(cvr -> null != cvr)
+      .collect(Collectors.toList());
+    if (returnList.size() != uris.size()) {
+      // we got a problem here
+      Main.LOGGER.error("something went wrong with atPosition - returnList.size() != uris.size()");
+    }
+
+    return returnList;
   }
 
   /**
