@@ -1,4 +1,4 @@
--- Election Outcomes, Counts and Margins
+-- Vote Counts by County, Contest, Choice
 
 SELECT
   county.name AS county_name,
@@ -15,6 +15,6 @@ WHERE
   county_contest_result.contest_id = contest.id AND
   county_contest_result.county_id = county.id
 ORDER BY
-  contest.county_id ASC,
+  county.name ASC,
   contest.id ASC,
   county_contest_vote_total.vote_total DESC;
