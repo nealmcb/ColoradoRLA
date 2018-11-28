@@ -26,7 +26,7 @@ module.exports = {
 
     plugins: [
         new webpack.DefinePlugin({
-            DEBUG: false,
+            DEBUG: true,
         }),
 
         new webpack.NamedModulesPlugin(),
