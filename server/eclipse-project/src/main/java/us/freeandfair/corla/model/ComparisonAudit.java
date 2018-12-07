@@ -433,6 +433,11 @@ public class ComparisonAudit implements PersistentEntity {
     return Math.max(0, estimatedSamplesToAudit() - getAuditedSampleCount());
   }
 
+  /** optimisticSamplesToAudit minus getAuditedSampleCount **/
+  public final Integer optimisticRemaining() {
+    return Math.max(0, optimisticSamplesToAudit() - getAuditedSampleCount());
+  }
+
   /**
    * @return the expected overall number of ballots to audit, assuming
    * overstatements continue to occur at the current rate.

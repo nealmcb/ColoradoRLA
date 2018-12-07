@@ -185,8 +185,8 @@ public class DoSDashboardRefreshResponse {
           audited_contests.put(cta.contest().id(), cta.reason());
 
           for (final ComparisonAudit ca : ComparisonAuditQueries.matching(cta.contest().name())) {
-            optimistic = Math.max(optimistic, Math.max(0, ca.optimisticSamplesToAudit() - ca.getAuditedSampleCount()));
-            estimated = Math.max(estimated, Math.max(0, ca.estimatedSamplesToAudit() - ca.getAuditedSampleCount()));
+            optimistic = ca.optimisticRemaining();
+            estimated = ca.estimatedRemaining();
 
             LOGGER.debug(String.format("[createResponse: optimistic=%d, estimated = %d, ca.optimisticSamplesToAudit()=%d, ca.estimatedSamplesToAudit()=%d, ca.getAuditedSampleCount()=%d]",
                                        optimistic, estimated, ca.optimisticSamplesToAudit(), ca.estimatedSamplesToAudit(), ca.getAuditedSampleCount()));
