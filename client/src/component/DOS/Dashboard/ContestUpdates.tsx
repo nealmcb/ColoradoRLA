@@ -32,7 +32,13 @@ interface ButtonProps {
 const HandCountButton = (props: ButtonProps) => {
     const { contest } = props;
 
-    const onClick = () => setHandCount(contest.id);
+    const onClick = () => {
+        const msg = 'Are you sure you want to hand-count ' + contest.name + '?';
+
+        if (confirm(msg)) {
+            setHandCount(contest.id);
+        }
+    };
 
     return (
         <button className='pt-button pt-intent-primary' onClick={ onClick }>
