@@ -32,7 +32,13 @@ interface ButtonProps {
 const HandCountButton = (props: ButtonProps) => {
     const { contest } = props;
 
-    const onClick = () => setHandCount(contest.id);
+    const onClick = () => {
+        const msg = `You have selected "${contest.name}" to hand count - are you sure you want to proceed? This action cannot be undone if you choose to hand count "${contest.name}."`;
+
+        if (confirm(msg)) {
+            setHandCount(contest.id);
+        }
+    };
 
     return (
         <button className='pt-button pt-intent-primary' onClick={ onClick }>
