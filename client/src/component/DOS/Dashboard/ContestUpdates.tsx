@@ -33,7 +33,7 @@ const HandCountButton = (props: ButtonProps) => {
     const { contest } = props;
 
     const onClick = () => {
-        const msg = 'Are you sure you want to hand-count ' + contest.name + '?';
+        const msg = `You have selected "${contest.name}" to hand count - are you sure you want to proceed? This action cannot be undone if you choose to hand count "${contest.name}."`;
 
         if (confirm(msg)) {
             setHandCount(contest.id);
