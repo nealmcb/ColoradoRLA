@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.persistence.Cacheable;
 import javax.persistence.CollectionTable;
@@ -189,6 +190,18 @@ final public class CastVoteRecord implements Comparable<CastVoteRecord>,
   private transient boolean my_audit_flag;
 
   /**
+   * both a performance optimization and work around for a feature lacking from
+   * hibernate: on delete cascade in the ddl
+   * so we tag the ContestInfo with a county so we can delete them all quickly
+   **/
+  public static List<CVRContestInfo> claim(final List<CVRContestInfo> contestInfos, final Long countyId) {
+    return contestInfos.stream()
+      .map(ci -> {ci.setCountyId(countyId); return ci;})
+      .collect(Collectors.toList());
+  }
+
+
+  /**
    * Constructs an empty cast vote record, solely for persistence.
    */
   public CastVoteRecord() {
@@ -234,7 +247,7 @@ final public class CastVoteRecord implements Comparable<CastVoteRecord>,
     my_imprinted_id = the_imprinted_id;
     my_ballot_type = the_ballot_type;
     if (the_contest_info != null) {
-      my_contest_info.addAll(the_contest_info);
+      my_contest_info.addAll(CastVoteRecord.claim(the_contest_info, my_county_id));
     }
     this.setUri();
   }
@@ -378,7 +391,7 @@ final public class CastVoteRecord implements Comparable<CastVoteRecord>,
   /** setter **/
   public void setContestInfo (final List<CVRContestInfo> contestInfos) {
     this.my_contest_info.clear();
-    this.my_contest_info.addAll(contestInfos);
+    this.my_contest_info.addAll(CastVoteRecord.claim(contestInfos, this.my_county_id));
   }
 
   /**

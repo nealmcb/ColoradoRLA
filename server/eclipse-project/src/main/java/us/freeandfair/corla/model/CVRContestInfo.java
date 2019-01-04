@@ -60,7 +60,13 @@ public class CVRContestInfo implements Serializable {
    */
   @Column(updatable = false)
   private String my_comment;
-  
+
+  /**
+   * The countyId for fast bulk deletion. This is because of the apparent
+   * lacking feature of jpa; on delete cascade added to ddl
+   */
+  private Long county_id;
+
   /**
    * The consensus value for this contest
    */
@@ -115,7 +121,12 @@ public class CVRContestInfo implements Serializable {
   public Contest contest() {
     return my_contest;
   }
-  
+
+  /** set the county id **/
+  public void setCountyId(Long countyId) {
+    this.county_id = countyId;
+  }
+
   /**
    * @return the comment in this record.
    */
