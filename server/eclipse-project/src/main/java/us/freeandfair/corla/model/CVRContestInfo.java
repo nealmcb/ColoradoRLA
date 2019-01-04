@@ -64,7 +64,10 @@ public class CVRContestInfo implements Serializable {
   /**
    * The countyId for fast bulk deletion. This is because of the apparent
    * lacking feature of jpa; on delete cascade added to ddl
+   * the value is used in a query not in the code, hence the SuppressWarnings
    */
+  @SuppressWarnings({"PMD.UnusedPrivateField","PMD.SingularField"})
+  @Column
   private Long county_id;
 
   /**
@@ -123,7 +126,7 @@ public class CVRContestInfo implements Serializable {
   }
 
   /** set the county id **/
-  public void setCountyId(Long countyId) {
+  public void setCountyId(final Long countyId) {
     this.county_id = countyId;
   }
 

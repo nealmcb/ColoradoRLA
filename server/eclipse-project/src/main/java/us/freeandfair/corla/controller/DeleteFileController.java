@@ -1,11 +1,9 @@
 package us.freeandfair.corla.controller;
 
-import javax.persistence.PersistenceException;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import us.freeandfair.corla.model.County;
 import us.freeandfair.corla.model.CountyDashboard;
 import us.freeandfair.corla.model.DoSDashboard;
 import us.freeandfair.corla.model.ImportStatus;
@@ -13,15 +11,13 @@ import us.freeandfair.corla.model.ImportStatus.ImportState;
 import us.freeandfair.corla.persistence.Persistence;
 import us.freeandfair.corla.query.BallotManifestInfoQueries;
 import us.freeandfair.corla.query.CastVoteRecordQueries;
-import us.freeandfair.corla.query.ContestQueries;
-import us.freeandfair.corla.query.CountyQueries;
 import us.freeandfair.corla.query.CountyContestResultQueries;
-import us.freeandfair.corla.query.UploadedFileQueries;
 
 /**
  *
  */
-public final class DeleteFileController {
+public abstract class DeleteFileController {
+
   /**
    * Class-wide logger
    */
@@ -34,16 +30,17 @@ public final class DeleteFileController {
    * returns true if all the steps succeeded, false if one or more failed
    * if any steps don't succeed they will throw a DeleteFileFail exception
    */
-  public static Boolean deleteFile(Long countyId, String fileType)
+  public static Boolean deleteFile(final Long countyId, final String fileType)
     throws DeleteFileFail {
-    if (fileType.equals("cvr")) {
+    if ("cvr".equals(fileType)) {
       LOGGER.info("deleting a CVR file for countyId: " + countyId);
 
-      // deleteCastVoteRecords will also delete cvr_contest_infos due to constraints
-      // deleteCastVoteRecords needs to be called before contests are deleted due to constraints
+      // deleteCastVoteRecords will also delete cvr_contest_infos due to
+      // constraints, also, deleteCastVoteRecords needs to be called before
+      // contests are deleted due to constraints
       deleteCastVoteRecords(countyId);
       deleteResultsAndContests(countyId);
-    } else if (fileType.equals("bmi")) {
+    } else if ("bmi".equals(fileType)) {
       LOGGER.info("deleting a BMI file for countyId: " + countyId);
       deleteBallotManifestInfos(countyId);
     } else {
@@ -54,17 +51,18 @@ public final class DeleteFileController {
     return true;
   }
 
-  static Boolean resetDashboards(Long countyId, String fileType)
+  /** reset cvr file info or bmi info on the county dashboard **/
+  public static Boolean resetDashboards(final Long countyId,final  String fileType)
     throws DeleteFileFail {
     final CountyDashboard cdb = Persistence.getByID(countyId, CountyDashboard.class);
 
-    if (fileType.equals("cvr")) {
+    if ("cvr".equals(fileType)) {
       resetDashboardCVR(cdb);
       final DoSDashboard dosdb = Persistence.getByID(DoSDashboard.ID, DoSDashboard.class);
       dosdb.removeContestsToAuditForCounty(cdb.county());
       LOGGER.debug("Removed contests to audit for county");
       return true;
-    } else if (fileType.equals("bmi")) {
+    } else if ("bmi".equals(fileType)) {
       resetDashboardBMI(cdb);
       return true;
     } else {
@@ -72,7 +70,8 @@ public final class DeleteFileController {
     }
   }
 
-  static Boolean resetDashboardCVR(CountyDashboard cdb) {
+  /** reset cvr file info on the county dashboard **/
+  public static Boolean resetDashboardCVR(final CountyDashboard cdb) {
     Persistence.delete(cdb.cvrFile());
     cdb.setCVRFile(null);
     cdb.setCVRsImported(0);
@@ -81,7 +80,8 @@ public final class DeleteFileController {
     return true;
   }
 
-  static Boolean resetDashboardBMI(CountyDashboard cdb) {
+  /** reset bmi info on the county dashboard **/
+  public static Boolean resetDashboardBMI(final CountyDashboard cdb) {
     Persistence.delete(cdb.manifestFile());
     cdb.setManifestFile(null);
     cdb.setBallotsInManifest(0);
@@ -92,10 +92,10 @@ public final class DeleteFileController {
   /**
    * Remove all CountyContestResults and Contests for a county
    */
-  static Boolean deleteResultsAndContests(Long countyId)
+  public static Boolean deleteResultsAndContests(final Long countyId)
     throws DeleteFileFail {
     // this will also delete the contests - surprise!
-    Integer result = CountyContestResultQueries.deleteForCounty(countyId);
+    final Integer result = CountyContestResultQueries.deleteForCounty(countyId);
     LOGGER.debug("Removed county contest results");
 
     if (result > 0) {
@@ -109,9 +109,9 @@ public final class DeleteFileController {
   /**
    * Remove all CastVoteRecords for a county
    */
-  static Boolean deleteCastVoteRecords(Long countyId)
+  public static Boolean deleteCastVoteRecords(final Long countyId)
     throws DeleteFileFail {
-    Integer rowsDeleted = CastVoteRecordQueries.deleteAll(countyId);
+    final Integer rowsDeleted = CastVoteRecordQueries.deleteAll(countyId);
 
     if (1 <= rowsDeleted) {
       LOGGER.info("some cvrs deleted!");
@@ -125,9 +125,9 @@ public final class DeleteFileController {
    * Remove all BallotManifestInfo for a county
    * @param countyId
    */
-  static Boolean deleteBallotManifestInfos(Long countyId)
+  public static Boolean deleteBallotManifestInfos(final Long countyId)
     throws DeleteFileFail {
-    Integer rowsDeleted = BallotManifestInfoQueries.deleteMatching(countyId);
+    final Integer rowsDeleted = BallotManifestInfoQueries.deleteMatching(countyId);
 
     if (1 <= rowsDeleted) {
       LOGGER.debug("some bmis deleted!");
@@ -137,8 +137,11 @@ public final class DeleteFileController {
     }
   }
 
+  /** used to abort the set of operations (transaction) **/
   public static class DeleteFileFail extends Exception {
-    public DeleteFileFail(String message) {
+
+    /** used to abort the set of operations (transaction) **/
+    public DeleteFileFail(final String message) {
       super(message);
     }
   }

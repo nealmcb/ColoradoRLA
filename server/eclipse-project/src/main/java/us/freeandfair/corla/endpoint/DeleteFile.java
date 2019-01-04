@@ -3,9 +3,7 @@ package us.freeandfair.corla.endpoint;
 import javax.persistence.PersistenceException;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
-import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import spark.Request;
@@ -13,8 +11,6 @@ import spark.Response;
 
 import us.freeandfair.corla.controller.DeleteFileController;
 import us.freeandfair.corla.Main;
-import us.freeandfair.corla.model.CountyDashboard;
-import us.freeandfair.corla.persistence.Persistence;
 
 /**
  * The endpoint for deleting a file or files for a county
