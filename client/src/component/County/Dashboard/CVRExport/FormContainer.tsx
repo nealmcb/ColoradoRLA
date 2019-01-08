@@ -6,17 +6,19 @@ import Uploading from './Uploading';
 
 import uploadCvrExport from 'corla/action/county/uploadCvrExport';
 
+import deleteFile from 'corla/action/county/deleteFile';
 import cvrExportUploadedSelector from 'corla/selector/county/cvrExportUploaded';
 import cvrExportUploadingSelector from 'corla/selector/county/cvrExportUploading';
 
 
 interface UploadedProps {
     enableReupload: OnClick;
+    handleDeleteFile: OnClick;
     file: UploadedFile;
 }
 
 const UploadedCVRExport = (props: UploadedProps) => {
-    const { enableReupload, file } = props;
+    const { enableReupload, handleDeleteFile, file } = props;
     return (
         <div className='pt-card'>
             <div><strong>CVR Export</strong></div>
@@ -25,6 +27,11 @@ const UploadedCVRExport = (props: UploadedProps) => {
             <button className='pt-button pt-intent-primary' onClick={ enableReupload }>
                 Re-upload
             </button>
+            <span> &nbsp;&nbsp; </span>
+            <button className='pt-button pt-intent-primary' onClick={ handleDeleteFile }>
+                Delete File
+            </button>
+
         </div>
     );
 };
@@ -62,6 +69,7 @@ class CVRExportFormContainer extends React.Component<ContainerProps, ContainerSt
         if (fileUploaded && !this.state.reupload && countyState.cvrExport) {
             return (
                 <UploadedCVRExport enableReupload={ this.enableReupload }
+                                   handleDeleteFile={ this.handleDeleteFile }
                                    file={ countyState.cvrExport } />
             );
         }
@@ -98,6 +106,10 @@ class CVRExportFormContainer extends React.Component<ContainerProps, ContainerSt
         s.form.hash = hash;
 
         this.setState(s);
+    }
+
+    private handleDeleteFile = () => {
+        deleteFile('cvr');
     }
 
     private upload = () => {

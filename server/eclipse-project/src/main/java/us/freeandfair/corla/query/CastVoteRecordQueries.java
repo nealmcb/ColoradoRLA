@@ -225,6 +225,33 @@ public final class CastVoteRecordQueries {
   }
 
   /**
+   * CVRContestInfo has a required foreign key to CastVoteRecord so they must be
+   * deleted first
+   **/
+  public static int deleteCVRContestInfos(final Long countyId) {
+    final Session s = Persistence.currentSession();
+    final Query q = s
+      .createNativeQuery("delete from cvr_contest_info ci where ci.county_id = :county_id")
+      .setParameter("county_id", countyId);
+
+    return q.executeUpdate();
+
+  }
+
+  /** delete all cvrs for a county, this supports the delete-file feature **/
+  public static int deleteAll(final Long county_id) {
+    final Session s = Persistence.currentSession();
+    // CVRContestInfo has a required foreign key to CastVoteRecord so they must
+    // be deleted first
+    deleteCVRContestInfos(county_id);
+
+    final Query query = s.createQuery("delete from CastVoteRecord cvr where cvr.my_county_id = :county_id");
+    query.setParameter("county_id", county_id);
+
+    return query.executeUpdate();
+  }
+
+  /**
    * Deletes the set of cast vote records for the specified county ID and
    * record type.
    *

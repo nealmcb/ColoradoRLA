@@ -6,16 +6,18 @@ import Uploading from './Uploading';
 
 import uploadBallotManifest from 'corla/action/county/uploadBallotManifest';
 
+import deleteFile from 'corla/action/county/deleteFile';
 import ballotManifestUploadedSelector from 'corla/selector/county/ballotManifestUploaded';
 
 
 interface UploadedProps {
     enableReupload: OnClick;
+    handleDeleteFile: OnClick;
     file: UploadedFile;
 }
 
 const UploadedBallotManifest = (props: UploadedProps) => {
-    const { enableReupload, file } = props;
+    const { enableReupload, handleDeleteFile, file } = props;
 
     return (
         <div className='pt-card'>
@@ -24,6 +26,10 @@ const UploadedBallotManifest = (props: UploadedProps) => {
             <div><strong>SHA-256 hash: </strong> { file.hash }</div>
             <button className='pt-button pt-intent-primary' onClick={ enableReupload }>
                 Re-upload
+            </button>
+            <span>&nbsp;&nbsp; </span>
+            <button className='pt-button pt-intent-primary' onClick={ handleDeleteFile }>
+                Delete File
             </button>
         </div>
     );
@@ -62,6 +68,7 @@ class BallotManifestFormContainer extends React.Component<ContainerProps, Contai
         if (fileUploaded && !this.state.reupload && countyState.ballotManifest) {
             return (
                 <UploadedBallotManifest enableReupload={ this.enableReupload }
+                                        handleDeleteFile={ this.handleDeleteFile }
                                         file={ countyState.ballotManifest } />
             );
         }
@@ -98,6 +105,10 @@ class BallotManifestFormContainer extends React.Component<ContainerProps, Contai
         s.form.hash = hash;
 
         this.setState(s);
+    }
+
+    private handleDeleteFile = () => {
+        deleteFile('bmi');
     }
 
     private upload = () => {

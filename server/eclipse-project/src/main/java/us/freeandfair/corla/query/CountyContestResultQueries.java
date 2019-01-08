@@ -143,15 +143,18 @@ public final class CountyContestResultQueries {
    * 
    * @param the_id The county ID.
    */
-  public static void deleteForCounty(final Long the_county_id) {
+  public static Integer deleteForCounty(final Long the_county_id) {
     final Set<CountyContestResult> results = 
         forCounty(Persistence.getByID(the_county_id, County.class));
+    Integer n = 0;
     if (results != null) {
       for (final CountyContestResult c : results) {
         Persistence.delete(c);
         Persistence.delete(c.contest());
+        n++;
       }
     }
     Persistence.flush();
+    return n;
   }
 }
