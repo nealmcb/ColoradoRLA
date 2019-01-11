@@ -10,8 +10,13 @@ with the following tags indicating the components affected:
 - `TOOLING` refers to changes to tooling that falls outside the UI or API, such
   as the RLA export.
 
-## 2.0.12 - SNAPSHOT - In development
+## 2.0.13 - SNAPSHOT - In development
+- [API - Add delete file button][pr110]
+
+## 2.0.12 - Bugfix release
 - [UI - Hand count button requires confirmation][pr109]
+- [UI - hide submit until valid seed entered][pr108]
+- [API - Make the hand count button safe to use][pr107]
 - [API - Don't show negative numbers of estimated samples][pr106]
 
 ## 2.0.11 - Bugfix release
@@ -190,4 +195,7 @@ This is [FreeAndFair's most recent tag][1.1.0.3].
 [cm506cf]: https://github.com/democracyworks/ColoradoRLA/commit/506cf568901ce6f1ba8e2085369444d88f802ff6
 [cma60b5]: https://github.com/democracyworks/ColoradoRLA/commit/a60b5972b9f6b1a68d4b22cf06721dd41e5a7374
 [pr106]: https://github.com/democracyworks/ColoradoRLA/pull/106
+[pr107]: https://github.com/democracyworks/ColoradoRLA/pull/107
+[pr108]: https://github.com/democracyworks/ColoradoRLA/pull/108
 [pr109]: https://github.com/democracyworks/ColoradoRLA/pull/109
+[pr110]: https://github.com/democracyworks/ColoradoRLA/pull/110
