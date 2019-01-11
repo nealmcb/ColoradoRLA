@@ -4,6 +4,8 @@ package us.freeandfair.corla.controller;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import us.freeandfair.corla.asm.ASMUtilities;
+import us.freeandfair.corla.asm.CountyDashboardASM;
 import us.freeandfair.corla.model.CountyDashboard;
 import us.freeandfair.corla.model.DoSDashboard;
 import us.freeandfair.corla.model.ImportStatus;
@@ -55,19 +57,20 @@ public abstract class DeleteFileController {
   public static Boolean resetDashboards(final Long countyId,final  String fileType)
     throws DeleteFileFail {
     final CountyDashboard cdb = Persistence.getByID(countyId, CountyDashboard.class);
-
     if ("cvr".equals(fileType)) {
       resetDashboardCVR(cdb);
       final DoSDashboard dosdb = Persistence.getByID(DoSDashboard.ID, DoSDashboard.class);
       dosdb.removeContestsToAuditForCounty(cdb.county());
       LOGGER.debug("Removed contests to audit for county");
-      return true;
     } else if ("bmi".equals(fileType)) {
       resetDashboardBMI(cdb);
-      return true;
     } else {
       throw new DeleteFileFail("Did not recognize fileType: " + fileType);
     }
+
+    // this must come after the other resetDashboard*s
+    reinitializeCDB(cdb);
+    return true;
   }
 
   /** reset cvr file info on the county dashboard **/
@@ -78,6 +81,16 @@ public abstract class DeleteFileController {
     cdb.setCVRImportStatus(new ImportStatus(ImportState.NOT_ATTEMPTED));
     LOGGER.debug("Updated the county dashboard to remove CVR stuff");
     return true;
+  }
+
+  /** if both cvr and bmi have been deleted use a asm reset shortcut **/
+  public static void reinitializeCDB(final CountyDashboard cdb) {
+    if (null == cdb.cvrFile() && null == cdb.manifestFile()) {
+      final CountyDashboardASM countyDashboardASM = ASMUtilities.asmFor(CountyDashboardASM.class,
+                                                                        String.valueOf(cdb.id()));
+      countyDashboardASM.reinitialize();
+      ASMUtilities.save(countyDashboardASM);
+    }
   }
 
   /** reset bmi info on the county dashboard **/
