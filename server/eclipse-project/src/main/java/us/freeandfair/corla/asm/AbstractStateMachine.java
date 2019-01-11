@@ -145,6 +145,12 @@ public abstract class AbstractStateMachine implements Serializable {
     my_current_state = the_state;
   }
 
+  /** This sets the state machine back to the beginning. It should be used
+   * carefully. It is a shortcut. **/
+  public void reinitialize() {
+    my_current_state = my_initial_state;
+  }
+
   /**
    * @return the ASM's identity, or null if this ASM is a singleton.
    */
