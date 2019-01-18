@@ -26,6 +26,7 @@ declare namespace Action {
         | ImportCvrExportOk
         | Login1FOk
         | SelectContestsForAuditOk
+        | SetAuditBoard
         | UpdateAcvrForm
         | UploadBallotManifestOk
         | UploadAcvrFail
@@ -140,6 +141,13 @@ declare namespace Action {
     interface SelectContestsForAuditOk {
         type: 'SELECT_CONTESTS_FOR_AUDIT_OK';
         data: any;
+    }
+
+    interface SetAuditBoard {
+        type: 'SET_AUDIT_BOARD';
+        data: {
+            auditBoardIndex: number;
+        };
     }
 
     interface UpdateAcvrForm {
