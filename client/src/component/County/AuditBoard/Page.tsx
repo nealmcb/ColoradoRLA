@@ -41,7 +41,8 @@ class AuditBoardSignInPage extends React.Component<PageProps, PageState> {
         } = this.props;
 
         const submit = () => {
-          auditBoardSignIn(auditBoardIndex, this.state.form);
+            auditBoardSignIn(auditBoardIndex, this.state.form);
+            window.history.pushState({}, 'login', '/county/audit/' + auditBoardIndex);
         };
 
         const disableButton = !isValidAuditBoard(this.state.form);
