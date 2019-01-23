@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
+import action from 'corla/action';
 import BallotManifestForm from './Form';
 import Uploading from './Uploading';
 
@@ -42,6 +43,7 @@ interface ContainerProps {
 }
 
 interface ContainerState {
+    fileDeleted: boolean;
     form: {
         file?: File;
         hash: string;
@@ -51,6 +53,7 @@ interface ContainerState {
 
 class BallotManifestFormContainer extends React.Component<ContainerProps, ContainerState> {
     public state: ContainerState = {
+        fileDeleted: false,
         form: {
             file: undefined,
             hash: '',
@@ -68,7 +71,7 @@ class BallotManifestFormContainer extends React.Component<ContainerProps, Contai
         if (fileUploaded && !this.state.reupload && countyState.ballotManifest) {
             return (
                 <UploadedBallotManifest enableReupload={ this.enableReupload }
-                                        handleDeleteFile={ this.handleDeleteFile }
+                                        handleDeleteFile={ this.handleDeleteFile.bind(this) }
                                         file={ countyState.ballotManifest } />
             );
         }
@@ -76,6 +79,7 @@ class BallotManifestFormContainer extends React.Component<ContainerProps, Contai
         return (
             <BallotManifestForm disableReupload={ this.disableReupload }
                                 fileUploaded={ fileUploaded }
+                                fileDeleted={ this.state.fileDeleted }
                                 form={ this.state.form }
                                 onFileChange={ this.onFileChange }
                                 onHashChange={ this.onHashChange }
@@ -108,7 +112,17 @@ class BallotManifestFormContainer extends React.Component<ContainerProps, Contai
     }
 
     private handleDeleteFile = () => {
-        deleteFile('bmi');
+        const result = deleteFile('bmi');
+
+        if (result) {
+            // clear form
+            const s = { ...this.state };
+            s.form.hash = '';
+            s.form.file = undefined;
+            s.fileDeleted = true; // don't show the cancel button momentarily
+            this.setState(s);
+        }
+
     }
 
     private upload = () => {

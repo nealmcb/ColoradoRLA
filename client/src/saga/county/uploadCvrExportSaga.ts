@@ -43,7 +43,10 @@ function* uploadCvrExportNetworkFail(): IterableIterator<any> {
 function createUploadingCvrExport(uploading: boolean) {
     function* uploadingCvrExport(action: any): IterableIterator<any> {
         const data = { uploading };
-
+        // delete file uses this
+        if (action.data.fileType && action.data.fileType !== 'cvr') {
+            return;
+        }
         yield put({ data, type: 'UPLOADING_CVR_EXPORT' });
     }
 
@@ -56,10 +59,14 @@ const UPLOADING_FALSE = [
     'IMPORT_CVR_EXPORT_OK',
     'UPLOAD_CVR_EXPORT_FAIL',
     'UPLOAD_CVR_EXPORT_NETWORK_FAIL',
+    'DELETE_FILE_FAIL',
+    'DELETE_FILE_OK',
+    'DELETE_FILE_NETWORK_FAIL',
 ];
 
 const UPLOADING_TRUE = [
     'UPLOAD_CVR_EXPORT_SEND',
+    'DELETE_FILE_SEND',
 ];
 
 

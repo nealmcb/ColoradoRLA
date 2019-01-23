@@ -6,6 +6,7 @@ import { EditableText } from '@blueprintjs/core';
 interface FormProps {
     disableReupload: OnClick;
     fileUploaded: boolean;
+    fileDeleted: boolean;
     form: {
         file?: File;
         hash: string;
@@ -19,6 +20,7 @@ const CVRExportForm = (props: FormProps) => {
     const {
         disableReupload,
         fileUploaded,
+        fileDeleted,
         form,
         onFileChange,
         onHashChange,
@@ -35,7 +37,10 @@ const CVRExportForm = (props: FormProps) => {
         </button>
     );
 
-    const renderedCancelButton = fileUploaded
+    // fileDeleted allows us to not wait for a dashboard refresh to get the asm
+    // state, which is what fileUploaded is based on
+    // then, we won't show the cancel button momentarily, which looks weird
+    const renderedCancelButton = fileUploaded && !fileDeleted
                                ? cancelButton
                                : '';
 

@@ -47,11 +47,13 @@ interface ContainerState {
         file?: File;
         hash: string;
     };
+    fileDeleted: boolean;
     reupload: boolean;
 }
 
 class CVRExportFormContainer extends React.Component<ContainerProps, ContainerState> {
     public state: ContainerState = {
+        fileDeleted: false,
         form: {
             file: undefined,
             hash: '',
@@ -77,6 +79,7 @@ class CVRExportFormContainer extends React.Component<ContainerProps, ContainerSt
         return (
             <CVRExportForm disableReupload={ this.disableReupload }
                            fileUploaded={ fileUploaded }
+                           fileDeleted={ this.state.fileDeleted }
                            form={ this.state.form }
                            onFileChange={ this.onFileChange }
                            onHashChange={ this.onHashChange }
@@ -109,7 +112,18 @@ class CVRExportFormContainer extends React.Component<ContainerProps, ContainerSt
     }
 
     private handleDeleteFile = () => {
-        deleteFile('cvr');
+        const result = deleteFile('cvr');
+
+        if (result) {
+            // clear form
+            const s = { ...this.state };
+            s.form.hash = '';
+            s.form.file = undefined;
+            s.fileDeleted = true; // don't show the cancel button momentarily
+            this.setState(s);
+        }
+
+
     }
 
     private upload = () => {

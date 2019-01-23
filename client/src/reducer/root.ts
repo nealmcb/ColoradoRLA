@@ -1,6 +1,7 @@
 import * as _ from 'lodash';
 
 import countyDashboardRefreshOk from './county/dashboardRefreshOk';
+import deleteFileOK from './county/deleteFileOK';
 import fetchAuditBoardASMStateOk from './county/fetchAuditBoardASMStateOk';
 import countyFetchContestsOk from './county/fetchContestsOk';
 import fetchCountyASMStateOk from './county/fetchCountyASMStateOk';
@@ -87,6 +88,10 @@ export default function root(state: AppState, action: Action.App) {
 
     case 'FETCH_DOS_ASM_STATE_OK': {
         return fetchDOSASMStateOk(state as DOS.AppState, action);
+    }
+
+    case 'DELETE_FILE_OK': {
+        return deleteFileOK(state as County.AppState, action);
     }
 
     case 'IMPORT_CVR_EXPORT_OK': {
