@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
+import action from 'corla/action';
 import BallotManifestForm from './Form';
 import Uploading from './Uploading';
-import action from 'corla/action';
 
 import uploadBallotManifest from 'corla/action/county/uploadBallotManifest';
 
@@ -43,22 +43,22 @@ interface ContainerProps {
 }
 
 interface ContainerState {
+    fileDeleted: boolean;
     form: {
         file?: File;
         hash: string;
     };
     reupload: boolean;
-    fileDeleted: boolean;
 }
 
 class BallotManifestFormContainer extends React.Component<ContainerProps, ContainerState> {
     public state: ContainerState = {
+        fileDeleted: false,
         form: {
             file: undefined,
             hash: '',
         },
         reupload: false,
-        fileDeleted: false
     };
 
     public render() {
@@ -119,7 +119,7 @@ class BallotManifestFormContainer extends React.Component<ContainerProps, Contai
             const s = { ...this.state };
             s.form.hash = '';
             s.form.file = undefined;
-            s.fileDeleted = true;// don't show the cancel button momentarily
+            s.fileDeleted = true; // don't show the cancel button momentarily
             this.setState(s);
         }
 

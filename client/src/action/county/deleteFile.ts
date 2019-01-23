@@ -14,23 +14,23 @@ async function deleteFile(fileType: string) {
 
 
     try {
-        action('DELETE_FILE_SEND');
+        action('DELETE_FILE_SEND', { fileType });
 
         const r = await fetch(deleteFileUrl, init);
 
         const received = await r.json().catch(empty);
 
         if (!r.ok) {
-            action('DELETE_FILE_FAIL', received);
+            action('DELETE_FILE_FAIL', {fileType, received});
             return false;
         }
 
-        action('DELETE_FILE_OK', received);
+        action('DELETE_FILE_OK', {fileType, received});
         return true;
 
 
     } catch (e) {
-        action('DELETE_FILE_NETWORK_FAIL');
+        action('DELETE_FILE_NETWORK_FAIL', {fileType});
 
         throw e;
 
