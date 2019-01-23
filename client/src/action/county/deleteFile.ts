@@ -22,10 +22,11 @@ async function deleteFile(fileType: string) {
 
         if (!r.ok) {
             action('DELETE_FILE_FAIL', received);
-            return;
+            return false;
         }
 
         action('DELETE_FILE_OK', received);
+        return true;
 
 
     } catch (e) {

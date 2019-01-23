@@ -18,6 +18,7 @@ declare namespace Action {
         | DOSDashboardRefreshOk
         | DOSFetchContestsOk
         | DOSLoginOk
+        | DeleteFileOK
         | FetchAuditBoardASMStateOk
         | FetchCountyASMStateOk
         | FetchCvrsToAuditOk
@@ -118,6 +119,11 @@ declare namespace Action {
 
     interface FetchDOSASMStateOk {
         type: 'FETCH_DOS_ASM_STATE_OK';
+        data: any;
+    }
+
+    interface DeleteFileOK {
+        type: 'DELETE_FILE_OK';
         data: any;
     }
 

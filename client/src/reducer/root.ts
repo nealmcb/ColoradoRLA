@@ -6,6 +6,7 @@ import countyFetchContestsOk from './county/fetchContestsOk';
 import fetchCountyASMStateOk from './county/fetchCountyASMStateOk';
 import countyFetchCvrOk from './county/fetchCvrOk';
 import fetchCvrsToAuditOk from './county/fetchCvrsToAuditOk';
+import deleteFileOK from './county/deleteFileOK';
 import countyLoginOk from './county/loginOk';
 import updateAcvrForm from './county/updateAcvrForm';
 import uploadAcvrOk from './county/uploadAcvrOk';
@@ -87,6 +88,10 @@ export default function root(state: AppState, action: Action.App) {
 
     case 'FETCH_DOS_ASM_STATE_OK': {
         return fetchDOSASMStateOk(state as DOS.AppState, action);
+    }
+
+    case 'DELETE_FILE_OK': {
+        return deleteFileOK(state as County.AppState, action);
     }
 
     case 'IMPORT_CVR_EXPORT_OK': {

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import BallotManifestForm from './Form';
 import Uploading from './Uploading';
+import action from 'corla/action';
 
 import uploadBallotManifest from 'corla/action/county/uploadBallotManifest';
 
@@ -47,6 +48,7 @@ interface ContainerState {
         hash: string;
     };
     reupload: boolean;
+    fileDeleted: boolean;
 }
 
 class BallotManifestFormContainer extends React.Component<ContainerProps, ContainerState> {
@@ -56,6 +58,7 @@ class BallotManifestFormContainer extends React.Component<ContainerProps, Contai
             hash: '',
         },
         reupload: false,
+        fileDeleted: false
     };
 
     public render() {
@@ -68,7 +71,7 @@ class BallotManifestFormContainer extends React.Component<ContainerProps, Contai
         if (fileUploaded && !this.state.reupload && countyState.ballotManifest) {
             return (
                 <UploadedBallotManifest enableReupload={ this.enableReupload }
-                                        handleDeleteFile={ this.handleDeleteFile }
+                                        handleDeleteFile={ this.handleDeleteFile.bind(this) }
                                         file={ countyState.ballotManifest } />
             );
         }
@@ -76,6 +79,7 @@ class BallotManifestFormContainer extends React.Component<ContainerProps, Contai
         return (
             <BallotManifestForm disableReupload={ this.disableReupload }
                                 fileUploaded={ fileUploaded }
+                                fileDeleted={ this.state.fileDeleted }
                                 form={ this.state.form }
                                 onFileChange={ this.onFileChange }
                                 onHashChange={ this.onHashChange }
@@ -108,7 +112,17 @@ class BallotManifestFormContainer extends React.Component<ContainerProps, Contai
     }
 
     private handleDeleteFile = () => {
-        deleteFile('bmi');
+        const result = deleteFile('bmi');
+
+        if (result) {
+            // clear form
+            const s = { ...this.state };
+            s.form.hash = '';
+            s.form.file = undefined;
+            s.fileDeleted = true;// don't show the cancel button momentarily
+            this.setState(s);
+        }
+
     }
 
     private upload = () => {

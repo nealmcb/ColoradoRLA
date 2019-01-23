@@ -43,6 +43,14 @@ function* uploadBallotManifestNetworkFail(): IterableIterator<any> {
     notice.danger('Network error: failed to upload ballot manifest.');
 }
 
+function* deleteFileOK(): IterableIterator<any>{
+    notice.ok('Successfully deleted file');
+}
+
+function* deleteFileNOTOK(): IterableIterator<any>{
+    notice.danger('There was an error deleting the file, please try again.');
+}
+
 function createUploadingBallotManifest(uploading: boolean) {
     function* uploadingBallotManifest(action: any): IterableIterator<any> {
         const data = { uploading };
@@ -59,10 +67,14 @@ const UPLOADING_FALSE = [
     'IMPORT_BALLOT_MANIFEST_OK',
     'UPLOAD_BALLOT_MANIFEST_FAIL',
     'UPLOAD_BALLOT_MANIFEST_NETWORK_FAIL',
+    'DELETE_FILE_FAIL',
+    'DELETE_FILE_OK',
+    'DELETE_FILE_NETWORK_FAIL'
 ];
 
 const UPLOADING_TRUE = [
     'UPLOAD_BALLOT_MANIFEST_SEND',
+    'DELETE_FILE_SEND'
 ];
 
 
@@ -73,6 +85,8 @@ export default function* fileUploadSaga() {
 
     yield takeLatest('UPLOAD_BALLOT_MANIFEST_FAIL', uploadBallotManifestFail);
     yield takeLatest('UPLOAD_BALLOT_MANIFEST_NETWORK_FAIL', uploadBallotManifestNetworkFail);
+    yield takeLatest('DELETE_FILE_OK', deleteFileOK);
+    yield takeLatest(['DELETE_FILE_FAIL', 'DELETE_FILE_NETWORK_FAIL'], deleteFileNOTOK);
 
     yield takeLatest(UPLOADING_FALSE, createUploadingBallotManifest(false));
     yield takeLatest(UPLOADING_TRUE, createUploadingBallotManifest(true));
