@@ -44,10 +44,10 @@ class AuditBoardSignInContainer extends React.Component<ContainerProps> {
             countyState,
         );
 
-        if (auditBoardSignedIn) {
-            const auditBoardStartOrContinue = () =>
-                history.push('/county/audit/' + boardIndex);
+        const auditBoardStartOrContinue = () =>
+            history.push('/county/audit/' + boardIndex);
 
+        if (auditBoardSignedIn) {
             return (
                 <SignedInPage auditBoardStatus={ auditBoards[boardIndex] }
                               auditBoardIndex={ boardIndex }
@@ -58,6 +58,7 @@ class AuditBoardSignInContainer extends React.Component<ContainerProps> {
         }
 
         return <AuditBoardPage auditBoardIndex={ boardIndex }
+                               auditBoardStartOrContinue={ auditBoardStartOrContinue }
                                countyName={ countyName } />;
     }
 }
