@@ -23,8 +23,10 @@ declare namespace Action {
         | FetchCountyASMStateOk
         | FetchCvrsToAuditOk
         | FetchDOSASMStateOk
+        | FinalReviewComplete
         | ImportCvrExportOk
         | Login1FOk
+        | ReAuditCvr
         | SelectContestsForAuditOk
         | SetAuditBoard
         | UpdateAcvrForm
@@ -128,6 +130,11 @@ declare namespace Action {
         data: any;
     }
 
+    interface FinalReviewComplete {
+        type: 'FINAL_REVIEW_COMPLETE',
+        data: any,
+    }
+
     interface ImportCvrExportOk {
         type: 'IMPORT_CVR_EXPORT_OK';
         data: any;
@@ -148,6 +155,14 @@ declare namespace Action {
         data: {
             auditBoardIndex: number;
         };
+    }
+
+    interface ReAuditCvr {
+        type: 'RE_AUDIT_CVR';
+        data: {
+            comment: string;
+            cvrId: number;
+        }
     }
 
     interface UpdateAcvrForm {

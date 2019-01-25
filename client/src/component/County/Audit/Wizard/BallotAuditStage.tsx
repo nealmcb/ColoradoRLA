@@ -10,19 +10,18 @@ import WaitingForNextBallot from './WaitingForNextBallot';
 import CommentIcon from '../../../CommentIcon';
 
 import ballotNotFound from 'corla/action/county/ballotNotFound';
-import countyFetchCvr from 'corla/action/county/fetchCvr';
 
 
 interface NotFoundProps {
-    ballotNotFound: OnClick;
+    notFound: OnClick;
     currentBallot: CVR;
 }
 
 const BallotNotFoundForm = (props: NotFoundProps) => {
-    const { ballotNotFound, currentBallot } = props;
+    const { notFound, currentBallot } = props;
     const onClick = () => {
         if (confirm('By continuing, this ballot will be recorded as “not found” and you will move on to the next ballot.')) {
-            ballotNotFound(currentBallot.id);
+            notFound();
         }
     };
 
@@ -42,18 +41,14 @@ const BallotNotFoundForm = (props: NotFoundProps) => {
 };
 
 interface AuditInstructionsProps {
-    ballotNotFound: OnClick;
     countyState: County.AppState;
     currentBallot: CVR;
-    currentBallotNumber: number;
 }
 
 const AuditInstructions = (props: AuditInstructionsProps) => {
     const {
-        ballotNotFound,
         countyState,
         currentBallot,
-        currentBallotNumber,
     } = props;
 
     const isCurrentCvr = (cvr: JSON.CVR) => cvr.db_id === currentBallot.id;
@@ -262,30 +257,45 @@ const BallotAuditForm = (props: AuditFormProps) => {
 
 interface StageProps {
     auditBoardIndex: number;
+    comment?: string;
     countyState: County.AppState;
-    currentBallot: County.CurrentBallot;
-    currentBallotNumber: number;
+    currentBallot?: County.CurrentBallot;
+    currentBallotNumber?: number;
+    isReAuditing: boolean;
     nextStage: OnClick;
     prevStage: OnClick;
-    totalBallotsForBoard: number;
-    updateBallotMarks: OnClick;
+    totalBallotsForBoard?: number;
+    updateBallotMarks: (data: any) => any;
 }
-
 
 const BallotAuditStage = (props: StageProps) => {
     const {
         auditBoardIndex,
+        comment,
         countyState,
         currentBallot,
         currentBallotNumber,
+        isReAuditing,
         nextStage,
         prevStage,
         totalBallotsForBoard,
         updateBallotMarks,
     } = props;
 
+    if (currentBallot == null) {
+        return <WaitingForNextBallot />;
+    }
+
+    if (currentBallotNumber == null) {
+        return <WaitingForNextBallot />;
+    }
+
     const notFound = () => {
-        ballotNotFound(currentBallot.id);
+        if (isReAuditing) {
+            ballotNotFound(currentBallot.id, true, comment);
+        } else {
+            ballotNotFound(currentBallot.id);
+        }
     };
 
     const validateAcvr = () => {
@@ -331,14 +341,12 @@ const BallotAuditStage = (props: StageProps) => {
                 <div className='col-layout row1'>
                     <div className='col1'>
                         <AuditInstructions
-                            ballotNotFound={ notFound }
                             countyState={ countyState }
-                            currentBallot={ currentBallot }
-                            currentBallotNumber={ currentBallotNumber } />
+                            currentBallot={ currentBallot } />
                     </div>
                     <div className='col2'>
                         <BallotNotFoundForm
-                            ballotNotFound={ ballotNotFound }
+                            notFound={ notFound }
                             currentBallot={ currentBallot } />
                     </div>
                 </div>
