@@ -180,20 +180,16 @@ const ReviewStage = (props: ReviewStageProps) => {
         totalBallotsForBoard,
     } = props;
 
-    async function onClick() {
+    const onClick = () => {
         const m = countyState!.acvrs![currentBallot.id];
 
-        try {
-            if (isReAuditing) {
-                await uploadAcvr(m, currentBallot, true, comment);
-            } else {
-                await uploadAcvr(m, currentBallot);
-            }
-
-            nextStage();
-        } catch {
-            // Failed to submit. Let saga machinery alert user.
+        if (isReAuditing) {
+            uploadAcvr(m, currentBallot, true, comment);
+        } else {
+            uploadAcvr(m, currentBallot);
         }
+
+        nextStage();
     }
 
     if (currentBallot.submitted) {
