@@ -8,7 +8,6 @@ import ballotNotFoundOkSaga from './county/ballotNotFoundOkSaga';
 import countyDashboardRefreshOkSaga from './county/dashboardRefreshOkSaga';
 import reAuditCvrSaga from './county/reAuditCvrSaga';
 import countySyncSaga from './county/sync';
-import uploadAcvrOkSaga from './county/uploadAcvrOkSaga';
 import uploadBallotManifestSaga from './county/uploadBallotManifestSaga';
 import uploadCvrExportSaga from './county/uploadCvrExportSaga';
 
@@ -35,7 +34,6 @@ export default function* rootSaga() {
         logoutSaga(),
         reAuditCvrSaga(),
         syncSaga(),
-        uploadAcvrOkSaga(),
         uploadBallotManifestSaga(),
         uploadCvrExportSaga(),
     ];
