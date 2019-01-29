@@ -45,6 +45,16 @@ function* countyRefreshOk({ data }: any): any {
         }
     }
 
+    const county = parse(data, state);
+
+    if (county.id) {
+        countyFetchContests(county.id);
+    }
+
+    if (has(county, 'currentRound.number')) {
+        fetchCvrsToAudit(county.currentRound!.number);
+    }
+
     if (typeof state.auditBoardIndex !== 'number') {
         return;
     }
@@ -63,16 +73,6 @@ function* countyRefreshOk({ data }: any): any {
         // again would overwrite the `submitted` flag, causing us to
         // forget that we are waiting for the submission to be handled.
         countyFetchCvr(nextId);
-    }
-
-    const county = parse(data, state);
-
-    if (county.id) {
-        countyFetchContests(county.id);
-    }
-
-    if (has(county, 'currentRound.number')) {
-        fetchCvrsToAudit(county.currentRound!.number);
     }
 }
 
