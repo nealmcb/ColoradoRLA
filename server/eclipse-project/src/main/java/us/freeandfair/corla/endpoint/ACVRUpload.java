@@ -103,6 +103,24 @@ public class ACVRUpload extends AbstractAuditBoardDashboardEndpoint {
         if (cdb == null) {
           LOGGER.error("could not get audit board dashboard");
           serverError(the_response, "Could not save ACVR to dashboard");
+        } else if (submission.isReaudit()) {
+
+          final CastVoteRecord cvr = Persistence.getByID(submission.cvrID(),
+                                                         CastVoteRecord.class);
+          final CastVoteRecord s = submission.auditCVR();
+          final CastVoteRecord newAcvr =
+            new CastVoteRecord(RecordType.AUDITOR_ENTERED, Instant.now(),
+                               s.countyID(), s.cvrNumber(), null, s.scannerID(),
+                               s.batchID(), s.recordID(), s.imprintedID(),
+                               s.ballotType(), s.contestInfo());
+          newAcvr.setComment(submission.getComment());
+
+          if (ComparisonAuditController.reaudit(cdb,cvr,newAcvr)) {
+            ok(the_response, "ACVR reaudited");
+          } else {
+            invariantViolation(the_response, "CVR has not previously been audited");
+          }
+
         } else if (cdb.ballotsRemainingInCurrentRound() > 0) {
           // FIXME extract-fn: setupACVR
           final CastVoteRecord acvr = submission.auditCVR();
@@ -157,9 +175,9 @@ public class ACVRUpload extends AbstractAuditBoardDashboardEndpoint {
     } catch (final JsonParseException e) {
       LOGGER.error("malformed audit CVR upload");
       badDataContents(the_response, "malformed audit CVR upload");
-    } catch (final PersistenceException e) {
-      LOGGER.error("could not save audit CVR");
-      serverError(the_response, "Unable to save audit CVR");
+    // } catch (final PersistenceException e) {
+    //   LOGGER.error("could not save audit CVR");
+    //   serverError(the_response, "Unable to save audit CVR");
     }
     return my_endpoint_result.get();
   }

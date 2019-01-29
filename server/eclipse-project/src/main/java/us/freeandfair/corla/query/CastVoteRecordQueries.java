@@ -543,6 +543,23 @@ public final class CastVoteRecordQueries {
     return cvr;
   }
 
+  /** find max revision - this only makes sense if the cvr is an "rcvr" an edited acvr **/
+  public static Long maxRevision(final CastVoteRecord cvr) {
+    final Session s = Persistence.currentSession();
+    final Query q =
+      s.createQuery("select max(revision) from CastVoteRecord cvr " +
+                    " where uri = :uri ");
+
+    q.setParameter("uri", cvr.getUri());
+    Long result = (Long)q.getSingleResult();
+    if (null == result) {
+      return 0L;
+    } else {
+      return result;
+    }
+  }
+
+
   /** Utility function **/
   public static <T> java.util.function.Predicate <T> distinctByKey(final Function<? super T, Object> keyExtractor)
   {
