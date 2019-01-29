@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { History } from 'history';
+import { RouteComponentProps } from 'react-router-dom';
 
 import withState from 'corla/component/withState';
 import withSync from 'corla/component/withSync';
@@ -15,13 +15,15 @@ import countyInfoSelector from 'corla/selector/county/countyInfo';
 import hasAuditedAnyBallotSelector from 'corla/selector/county/hasAuditedAnyBallot';
 
 
-interface ContainerProps {
+interface MatchParams {
+    id: string;
+}
+
+interface ContainerProps extends RouteComponentProps<MatchParams> {
     auditBoards: AuditBoards;
     countyName: string;
     countyState: County.AppState;
     hasAuditedAnyBallot: boolean;
-    history: History;
-    match: any;
 }
 
 class AuditBoardSignInContainer extends React.Component<ContainerProps> {
@@ -42,10 +44,10 @@ class AuditBoardSignInContainer extends React.Component<ContainerProps> {
             countyState,
         );
 
-        if (auditBoardSignedIn) {
-            const auditBoardStartOrContinue = () =>
-                history.push('/county/audit/' + boardIndex);
+        const auditBoardStartOrContinue = () =>
+            history.push('/county/audit/' + boardIndex);
 
+        if (auditBoardSignedIn) {
             return (
                 <SignedInPage auditBoardStatus={ auditBoards[boardIndex] }
                               auditBoardIndex={ boardIndex }
@@ -56,6 +58,7 @@ class AuditBoardSignInContainer extends React.Component<ContainerProps> {
         }
 
         return <AuditBoardPage auditBoardIndex={ boardIndex }
+                               auditBoardStartOrContinue={ auditBoardStartOrContinue }
                                countyName={ countyName } />;
     }
 }

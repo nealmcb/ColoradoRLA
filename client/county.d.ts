@@ -2,7 +2,6 @@ declare namespace County {
     interface AppState {
         acvrs: ACVRs;
         asm: ASMStates;
-        // XXX: Audit board index hack
         auditBoardIndex?: number;
         auditBoards: AuditBoards;
         auditBoardCount?: number;
@@ -29,6 +28,7 @@ declare namespace County {
         election?: Election;
         estimatedBallotsToAudit?: number;
         fileName?: string;  // TODO: remove
+        finalReview: FinalReview;
         hash?: string;  // TODO: remove
         id?: number;
         riskLimit?: number;
@@ -99,4 +99,10 @@ declare namespace County {
         | 'COUNTY_AUDIT_UNDERWAY'
         | 'COUNTY_AUDIT_COMPLETE'
         | 'DEADLINE_MISSED';
+
+    interface FinalReview {
+        ballotId?: number;
+        comment?: string;
+        complete: boolean;
+    }
 }

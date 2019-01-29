@@ -60,10 +60,10 @@ interface PageProps {
     auditBoardIndex: number;
     countyInfo: CountyInfo;
     currentRoundNumber: number;
+    cvrsToAudit: JSON.CVR[];
     election: Election;
     estimatedBallotsToAudit: number;
     previousRound: Round;
-    previousRoundSignedOff: boolean;
 }
 
 const EndOfRoundPage = (props: PageProps) => {
@@ -72,10 +72,10 @@ const EndOfRoundPage = (props: PageProps) => {
         auditBoardIndex,
         countyInfo,
         currentRoundNumber,
+        cvrsToAudit,
         election,
         estimatedBallotsToAudit,
         previousRound,
-        previousRoundSignedOff,
     } = props;
 
     const countyName = countyInfo.name;
@@ -83,13 +83,6 @@ const EndOfRoundPage = (props: PageProps) => {
 
     if (allRoundsComplete && estimatedBallotsToAudit <= 0) {
         return <LastRoundComplete />;
-    }
-
-    if (previousRoundSignedOff) {
-        notice.ok('Congratulations! You have finished auditing your board’s'
-            + ` ballots in round ${roundNumber}. Please wait for any other`
-            + ' audit boards to complete the audit.');
-        return <Redirect to='/county' />;
     }
 
     const electionDate = corlaDate.format(election.date);

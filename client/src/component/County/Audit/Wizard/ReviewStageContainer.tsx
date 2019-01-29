@@ -10,21 +10,25 @@ import totalBallotsForBoard from 'corla/selector/county/totalBallotsForBoard';
 
 
 interface ContainerProps {
+    comment?: string;
     countyState: County.AppState;
     currentBallot?: County.CurrentBallot;
-    currentBallotNumber: number;
+    currentBallotNumber?: number;
+    isReAuditing?: boolean;
     marks?: County.ACVR;
     nextStage: OnClick;
     prevStage: OnClick;
-    totalBallotsForBoard: number;
+    totalBallotsForBoard?: number;
 }
 
 class ReviewStageContainer extends React.Component<ContainerProps> {
     public render() {
         const {
+            comment,
             countyState,
             currentBallot,
             currentBallotNumber,
+            isReAuditing,
             marks,
             nextStage,
             prevStage,
@@ -39,9 +43,11 @@ class ReviewStageContainer extends React.Component<ContainerProps> {
             return null;
         }
 
-        return <ReviewStage countyState={ countyState }
+        return <ReviewStage comment={ comment }
+                            countyState={ countyState }
                             currentBallot={ currentBallot }
                             currentBallotNumber={ currentBallotNumber }
+                            isReAuditing={ isReAuditing }
                             marks={ marks }
                             nextStage={ nextStage }
                             prevStage={ prevStage }
@@ -53,6 +59,8 @@ class ReviewStageContainer extends React.Component<ContainerProps> {
 function select(countyState: County.AppState) {
     const { currentBallot } = countyState;
 
+    const comment = countyState.finalReview.comment;
+
     if (!currentBallot) {
         return { countyState };
     }
@@ -60,11 +68,13 @@ function select(countyState: County.AppState) {
     const marks = countyState.acvrs[currentBallot.id];
 
     return {
-      countyState,
-      currentBallot,
-      currentBallotNumber: currentBallotNumber(countyState),
-      marks,
-      totalBallotsForBoard: totalBallotsForBoard(countyState),
+        comment,
+        countyState,
+        currentBallot,
+        currentBallotNumber: currentBallotNumber(countyState),
+        isReAuditing: !!comment,
+        marks,
+        totalBallotsForBoard: totalBallotsForBoard(countyState),
     };
 }
 
