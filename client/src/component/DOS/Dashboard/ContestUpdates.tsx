@@ -4,9 +4,11 @@ import * as _ from 'lodash';
 
 import { EditableText, Tooltip } from '@blueprintjs/core';
 
+import setHandCount from 'corla/action/dos/setHandCount';
+
 import counties from 'corla/data/counties';
 
-import setHandCount from 'corla/action/dos/setHandCount';
+import { naturalSortBy } from 'corla/util';
 
 
 const RemainingToAuditHeader = () => {
@@ -53,17 +55,11 @@ type SortKey = 'name'
 
 type SortOrder = 'asc' | 'desc';
 
-function sortIndex(sort: SortKey): number {
-    // tslint:disable
-    const index = {
-        name: 1,
-        discrepancyCount: 2,
-        estimatedBallotsToAudit: 3,
-
-    };
-    // tslint:enable
-
-    return index[sort];
+interface RowData {
+    name: string;
+    discrepancyCount: number;
+    estimatedBallotsToAudit: number;
+    contest: Contest;
 }
 
 interface UpdatesProps {
@@ -79,11 +75,15 @@ interface UpdatesState {
 }
 
 class ContestUpdates extends React.Component<UpdatesProps, UpdatesState> {
-    public state: UpdatesState = {
-        filter: '',
-        order: 'asc',
-        sort: 'name',
-    };
+    public constructor(props: UpdatesProps) {
+        super(props);
+
+        this.state = {
+            filter: '',
+            order: 'asc',
+            sort: 'name',
+        };
+    }
 
     public render() {
         const { contests, dosState, seed } = this.props;
@@ -91,57 +91,54 @@ class ContestUpdates extends React.Component<UpdatesProps, UpdatesState> {
         const selectedContests: DOS.Contests =
             _.values(_.pick(contests, _.keys(dosState.auditedContests)));
 
-        type RowData = [string, number, number, Contest];
-
         const rowData: RowData[] = _.map(selectedContests, (c): RowData => {
             const discrepancyCount: number = _.sum(_.values(dosState.discrepancyCounts![c.id]));
             const estimatedBallotsToAudit = dosState.estimatedBallotsToAudit![c.id];
 
-            return [c.name, discrepancyCount, estimatedBallotsToAudit, c];
+            return {
+                contest: c,
+                discrepancyCount,
+                estimatedBallotsToAudit,
+                name: c.name,
+            };
         });
 
-        const keyFunc = (d: RowData) => d[sortIndex(this.state.sort)];
-        const sortedData = _.sortBy(rowData, keyFunc);
+        const selector = (row: RowData) => row[this.state.sort];
+
+        const sortedData = naturalSortBy(rowData, selector);
 
         if (this.state.order === 'desc') {
             _.reverse(sortedData);
         }
 
-        const filterName = (d: RowData) => {
-            const contestName = d[0].toLowerCase();
-            const str = this.state.filter.toLowerCase();
+        const filterName = (row: RowData) => {
+            const contestName = row.name.toLowerCase();
+            const s = this.state.filter.toLowerCase();
 
-            return contestName.includes(str);
+            return contestName.includes(s);
         };
+
         const filteredData = _.filter(sortedData, filterName);
 
         const contestStatuses = _.map(filteredData, row => {
-            const [contestName, discrepancyCount, estimatedBallotsToAudit, c] = row;
+            const {
+                name,
+                discrepancyCount,
+                estimatedBallotsToAudit,
+                contest,
+            } = row;
 
             return (
-                <tr key={ c.id }>
+                <tr key={ contest.id }>
                     <td>
-                        <HandCountButton contest={ c } />
+                        <HandCountButton contest={ contest } />
                     </td>
-                    <td>{ contestName }</td>
+                    <td>{ name }</td>
                     <td>{ discrepancyCount }</td>
                     <td>{ estimatedBallotsToAudit }</td>
                 </tr>
             );
         });
-
-        const sortAscIcon = <span className='pt-icon-standard pt-icon-sort-asc' />;
-        const sortDescIcon = <span className='pt-icon-standard pt-icon-sort-desc' />;
-
-        const sortIconForCol = (col: string) => {
-            if (col !== this.state.sort) {
-                return null;
-            }
-
-            return this.state.order === 'asc'
-                 ? sortAscIcon
-                 : sortDescIcon;
-        };
 
         return (
             <div className='pt-card'>
@@ -163,17 +160,17 @@ class ContestUpdates extends React.Component<UpdatesProps, UpdatesState> {
                                 <th onClick={ this.sortBy('name') }>
                                     Name
                                     <span> </span>
-                                    { sortIconForCol('name') }
+                                    { this.sortIconForCol('name') }
                                 </th>
                                 <th onClick={ this.sortBy('discrepancyCount') }>
                                     Discrepancies
                                     <span> </span>
-                                    { sortIconForCol('discrepancyCount') }
+                                    { this.sortIconForCol('discrepancyCount') }
                                 </th>
                                 <th onClick={ this.sortBy('estimatedBallotsToAudit') }>
                                     Est. Ballots to Audit
                                     <span> </span>
-                                   { sortIconForCol('estimatedBallotsToAudit') }
+                                   { this.sortIconForCol('estimatedBallotsToAudit') }
                                 </th>
 
                             </tr>
@@ -185,6 +182,16 @@ class ContestUpdates extends React.Component<UpdatesProps, UpdatesState> {
                 </div>
             </div>
         );
+    }
+
+    private sortIconForCol = (col: string) => {
+        if (col !== this.state.sort) {
+            return null;
+        }
+
+        return this.state.order === 'asc'
+             ? <span className='pt-icon-standard pt-icon-sort-asc' />
+             : <span className='pt-icon-standard pt-icon-sort-desc' />;
     }
 
     private onFilterChange = (filter: string) => {
@@ -203,11 +210,7 @@ class ContestUpdates extends React.Component<UpdatesProps, UpdatesState> {
     }
 
     private reverseOrder() {
-        const order = this.state.order === 'asc'
-                    ? 'desc'
-                    : 'asc';
-
-        this.setState({ order });
+        this.setState({ order: this.state.order === 'asc' ? 'desc' : 'asc' });
     }
 }
 
