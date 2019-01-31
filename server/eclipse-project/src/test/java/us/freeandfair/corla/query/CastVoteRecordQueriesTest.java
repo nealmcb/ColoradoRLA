@@ -35,10 +35,12 @@ public class CastVoteRecordQueriesTest {
     }
   }
 
-  @Test()
-  public void deleteAllTest() {
-    //vvvvv THIS IS ALL NOISE vvvvv
-    County c = new County("test", 1L);
+  public List<CVRContestInfo> noisyContestSetup(){
+    return noisyContestSetup(1L);
+  }
+
+  public List<CVRContestInfo> noisyContestSetup(Long countyId){
+    County c = new County("test" + countyId.toString(), countyId);
 
     List<Choice> choices = new ArrayList();
     Choice choice = new Choice("why?",
@@ -58,14 +60,30 @@ public class CastVoteRecordQueriesTest {
     List<String> votes = new ArrayList();
     votes.add("why?");
 
-    //^^^^^ THIS IS ALL NOISE ^^^^^
     CVRContestInfo ci = new CVRContestInfo(co, null,null, votes);
     List<CVRContestInfo> contest_info = new ArrayList();
     contest_info.add(ci);
+
+    Persistence.save(c);
+    Persistence.save(co);
+    Persistence.flush();
+
+    return contest_info;
+  }
+
+  public CastVoteRecord noisyCVRSetup() {
+    return noisyCVRSetup(1);
+  }
+
+  public CastVoteRecord noisyCVRSetup(final Integer position) {
+    return noisyCVRSetup(position, noisyContestSetup(Long.valueOf(position)));
+  }
+
+  public CastVoteRecord noisyCVRSetup(final Integer position, final List<CVRContestInfo> contest_info) {
     CastVoteRecord cvr = new CastVoteRecord(CastVoteRecord.RecordType.UPLOADED,
                                             null,
                                             1L,
-                                            1,
+                                            position,
                                             1,
                                             1,
                                             "1",
@@ -73,14 +91,30 @@ public class CastVoteRecordQueriesTest {
                                             "1",
                                             "a",
                                             contest_info);
-    Persistence.save(c);
-    Persistence.save(co);
+    // this will make the test pass
+    // but the update does not happen
+    // cvr.setToReaudited(1L);
     Persistence.save(cvr);
 
     // Without flushing the persistence context, `deleteAll(1L)` will
     // throw an exception.
-    Persistence.flush();
+    // Persistence.flush();
+    return cvr;
+  }
 
+  @Test()
+  public void reauditTest() {
+    CastVoteRecord cvr = noisyCVRSetup(2);
+    cvr.setToReaudited(1L);
+    // Persistence.saveOrUpdate(cvr);
+    Persistence.flush();
+    Long maxRev = CastVoteRecordQueries.maxRevision(cvr);
+    assertEquals((long)maxRev, (long)1L);
+  }
+
+  @Test()
+  public void deleteAllTest() {
+    noisyCVRSetup(1);
     // this is the method under test
     Integer result = CastVoteRecordQueries.deleteAll(1L);
 

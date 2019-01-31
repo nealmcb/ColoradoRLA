@@ -310,11 +310,11 @@ final public class CastVoteRecord implements Comparable<CastVoteRecord>,
   }
 
   /** set the record type to EDITED and the uri to rcvr:... **/
-  public void setToEdited(final Long revision) {
+  public void setToReaudited(final Long revision) {
     setRecordType(RecordType.REAUDITED);
     setRevision(revision);
 
-    this.setUri();
+    setUri();
   }
 
   /** set the record type **/
@@ -532,6 +532,9 @@ final public class CastVoteRecord implements Comparable<CastVoteRecord>,
       result &= nullableEquals(other_cvr.imprintedID(), imprintedID());
       result &= nullableEquals(other_cvr.ballotType(), ballotType());
       result &= nullableEquals(other_cvr.contestInfo(), contestInfo());
+      result &= nullableEquals(other_cvr.recordType(), recordType());
+      result &= nullableEquals(other_cvr.getRevision(), getRevision());
+      result &= nullableEquals(other_cvr.getUri(), getUri());
     } else {
       result = false;
     }

@@ -198,13 +198,13 @@ public final class ComparisonAuditController {
     final CVRAuditInfo oldInfo =
       Persistence.getByID(cvr.id(), CVRAuditInfo.class);
     CastVoteRecord oldAcvr = oldInfo.acvr();
-
+    Long revision;
     if (null == oldInfo.acvr()) {
       LOGGER.error("can't reaudit a cvr that hasn't been audited");
       return false;
     } else {
-      Long revision = CastVoteRecordQueries.maxRevision(cvr);
-      oldAcvr.setToEdited(revision);
+      revision = CastVoteRecordQueries.maxRevision(cvr);
+      oldAcvr.setToReaudited(revision);
       LOGGER.info("[reaudit] revision: " + oldAcvr.getRevision().toString());
       LOGGER.debug("[reaudit] oldAcvr: " + oldAcvr.toString());
     }
@@ -217,6 +217,8 @@ public final class ComparisonAuditController {
     final Integer former_count = unaudit(cdb, oldInfo);
     LOGGER.debug("[reaudit] former_count: " + former_count.toString());
 
+    LOGGER.info("[reaudit] old " + oldAcvr.getRevision().toString() + " " + oldAcvr.recordType().toString());
+    Persistence.update(oldAcvr);
     Persistence.delete(oldInfo);
     Persistence.save(newInfo);
     Persistence.update(oldAcvr);

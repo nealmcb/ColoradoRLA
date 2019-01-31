@@ -548,9 +548,9 @@ public final class CastVoteRecordQueries {
     final Session s = Persistence.currentSession();
     final Query q =
       s.createQuery("select max(revision) from CastVoteRecord cvr " +
-                    " where uri = :uri ");
+                    " where uri like ?0 ");
 
-    q.setParameter("uri", cvr.getUri());
+    q.setString(0, cvr.getUri().split("\\?")[0] + "%");
     Long result = (Long)q.getSingleResult();
     if (null == result) {
       return 0L;
