@@ -12,136 +12,100 @@ import Nav from '../Nav';
 
 import standardizeContests from 'corla/action/dos/standardizeContests';
 
-import { Breadcrumb, StandardizeContestsPage } from './StandardizeContestsPage';
+import StandardizeContestsPage from './StandardizeContestsPage';
 
 import withDOSState from 'corla/component/withDOSState';
 import withPoll from 'corla/component/withPoll';
 
 import counties from 'corla/data/counties';
 
-const contestsToDisplay = (contests: DOS.Contests,
-                           canonicalContests: DOS.CanonicalContests) => {
-    const displayedContests: DOS.Contests = {};
+// The next URL path to transition to.
+const NEXT_PATH = '/sos/audit/select-contests';
 
-    // XXX: Make this a map / filter chain. TypeScript complains about using
-    // `DOS.Contests` in a `_.filter` context, and I do not know how to make it
-    // happy.
-    _.forEach(contests, (contest: Contest) => {
+// The previous URL path to transition to.
+const PREV_PATH = '/sos/audit';
+
+const contestsToDisplay = (
+    contests: DOS.Contests,
+    canonicalContests: DOS.CanonicalContests,
+): DOS.Contests => {
+    return _.reduce(contests, (acc: DOS.Contests, contest: Contest) => {
         const countyName = counties[contest.countyId].name;
         const countyStandards = canonicalContests[countyName] || [];
 
-        if (!_.isEmpty(countyStandards) && !_.includes(countyStandards, contest.name)) {
-          displayedContests[contest.id] = contest;
+        if (!_.isEmpty(countyStandards)
+            && !_.includes(countyStandards, contest.name)) {
+            acc[contest.id] = contest;
         }
-    });
 
-    return displayedContests;
+        return acc;
+    }, {});
 };
 
-interface WaitingForContestsProps {
-    back: OnClick;
-}
-
-const WaitingForContests = ({ back }: WaitingForContestsProps) => {
-    return (
-        <div>
-            <Nav />
-            <Breadcrumb />
-            <div className='pt-card'>
-                Waiting for counties to upload contest data.
-            </div>
-            <div>
-                <button onClick={ back } className='pt-button pt-intent-primary pt-breadcrumb'>
-                    Back
-                </button>
-                <button disabled className='pt-button pt-intent-primary pt-breadcrumb'>
-                    Save & Next
-                </button>
-            </div>
-        </div>
-    );
-};
-
-interface ContainerProps {
+interface Props {
+    areContestsLoaded: boolean;
+    asm: DOS.ASMState;
     contests: DOS.Contests;
     canonicalContests: DOS.CanonicalContests;
     history: History;
-    dosState: DOS.AppState;
 }
 
-/**
- * The URL path part for the page logically following this one.
- */
-const NEXT_PAGE = '/sos/audit/select-contests';
+const StandardizeContestsPageContainer = (props: Props) => {
+    const {
+        areContestsLoaded,
+        asm,
+        canonicalContests,
+        contests,
+        history,
+    } = props;
 
-/**
- * The URL path part for the page logically preceding this one.
- */
-const PREVIOUS_PAGE = '/sos/audit';
+    const nextPage = (formData: DOS.Form.StandardizeContests.FormData) => {
+        standardizeContests(formData);
+        history.push(NEXT_PATH);
+    };
 
-class StandardizeContestsPageContainer extends React.Component<ContainerProps> {
-    private forms: DOS.Form.StandardizeContests.Ref;
+    const previousPage = () => {
+        history.push(PREV_PATH);
+    };
 
-    public componentDidMount() {
-        this.forms = { standardizeContestsForm: {} };
+    if (asm === 'DOS_AUDIT_ONGOING') {
+        return <Redirect to='/sos' />;
     }
 
-    public render() {
-        const {
-            canonicalContests,
-            contests,
-            dosState,
-            history,
-        } = this.props;
+    let filteredContests = {};
 
-        if (!_.get(dosState, 'asm')) {
-            return <div />;
-        }
-
-        const previousPage = () => history.push(PREVIOUS_PAGE);
-
-        if (_.isEmpty(contests) || _.isEmpty(canonicalContests)) {
-            return <WaitingForContests back={ previousPage } />;
-        }
-
-        if (dosState.asm === 'DOS_AUDIT_ONGOING') {
-            return <Redirect to='/sos' />;
-        }
-
-        const filteredContests = contestsToDisplay(contests, canonicalContests);
+    if (areContestsLoaded) {
+        filteredContests = contestsToDisplay(contests, canonicalContests);
 
         if (_.isEmpty(filteredContests)) {
-            return <Redirect to={ NEXT_PAGE } />;
+            return <Redirect to={ NEXT_PATH } />;
         }
-
-        const props = {
-            back: previousPage,
-            canonicalContests,
-            contests: filteredContests,
-            // Pass this mutable thing into the child object so we can submit it
-            // later. This is *not* the "right" way to do it.
-            forms: this.forms,
-            nextPage: () => {
-                standardizeContests(this.forms.standardizeContestsForm || {});
-                history.push(NEXT_PAGE);
-            },
-        };
-
-        return <StandardizeContestsPage { ...props } />;
     }
-}
 
-function select(dosState: DOS.AppState) {
+    return <StandardizeContestsPage areContestsLoaded={ areContestsLoaded }
+                                    back={ previousPage }
+                                    canonicalContests={ canonicalContests }
+                                    contests={ filteredContests }
+                                    forward={ nextPage } />;
+};
+
+const mapStateToProps = (state: DOS.AppState) => {
+    const canonicalContests = state.canonicalContests;
+    const contests = state.contests;
+    const areContestsLoaded = !_.isEmpty(contests)
+        && !_.isEmpty(canonicalContests);
+
     return {
-        canonicalContests: dosState.canonicalContests,
-        contests: dosState.contests,
-        dosState,
+        areContestsLoaded,
+        asm: state.asm,
+        canonicalContests,
+        contests,
     };
-}
+};
 
 export default withPoll(
     withDOSState(StandardizeContestsPageContainer),
     'DOS_SELECT_CONTESTS_POLL_START',
     'DOS_SELECT_CONTESTS_POLL_STOP',
-    select,
+    mapStateToProps,
 );

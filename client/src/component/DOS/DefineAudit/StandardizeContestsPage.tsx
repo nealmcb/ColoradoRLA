@@ -9,7 +9,44 @@ import Nav from '../Nav';
 
 import counties from 'corla/data/counties';
 
-export const Breadcrumb = () => (
+import { findBestMatch } from 'string-similarity';
+
+/**
+ * The maximum percentage match at or above which a contest will be assumed to
+ * match a given canonical contest.
+ *
+ * The algorithm used is not defined, so this may need to change if the
+ * algorithm is changed.
+ */
+const MIN_MATCH_THRESHOLD = 0.67;
+
+/**
+ * Returns the default selection for `name` given `canonicalNames` to choose
+ * from.
+ *
+ * The default selection will be the empty string if there was not a better
+ * choice in `canonicalNames` for the given contest name.
+ */
+const defaultCanonicalName = (
+    name: string,
+    canonicalNames: string[],
+): string => {
+    const loweredName = name.toLowerCase();
+    const loweredCanonicals = _.map(canonicalNames, s => s.toLowerCase());
+
+    const { bestMatch, bestMatchIndex } = findBestMatch(
+        loweredName,
+        loweredCanonicals,
+    );
+
+    if (bestMatch.rating < MIN_MATCH_THRESHOLD) {
+        return '';
+    }
+
+    return canonicalNames[bestMatchIndex];
+};
+
+const Breadcrumb = () => (
     <ul className='pt-breadcrumbs'>
         <li>
             <a className='pt-breadcrumb' href='/sos'>SoS</a>
@@ -23,59 +60,19 @@ export const Breadcrumb = () => (
     </ul>
 );
 
-interface PageProps {
-  forms: DOS.Form.StandardizeContests.Ref;
-  canonicalContests: DOS.CanonicalContests;
-  contests: DOS.Contests;
-  back: OnClick;
-  nextPage: OnClick;
+interface UpdateFormMessage {
+    id: number;
+    name: string;
 }
 
-export const StandardizeContestsPage = (props: PageProps) => {
-    const { canonicalContests, contests, forms, back, nextPage } = props;
-
-    // XXX: || {} is to appease the type checker
-    return (
-      <div>
-          <Nav />
-          <Breadcrumb />
-
-          <h2>Standardize Contest Names</h2>
-
-          <p>
-              Contest names must be standardized to group records correctly across
-              jurisdictions. Below is a list of contests that do not match the
-              standardized contest names provided by the state. For each of the
-              contests listed, please choose the appropriate standardized version
-              from the options provided, then save your choices and move forward.
-          </p>
-
-          <div className='pt-card'>
-              <StandardizeContestsForm formData={ _.get(forms, 'standardizeContestsForm', {})}
-                                       canonicalContests={ canonicalContests }
-                                       contests={ contests } />
-          </div>
-
-          <div>
-              <button onClick={ back } className='pt-button pt-breadcrumb'>
-                  Back
-              </button>
-              <button onClick={ nextPage } className='pt-button pt-intent-primary pt-breadcrumb'>
-                  Save & Next
-              </button>
-          </div>
-      </div>
-    );
-};
-
-interface StandardizeContestsFormProps {
+interface TableProps {
     contests: DOS.Contests;
     canonicalContests: DOS.CanonicalContests;
-    formData: DOS.Form.StandardizeContests.FormData;
+    updateFormData: (msg: UpdateFormMessage) => void;
 }
 
-const StandardizeContestsForm = (props: StandardizeContestsFormProps) => {
-    const { canonicalContests, contests, formData } = props;
+const StandardizeContestsTable = (props: TableProps) => {
+    const { canonicalContests, contests, updateFormData } = props;
 
     return (
         <table className='pt-table pt-striped'>
@@ -88,25 +85,25 @@ const StandardizeContestsForm = (props: StandardizeContestsFormProps) => {
             </thead>
             <ContestBody contests={ contests }
                          canonicalContests={ canonicalContests }
-                         formData={ formData } />
+                         updateFormData={ updateFormData } />
         </table>
     );
 };
 
-interface ContestBodyProps {
+interface BodyProps {
     contests: DOS.Contests;
     canonicalContests: DOS.CanonicalContests;
-    formData: DOS.Form.StandardizeContests.FormData;
+    updateFormData: (msg: UpdateFormMessage) => void;
 }
 
-const ContestBody = (props: ContestBodyProps) => {
-    const { canonicalContests, contests, formData } = props;
+const ContestBody = (props: BodyProps) => {
+    const { canonicalContests, contests, updateFormData } = props;
 
     const rows = _.map(contests, c => {
         return <ContestRow key={ c.id }
                            contest={ c }
                            canonicalContests={ canonicalContests }
-                           formData={ formData } />;
+                           updateFormData={ updateFormData } />;
     });
 
     return (
@@ -117,26 +114,21 @@ const ContestBody = (props: ContestBodyProps) => {
 interface ContestRowProps {
     contest: Contest;
     canonicalContests: DOS.CanonicalContests;
-    formData: DOS.Form.StandardizeContests.FormData;
+    updateFormData: (msg: UpdateFormMessage) => void;
 }
 
 const ContestRow = (props: ContestRowProps) => {
-    const { canonicalContests, contest, formData } = props;
+    const { canonicalContests, contest, updateFormData } = props;
     const countyName = counties[contest.countyId].name;
 
-    let standards: string[] = [];
-    if (!_.isEmpty(canonicalContests[countyName])) {
-        standards = _.clone(canonicalContests[countyName]);
-    }
+    const standards = canonicalContests[countyName];
 
-    const changeHandler = (e: any) => {
-        const v = String(e.target.value);
+    const defaultName = defaultCanonicalName(contest.name, standards);
 
-        if (_.isEmpty(v)) {
-            delete formData[contest.id];
-        } else {
-            formData[contest.id] = {name: v};
-        }
+    const changeHandler = (e: React.FormEvent<HTMLSelectElement>) => {
+        const v = e.currentTarget.value;
+
+        updateFormData({id: contest.id, name: v});
     };
 
     return (
@@ -146,12 +138,11 @@ const ContestRow = (props: ContestRowProps) => {
             <td>
                 <form>
                     <select name={ String(contest.id) }
-                            onChange={ changeHandler }>
+                            onChange={ changeHandler }
+                            defaultValue={ defaultName }>
                         <option value=''>-- No change --</option>
                         {
-                          _.map(standards, n => {
-                              return <option value={ n }>{ n }</option>;
-                          })
+                          _.map(standards, n => <option value={ n }>{ n }</option>)
                         }
                     </select>
                 </form>
@@ -159,3 +150,99 @@ const ContestRow = (props: ContestRowProps) => {
         </tr>
     );
 };
+
+interface PageProps {
+    areContestsLoaded: boolean;
+    canonicalContests: DOS.CanonicalContests;
+    contests: DOS.Contests;
+    forward: (x: DOS.Form.StandardizeContests.FormData) => void;
+    back: () => void;
+}
+
+class StandardizeContestsPage extends React.Component<PageProps> {
+    public formData: DOS.Form.StandardizeContests.FormData = {};
+
+    public constructor(props: PageProps) {
+        super(props);
+
+        this.updateFormData = this.updateFormData.bind(this);
+    }
+
+    public render() {
+        const {
+            areContestsLoaded,
+            back,
+            canonicalContests,
+            contests,
+            forward,
+        } = this.props;
+
+        if (areContestsLoaded) {
+            return (
+                <div>
+                    <Nav />
+                    <Breadcrumb />
+                    <h2>Standardize Contest Names</h2>
+                    <div className='pt-card'>
+                        <p>
+                            Contest names must be standardized to group records
+                            correctly across jurisdictions. Below is a list of
+                            contests that do not match the standardized contest
+                            names provided by the state. For each of the contests
+                            listed, please choose the appropriate standardized
+                            version from the options provided, then save your
+                            choices and move forward.
+                        </p>
+
+                        <StandardizeContestsTable canonicalContests={ canonicalContests }
+                                                  contests={ contests }
+                                                  updateFormData={ this.updateFormData } />
+                    </div>
+                    <div>
+                        <button onClick={ back }
+                                className='pt-button pt-breadcrumb'>
+                            Back
+                        </button>
+                        <button onClick={ () => forward(this.formData) }
+                                className='pt-button pt-intent-primary pt-breadcrumb'>
+                            Save & Next
+                        </button>
+                    </div>
+                </div>
+            );
+        } else {
+            return (
+                <div>
+                    <Nav />
+                    <Breadcrumb />
+                    <h2>Standardize Contest Names</h2>
+                    <div className='pt-card'>
+                        Waiting for counties to upload contest data.
+                    </div>
+                    <div>
+                        <button onClick={ back }
+                                className='pt-button pt-breadcrumb'>
+                            Back
+                        </button>
+                        <button disabled
+                                className='pt-button pt-intent-primary pt-breadcrumb'>
+                            Save & Next
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+    }
+
+    private updateFormData(msg: UpdateFormMessage) {
+        const { id, name } = msg;
+
+        if (_.isEmpty(name)) {
+            delete this.formData[id];
+        } else {
+            this.formData[id] = { name };
+        }
+    }
+}
+
+export default StandardizeContestsPage;

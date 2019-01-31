@@ -168,10 +168,6 @@ declare namespace DOS {
         }
 
         namespace StandardizeContests {
-            interface Ref {
-                standardizeContestsForm?: DOS.Form.StandardizeContests.FormData;
-            }
-
             interface ContestName {
                 name: string;
             }
