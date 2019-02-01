@@ -115,6 +115,6 @@ class AuditBoardNumberSelector
 
 const mapDispatchToProps = () => {
     return { setNumberOfAuditBoards };
-}
+};
 
 export default connect(null, mapDispatchToProps)(AuditBoardNumberSelector);

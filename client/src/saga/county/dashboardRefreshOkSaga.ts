@@ -1,10 +1,6 @@
 import { has } from 'lodash';
 
-import {
-    put,
-    select,
-    takeLatest,
-} from 'redux-saga/effects';
+import { call, put, select, takeLatest } from 'redux-saga/effects';
 
 import notice from 'corla/notice';
 
@@ -48,11 +44,11 @@ function* countyRefreshOk({ data }: any): any {
     const county = parse(data, state);
 
     if (county.id) {
-        countyFetchContests(county.id);
+        yield call(countyFetchContests, county.id);
     }
 
     if (has(county, 'currentRound.number')) {
-        fetchCvrsToAudit(county.currentRound!.number);
+        yield call(fetchCvrsToAudit, county.currentRound!.number);
     }
 
     if (typeof state.auditBoardIndex !== 'number') {
@@ -72,7 +68,7 @@ function* countyRefreshOk({ data }: any): any {
         // it is new. Otherwise we already have it, and fetching it
         // again would overwrite the `submitted` flag, causing us to
         // forget that we are waiting for the submission to be handled.
-        countyFetchCvr(nextId);
+        yield call(countyFetchCvr, nextId);
     }
 }
 
