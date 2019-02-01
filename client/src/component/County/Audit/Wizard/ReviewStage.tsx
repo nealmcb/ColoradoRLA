@@ -190,7 +190,7 @@ const ReviewStage = (props: ReviewStageProps) => {
         }
 
         nextStage();
-    }
+    };
 
     if (currentBallot.submitted) {
         return <SubmittingACVR />;
