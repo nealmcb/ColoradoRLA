@@ -495,7 +495,16 @@ public class ComparisonAudit implements PersistentEntity {
    * `my_estimates_samples_to_audit` fields.
    */
   private void recalculateSamplesToAudit() {
+    LOGGER.debug(String.format("[recalculateSamplestoAudit start contestName=%s, "
+                               + "twoUnder=%d, oneUnder=%d, oneOver=%d, twoOver=%d"
+                               + " optimistic=%d, estimated=%d]",
+                               contestResult().getContestName(),
+                               my_two_vote_under_count, my_one_vote_under_count,
+                               my_one_vote_over_count, my_two_vote_over_count,
+                               my_optimistic_samples_to_audit, my_estimated_samples_to_audit));
+
     if (my_optimistic_recalculate_needed) {
+      LOGGER.debug("[recalculateSamplesToAudit: calling computeOptimisticSamplesToAudit]");
       final BigDecimal optimistic = computeOptimisticSamplesToAudit(my_two_vote_under_count,
                                                                     my_one_vote_under_count,
                                                                     my_one_vote_over_count,
@@ -508,7 +517,7 @@ public class ComparisonAudit implements PersistentEntity {
       LOGGER.debug("[recalculateSamplesToAudit: zero overcounts]");
       my_estimated_samples_to_audit = my_optimistic_samples_to_audit;
     } else {
-      LOGGER.debug("[recalculateSamplesToAudit: non-zero overcounts, using scaling factor]");
+      LOGGER.debug(String.format("[recalculateSamplesToAudit: non-zero overcounts, using scaling factor %s]", scalingFactor()));
       my_estimated_samples_to_audit =
         BigDecimal.valueOf(my_optimistic_samples_to_audit)
         .multiply(scalingFactor())
@@ -516,7 +525,7 @@ public class ComparisonAudit implements PersistentEntity {
         .intValue();
     }
 
-    LOGGER.debug(String.format("[recalculateSamplestoAudit contestName=%s, "
+    LOGGER.debug(String.format("[recalculateSamplestoAudit end contestName=%s, "
                                + "twoUnder=%d, oneUnder=%d, oneOver=%d, twoOver=%d"
                                + " optimistic=%d, estimated=%d]",
                                contestResult().getContestName(),
@@ -599,9 +608,9 @@ public class ComparisonAudit implements PersistentEntity {
    * @param the_count The count of samples that have been unaudited simultaneously
    * (for duplicates).
    */
-  public void signalSampleUnaudited(final int the_count) {
+  public void signalSampleUnaudited(final int count) {
     my_estimated_recalculate_needed = true;
-    my_audited_sample_count = my_audited_sample_count - the_count;
+    my_audited_sample_count = my_audited_sample_count - count;
 
     if (my_audit_status != AuditStatus.ENDED &&
         my_audit_status != AuditStatus.NOT_AUDITABLE) {
@@ -619,6 +628,12 @@ public class ComparisonAudit implements PersistentEntity {
    * @parma cvrID The ID of the CVR to unaudit
    */
   public void signalSampleUnaudited(final int count, final Long cvrID) {
+    LOGGER.debug
+      (String.format
+       ("[signalSampleUnaudited: start "
+        + "contestName=%s, cvrID=%d, auditedSamples=%d, count=%d]",
+        contestResult().getContestName(), cvrID, getAuditedSampleCount(), count));
+
     final boolean covered = isCovering(cvrID);
     final boolean targeted = isTargeted();
 

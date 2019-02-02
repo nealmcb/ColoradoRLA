@@ -91,25 +91,25 @@ public class CastVoteRecordQueriesTest {
                                             "1",
                                             "a",
                                             contest_info);
-    // this will make the test pass
-    // but the update does not happen
-    // cvr.setToReaudited(1L);
     Persistence.save(cvr);
 
     // Without flushing the persistence context, `deleteAll(1L)` will
     // throw an exception.
-    // Persistence.flush();
+    Persistence.flush();
     return cvr;
   }
 
   @Test()
   public void reauditTest() {
+    // let's pretend the current max revision is 2, which we'll inc, and then
+    // assertEquals
+    Long curMax = 2L;
     CastVoteRecord cvr = noisyCVRSetup(2);
-    cvr.setToReaudited(1L);
-    // Persistence.saveOrUpdate(cvr);
-    Persistence.flush();
+    cvr.setToReaudited(curMax + 1L);
+    Long result = CastVoteRecordQueries.forceUpdate(cvr);
+    assertEquals((long) 1L, (long)result);
     Long maxRev = CastVoteRecordQueries.maxRevision(cvr);
-    assertEquals((long)maxRev, (long)1L);
+    assertEquals((long)maxRev, (long)curMax + 1L);
   }
 
   @Test()

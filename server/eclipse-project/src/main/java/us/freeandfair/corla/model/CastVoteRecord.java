@@ -578,7 +578,7 @@ final public class CastVoteRecord implements Comparable<CastVoteRecord>,
    */
   @Override
   public int hashCode() {
-    return nullableHashCode(imprintedID());
+    return nullableHashCode(getUri());
   }
 
   /**
