@@ -18,17 +18,10 @@ interface ReviewButtonProps {
 
 const ReviewButton = (props: ReviewButtonProps) => {
     const handler: IButtonProps['onClick'] = () => {
-        if (props.cvr.db_id != null) {
-            props.open(props.cvr);
-        } else {
-            alert('Sorry, this ballot cannot be re-audited.');
-        }
+        props.open(props.cvr);
     };
 
-    return (
-        <Button text='Re-audit'
-                onClick={ handler }  />
-    );
+    return <Button text='Re-audit' onClick={ handler } />;
 };
 
 interface FinalReviewPageProps {
