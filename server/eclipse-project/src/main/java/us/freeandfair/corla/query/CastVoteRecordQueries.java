@@ -560,7 +560,7 @@ public final class CastVoteRecordQueries {
       .split("\\?")[0] + "%";
 
     q.setString(0, ruri);
-    Long result = (Long)q.getSingleResult();
+    final Long result = (Long)q.getSingleResult();
 
     if (null == result) {
       return 0L;
@@ -569,6 +569,10 @@ public final class CastVoteRecordQueries {
     }
   }
 
+  /**
+     workaround. hibernate was ignoring the update of the object passed to the
+     method for some unknown reason
+   **/
   public static Long forceUpdate(final CastVoteRecord cvr) {
     final Session s = Persistence.currentSession();
     final Query q =
@@ -581,7 +585,7 @@ public final class CastVoteRecordQueries {
     q.setParameter("revision", cvr.getRevision());
     q.setParameter("uri", cvr.getUri());
     q.setParameter("id", cvr.id());
-    int result = q.executeUpdate();
+    final int result = q.executeUpdate();
     return Long.valueOf(result);
   }
 

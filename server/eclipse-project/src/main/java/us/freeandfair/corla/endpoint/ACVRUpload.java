@@ -87,6 +87,7 @@ public class ACVRUpload extends AbstractAuditBoardDashboardEndpoint {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings({"PMD.ModifiedCyclomaticComplexity", "PMD.StdCyclomaticComplexity"})
   @Override
   public String endpointBody(final Request the_request, final Response the_response) {
     try {
@@ -175,9 +176,9 @@ public class ACVRUpload extends AbstractAuditBoardDashboardEndpoint {
     } catch (final JsonParseException e) {
       LOGGER.error("malformed audit CVR upload");
       badDataContents(the_response, "malformed audit CVR upload");
-    // } catch (final PersistenceException e) {
-    //   LOGGER.error("could not save audit CVR");
-    //   serverError(the_response, "Unable to save audit CVR");
+    } catch (final PersistenceException e) {
+      LOGGER.error("could not save audit CVR");
+      serverError(the_response, "Unable to save audit CVR");
     }
     return my_endpoint_result.get();
   }

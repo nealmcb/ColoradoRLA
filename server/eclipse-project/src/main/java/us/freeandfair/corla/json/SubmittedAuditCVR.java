@@ -52,6 +52,7 @@ public class SubmittedAuditCVR {
     this.comment = "";
   }
 
+  /** create the object with all the fields **/
   public SubmittedAuditCVR(final Long the_cvr_id,
                            final CastVoteRecord the_audit_cvr,
                            final Boolean reaudit,

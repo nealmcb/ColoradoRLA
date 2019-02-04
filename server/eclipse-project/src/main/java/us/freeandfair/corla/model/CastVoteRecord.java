@@ -75,7 +75,9 @@ import us.freeandfair.corla.util.SuppressFBWarnings;
 // cannot be for compatibility with Hibernate and JPA.
 @SuppressWarnings({"PMD.ImmutableField",
                     // I agreed but let's put if off for now
-                   "PMD.TooManyMethods"})
+                   "PMD.TooManyMethods",
+                   "PMD.TooManyFields",
+                   "PMD.GodClass"})
 // this FindBugs warning is for the transient field, which we know will not be
 // restored when the class is unserialized, because we intentionally made it
 // transient so it wouldn't be. Since that's what "transient" means.
@@ -318,7 +320,7 @@ final public class CastVoteRecord implements Comparable<CastVoteRecord>,
   }
 
   /** set the record type **/
-  public void setRecordType(RecordType recordType) {
+  public void setRecordType(final RecordType recordType) {
     this.my_record_type = recordType;
   }
 
