@@ -8,6 +8,8 @@ import counties from 'corla/data/counties';
 
 import { formatCountyAndBoardASMState } from 'corla/format';
 
+import { naturalSortBy } from 'corla/util';
+
 
 const RemainingInRoundHeader = () => {
     const content =
@@ -52,24 +54,19 @@ type SortKey = 'name'
              | 'remRound'
              | 'remTotal';
 
-function sortIndex(sort: SortKey): number {
-    // tslint:disable
-    const index = {
-        name: 1,
-        status: 2,
-        submitted: 3,
-        auditedDisc: 4,
-        oppDisc: 5,
-        disagreements: 6,
-        remRound: 7,
-        remTotal: 8,
-    };
-    // tslint:enable
-
-    return index[sort];
-}
-
 type SortOrder = 'asc' | 'desc';
+
+interface RowData {
+    id: number;
+    name: string;
+    status: string;
+    submitted: number | string;
+    auditedDisc: number | string;
+    oppDisc: number | string;
+    disagreements: number | string;
+    remRound: number | string;
+    remTotal: number | string;
+}
 
 interface UpdatesProps {
     auditStarted: boolean;
@@ -92,29 +89,23 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
     public render() {
         const { auditStarted, countyStatus } = this.props;
 
-        type RowData = [
-            number,
-            string,
-            string,
-            (number | string),
-            (number | string),
-            (number | string),
-            (number | string),
-            (number | string),
-            (number | string)
-        ];
-
         const countyData: RowData[] = _.map(countyStatus, (c): RowData => {
             const county = counties[c.id];
             const missedDeadline = c.asmState === 'DEADLINE_MISSED';
             const status = formatCountyAndBoardASMState(c.asmState, c.auditBoardASMState);
 
-            if (!auditStarted) {
-                return [c.id, county.name, status, '—', '—', '—', '—', '—', '—'];
-            }
-
-            if (auditStarted && missedDeadline) {
-                return [c.id, county.name, status, '—', '—', '—', '—', '—', '—'];
+            if (!auditStarted || (auditStarted && missedDeadline)) {
+                return {
+                    auditedDisc: '—',
+                    disagreements: '—',
+                    id: c.id,
+                    name: county.name,
+                    oppDisc: '—',
+                    remRound: '—',
+                    remTotal: '—',
+                    status,
+                    submitted: '—',
+                };
             }
 
             const auditedDiscrepancyCount = c.discrepancyCount
@@ -125,22 +116,22 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
                                             : 0;
             const disagreementCount = c.disagreementCount || 0;
 
-            return [
-                c.id,
-                county.name,
+            return {
+                auditedDisc: auditedDiscrepancyCount,
+                disagreements: disagreementCount,
+                id: c.id,
+                name: county.name,
+                oppDisc: unauditedDiscrepancyCount,
+                remRound: c.ballotsRemainingInRound,
+                remTotal: Math.max(0, c.estimatedBallotsToAudit),
                 status,
-                c.auditedBallotCount || 0,
-                auditedDiscrepancyCount,
-                unauditedDiscrepancyCount,
-                disagreementCount,
-                c.ballotsRemainingInRound,
-                Math.max(0, c.estimatedBallotsToAudit),
-            ];
+                submitted: c.auditedBallotCount || 0,
+            };
         });
 
-        const keyFunc = (d: RowData) => {
-            const countyName = d[1];
-            const sortVal = d[sortIndex(this.state.sort)];
+        const selector = (row: RowData) => {
+            const countyName = row.name;
+            const sortVal = row[this.state.sort];
 
             if (sortVal === '—') {
                 // There are numeric and non-numeric columns. If the audit has not
@@ -157,48 +148,36 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
                 return [sortVal, countyName];
             }
         };
-        const sortedCountyData = _.sortBy(countyData, keyFunc);
+
+        const sortedCountyData = naturalSortBy(countyData, selector);
 
         if (this.state.order === 'desc') {
             _.reverse(sortedCountyData);
         }
 
-        const filterName = (d: RowData) => {
-            const name = d[1].toLowerCase();
-            const str = this.state.filter.toLowerCase();
+        const filterName = (row: RowData) => {
+            const name = row.name.toLowerCase();
+            const s = this.state.filter.toLowerCase();
 
-            return name.includes(str);
+            return name.includes(s);
         };
         const filteredCountyData = _.filter(sortedCountyData, filterName);
 
-        const countyStatusRows = _.map(filteredCountyData, (x: RowData) => {
+        const countyStatusRows = _.map(filteredCountyData, (row: RowData) => {
             return (
-                <tr key={ x[0] }>
-                    <td>{ x[1] }</td>
-                    <td>{ x[2] }</td>
-                    <td>{ x[3] }</td>
-                    <td>{ x[4] }</td>
-                    <td>{ x[5] }</td>
-                    <td>{ x[6] }</td>
-                    <td>{ x[7] }</td>
+                <tr key={ row.id }>
+                    <td>{ row.name }</td>
+                    <td>{ row.status }</td>
+                    <td>{ row.submitted }</td>
+                    <td>{ row.auditedDisc }</td>
+                    <td>{ row.oppDisc }</td>
+                    <td>{ row.disagreements }</td>
+                    <td>{ row.remRound }</td>
                     {/* not applicable to Counties anymore, only ComparisonAudit */}
                     {/* <td>{ x[8] }</td> */}
                 </tr>
             );
         });
-
-        const sortAscIcon = <span className='pt-icon-standard pt-icon-sort-asc' />;
-        const sortDescIcon = <span className='pt-icon-standard pt-icon-sort-desc' />;
-
-        const sortIconForCol = (col: string) => {
-            if (col !== this.state.sort) {
-                return null;
-            }
-
-            return this.state.order === 'asc'
-                 ? sortAscIcon
-                 : sortDescIcon;
-        };
 
         return (
             <div className='pt-card'>
@@ -223,43 +202,43 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
                                 <th onClick={ this.sortBy('name') }>
                                     Name
                                     <span> </span>
-                                    { sortIconForCol('name') }
+                                    { this.sortIconForCol('name') }
                                 </th>
                                 <th onClick={ this.sortBy('status') }>
                                     Status
                                     <span> </span>
-                                    { sortIconForCol('status') }
+                                    { this.sortIconForCol('status') }
                                 </th>
                                 <th onClick={ this.sortBy('submitted') }>
                                     Submitted
                                     <span> </span>
-                                    { sortIconForCol('submitted') }
+                                    { this.sortIconForCol('submitted') }
                                 </th>
                                 <th onClick={ this.sortBy('auditedDisc') }>
                                     Audited Contest Discrepancies
                                     <span> </span>
-                                    { sortIconForCol('auditedDisc') }
+                                    { this.sortIconForCol('auditedDisc') }
                                 </th>
                                 <th onClick={ this.sortBy('oppDisc') }>
                                     Non-audited Contest Discrepancies
                                     <span> </span>
-                                    { sortIconForCol('oppDisc') }
+                                    { this.sortIconForCol('oppDisc') }
                                 </th>
                                 <th onClick={ this.sortBy('disagreements') }>
                                     Disagreements
                                     <span> </span>
-                                    { sortIconForCol('disagreements') }
+                                    { this.sortIconForCol('disagreements') }
                                 </th>
                                 <th onClick={ this.sortBy('remRound') }>
                                     <RemainingInRoundHeader />
                                     <span> </span>
-                                    { sortIconForCol('remRound') }
+                                    { this.sortIconForCol('remRound') }
                                 </th>
                                 {/* not applicable to Counties anymore, only ComparisonAudit */}
                                 {/* <th onClick={ this.sortBy('remTotal') }> */}
                                     {/* <EstRemainingHeader /> */}
                                     {/* <span> </span> */}
-                                    {/* { sortIconForCol('remTotal') } */}
+                                    {/* { this.sortIconForCol('remTotal') } */}
                                     {/* </th> */}
                             </tr>
                         </thead>
@@ -270,6 +249,16 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
                 </div>
             </div>
         );
+    }
+
+    private sortIconForCol = (col: string) => {
+        if (col !== this.state.sort) {
+            return null;
+        }
+
+        return this.state.order === 'asc'
+             ? <span className='pt-icon-standard pt-icon-sort-asc' />
+             : <span className='pt-icon-standard pt-icon-sort-desc' />;
     }
 
     private onFilterChange = (filter: string) => {
@@ -288,11 +277,7 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
     }
 
     private reverseOrder() {
-        const order = this.state.order === 'asc'
-                    ? 'desc'
-                    : 'asc';
-
-        this.setState({ order });
+        this.setState({order: this.state.order === 'asc' ? 'desc' : 'asc'});
     }
 }
 

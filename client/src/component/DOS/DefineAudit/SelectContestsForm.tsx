@@ -7,6 +7,8 @@ import { Select } from '@blueprintjs/labs';
 
 import counties from 'corla/data/counties';
 
+import { naturalSortBy } from 'corla/util';
+
 
 const auditReasons: DOS.Form.SelectContests.Reason[] = [
     /* county contest should be the default because there are more of them and this will save clicks. default is first */
@@ -119,6 +121,12 @@ type SortKey = 'contest' | 'county';
 
 type SortOrder = 'asc' | 'desc';
 
+interface ContestData {
+    county: string;
+    contest: string;
+    props: RowProps;
+}
+
 interface FormProps {
     contests: DOS.Contests;
     auditedContests: DOS.AuditedContests;
@@ -171,8 +179,6 @@ class SelectContestsForm extends React.Component<FormProps, FormState> {
 
         this.props.forms.selectContestsForm = this.state.form;
 
-        type ContestData = [string, string, RowProps];
-
         const contestData: ContestData[] = _.map(contests, (c): ContestData => {
             const props = {
                 contest: c,
@@ -185,15 +191,15 @@ class SelectContestsForm extends React.Component<FormProps, FormState> {
 
             const countyName = counties[c.countyId].name;
 
-            return [
-                countyName,
-                c.name,
+            return {
+                contest: c.name,
+                county: countyName,
                 props,
-            ];
+            };
         });
 
-        const sortedData = _.sortBy(contestData, (d: ContestData) => {
-            return d[this.state.sort === 'contest' ? 1 : 0];
+        const sortedData = naturalSortBy(contestData, (d: ContestData) => {
+            return d[this.state.sort];
         });
 
         if (this.state.order === 'desc') {
@@ -201,19 +207,19 @@ class SelectContestsForm extends React.Component<FormProps, FormState> {
         }
 
         const filterFunc = (d: ContestData) => {
-            const [countyName, contestName, ...props] = d;
+            const { county, contest } = d;
 
-            const str = this.state.filter.toLowerCase();
+            const s = this.state.filter.toLowerCase();
 
-            return contestName.toLowerCase().includes(str)
-                || countyName.toLowerCase().includes(str);
-
+            return contest.toLowerCase().includes(s)
+                || county.toLowerCase().includes(s);
         };
+
         const filteredData = _.filter(sortedData, filterFunc);
-        const uniqData = _.uniqBy(filteredData, (d: ContestData) => d[1]);
+        const uniqData = _.uniqBy(filteredData, (d: ContestData) => d.contest);
 
         const contestRows = _.map(uniqData, (d: ContestData) => {
-            const props = d[2];
+            const props = d.props;
             const { contest } = props;
 
             const auditable = isAuditable(contest.id);
@@ -224,19 +230,6 @@ class SelectContestsForm extends React.Component<FormProps, FormState> {
                 return <TiedContestRow { ...props } />;
             }
         });
-
-        const sortAscIcon = <span className='pt-icon-standard pt-icon-sort-asc' />;
-        const sortDescIcon = <span className='pt-icon-standard pt-icon-sort-desc' />;
-
-        const sortIconForCol = (col: string) => {
-            if (col !== this.state.sort) {
-                return null;
-            }
-
-            return this.state.order === 'asc'
-                 ? sortAscIcon
-                 : sortDescIcon;
-        };
 
         return (
             <div>
@@ -270,12 +263,12 @@ class SelectContestsForm extends React.Component<FormProps, FormState> {
                                 {/* <th onClick={ this.sortBy('county') }> */}
                                 {/* County */}
                                 {/* <span> </span> */}
-                                {/* { sortIconForCol('county') } */}
+                                {/* { this.sortIconForCol('county') } */}
                                 {/* </th> */}
                                 <th onClick={ this.sortBy('contest') }>
                                     Contest Name
                                     <span> </span>
-                                    { sortIconForCol('contest') }
+                                    { this.sortIconForCol('contest') }
                                 </th>
                                 <th>Audit?</th>
                                 <th>Reason</th>
@@ -288,6 +281,16 @@ class SelectContestsForm extends React.Component<FormProps, FormState> {
                 </div>
             </div>
         );
+    }
+
+    private sortIconForCol = (col: string) => {
+        if (col !== this.state.sort) {
+            return null;
+        }
+
+        return this.state.order === 'asc'
+             ? <span className='pt-icon-standard pt-icon-sort-asc' />
+             : <span className='pt-icon-standard pt-icon-sort-desc' />;
     }
 
     private resetForm(contests: DOS.Contests) {
@@ -335,11 +338,7 @@ class SelectContestsForm extends React.Component<FormProps, FormState> {
     }
 
     private reverseOrder() {
-        const order = this.state.order === 'asc'
-                    ? 'desc'
-                    : 'asc';
-
-        this.setState({ order });
+        this.setState({order: this.state.order === 'asc' ? 'desc' : 'asc'});
     }
 
     private sortBy(sort: SortKey) {
