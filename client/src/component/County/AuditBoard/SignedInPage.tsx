@@ -8,7 +8,7 @@ import auditBoardSignOut from 'corla/action/county/auditBoardSignOut';
 interface PageProps {
     auditBoardStatus: AuditBoardStatus;
     auditBoardIndex: number;
-    auditBoardStartOrContinue: OnClick;
+    auditBoardStartOrContinue: () => void;
     countyName: string;
     hasAuditedAnyBallot: boolean;
 }

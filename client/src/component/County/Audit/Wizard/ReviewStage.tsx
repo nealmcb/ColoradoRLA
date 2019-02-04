@@ -154,21 +154,25 @@ const BallotReview = (props: BallotReviewProps) => {
 };
 
 interface ReviewStageProps {
+    comment?: string;
     countyState: County.AppState;
     currentBallot: County.CurrentBallot;
-    currentBallotNumber: number;
+    currentBallotNumber?: number;
+    isReAuditing?: boolean;
     marks: County.ACVR;
     nextStage: OnClick;
     prevStage: OnClick;
     uploadAcvr: OnClick;
-    totalBallotsForBoard: number;
+    totalBallotsForBoard?: number;
 }
 
 const ReviewStage = (props: ReviewStageProps) => {
     const {
+        comment,
         countyState,
         currentBallot,
         currentBallotNumber,
+        isReAuditing,
         marks,
         nextStage,
         prevStage,
@@ -176,16 +180,17 @@ const ReviewStage = (props: ReviewStageProps) => {
         totalBallotsForBoard,
     } = props;
 
-    async function onClick() {
+    const onClick = () => {
         const m = countyState!.acvrs![currentBallot.id];
 
-        try {
-            await uploadAcvr(m, currentBallot);
-            nextStage();
-        } catch {
-            // Failed to submit. Let saga machinery alert user.
+        if (isReAuditing) {
+            uploadAcvr(m, currentBallot, true, comment);
+        } else {
+            uploadAcvr(m, currentBallot);
         }
-    }
+
+        nextStage();
+    };
 
     if (currentBallot.submitted) {
         return <SubmittingACVR />;

@@ -15,6 +15,14 @@ import fetchCvrsToAudit from 'corla/action/county/fetchCvrsToAudit';
 import { parse } from 'corla/adapter/countyDashboardRefresh';
 
 
+function nextBallotId(state: County.AppState): number | undefined {
+    if (state.ballotUnderAuditIds && state.auditBoardIndex != null) {
+        return state.ballotUnderAuditIds[state.auditBoardIndex];
+    }
+
+    return;
+}
+
 function* countyRefreshOk({ data }: any): any {
     const state = yield select();
 
@@ -37,11 +45,21 @@ function* countyRefreshOk({ data }: any): any {
         }
     }
 
+    const county = parse(data, state);
+
+    if (county.id) {
+        countyFetchContests(county.id);
+    }
+
+    if (has(county, 'currentRound.number')) {
+        fetchCvrsToAudit(county.currentRound!.number);
+    }
+
     if (typeof state.auditBoardIndex !== 'number') {
         return;
     }
 
-    const nextId = state.ballotUnderAuditIds[state.auditBoardIndex];
+    const nextId = nextBallotId(state);
 
     if (!nextId) {
         return;
@@ -55,16 +73,6 @@ function* countyRefreshOk({ data }: any): any {
         // again would overwrite the `submitted` flag, causing us to
         // forget that we are waiting for the submission to be handled.
         countyFetchCvr(nextId);
-    }
-
-    const county = parse(data, state);
-
-    if (county.id) {
-        countyFetchContests(county.id);
-    }
-
-    if (has(county, 'currentRound.number')) {
-        fetchCvrsToAudit(county.currentRound!.number);
     }
 }
 

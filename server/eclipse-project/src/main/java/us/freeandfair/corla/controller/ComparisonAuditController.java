@@ -187,6 +187,40 @@ public final class ComparisonAuditController {
     return cdb.ballotsRemainingInCurrentRound() > 0;
   }
 
+
+  /** unaudit and audit a submitted ACVR **/
+  public static boolean reaudit(final CountyDashboard cdb,
+                                final CastVoteRecord cvr,
+                                final CastVoteRecord newAcvr) {
+
+    LOGGER.info("[reaudit] cvr: " + cvr.toString());
+    final CVRAuditInfo cai =
+      Persistence.getByID(cvr.id(), CVRAuditInfo.class);
+    final CastVoteRecord oldAcvr = cai.acvr();
+    if (null == oldAcvr) {
+      LOGGER.error("can't reaudit a cvr that hasn't been audited");
+      return false;
+    }
+
+    final Integer former_count = unaudit(cdb, cai);
+    LOGGER.debug("[reaudit] former_count: " + former_count.toString());
+
+
+    final Long revision = CastVoteRecordQueries.maxRevision(cvr);
+    oldAcvr.setToReaudited(revision + 1L);
+    CastVoteRecordQueries.forceUpdate(oldAcvr);
+
+    cai.setACVR(newAcvr);
+    Persistence.save(newAcvr);
+    Persistence.save(cai);
+
+    final Integer new_count = audit(cdb, cai, true);
+    LOGGER.debug("[reaudit] new_count: " + new_count.toString());
+
+    return true;
+  }
+
+
   /**
    * Submit an audit CVR for a CVR under audit to the specified county dashboard.
    *
@@ -404,17 +438,19 @@ public final class ComparisonAuditController {
     final CastVoteRecord auditCvr = auditInfo.acvr();
     int totalCount = 0;
 
-    for (final CVRContestInfo ci : auditCvr.contestInfo()) {
-      if (ci.consensus() == ConsensusValue.NO) {
-        contestDisagreements.add(ci.contest().name());
-      }
-    }
-
+    // discrepancies
     for (final ComparisonAudit ca : cdb.comparisonAudits()) {
       AuditReason auditReason = ca.auditReason();
       final String contestName = ca.contestResult().getContestName();
+
+      // how many times does this cvr appear in the audit samples; how many dups?
       final int multiplicity = ca.multiplicity(cvrID);
+
+      // how many times does a discrepancy need to be recorded, while counting
+      // each sample(or occurance) only once - across rounds
       final int auditCount = multiplicity - auditInfo.getCountByContest(ca.id());
+
+      // to report something to the caller
       totalCount += auditCount;
 
       auditInfo.setMultiplicityByContest(ca.id(), multiplicity);
@@ -437,6 +473,13 @@ public final class ComparisonAuditController {
                                      + " contestName=%s, auditReason=%s]",
                                      cvrID, contestName, auditReason));
           discrepancies.add(auditReason);
+        }
+      }
+
+      // disagreements
+      for (final CVRContestInfo ci : auditCvr.contestInfo()) {
+        if (ci.consensus() == ConsensusValue.NO) {
+          contestDisagreements.add(ci.contest().name());
         }
       }
 
@@ -482,7 +525,7 @@ public final class ComparisonAuditController {
     final Set<AuditReason> disagreements = new HashSet<>();
     final CastVoteRecord cvr_under_audit = the_info.cvr();
     final CastVoteRecord audit_cvr = the_info.acvr();
-    final int result = the_info.totalCounts();
+    int totalCount = 0;
 
     for (final CVRContestInfo ci : audit_cvr.contestInfo()) {
       if (ci.consensus() == ConsensusValue.NO) {
@@ -491,21 +534,31 @@ public final class ComparisonAuditController {
     }
 
     for (final ComparisonAudit ca : the_cdb.comparisonAudits()) {
+
+      // how many times does this cvr appear in the audit samples; how many dups?
+      final int multiplicity = ca.multiplicity(cvr_under_audit.id());
+
+      // if the cvr has been audited, which is must have been to be here, then
+      final int auditCount = multiplicity;
+
+      // to report something to the caller
+      totalCount += auditCount;
+
       final OptionalInt discrepancy =
           ca.computeDiscrepancy(cvr_under_audit, audit_cvr);
       if (discrepancy.isPresent()) {
-        for (int i = 0; i < result; i++) {
+        for (int i = 0; i < auditCount; i++) {
           ca.removeDiscrepancy(the_info, discrepancy.getAsInt());
         }
         discrepancies.add(ca.auditReason());
       }
       if (contest_disagreements.contains(ca.contestResult().getContestName())) {
-        for (int i = 0; i < result; i++) {
+        for (int i = 0; i < auditCount; i++) {
           ca.removeDisagreement(the_info);
         }
         disagreements.add(ca.auditReason());
       }
-      ca.signalSampleUnaudited(result, cvr_under_audit.id());
+      ca.signalSampleUnaudited(auditCount, cvr_under_audit.id());
       Persistence.saveOrUpdate(ca);
     }
 
@@ -517,7 +570,7 @@ public final class ComparisonAuditController {
     the_cdb.removeDiscrepancy(discrepancies);
     the_cdb.removeDisagreement(disagreements);
 
-    return result;
+    return totalCount;
   }
 
   /**
@@ -544,7 +597,7 @@ public final class ComparisonAuditController {
 
           final CVRAuditInfo cai = Persistence.getByID(cvr_id, CVRAuditInfo.class);
 
-          if (cai.acvr() == null) {
+          if (cai == null || cai.acvr() == null) {
             break;              // ok, so this hasn't been audited yet.
           } else {
             final int audit_count = audit(cdb, cai, false);

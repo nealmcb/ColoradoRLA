@@ -87,6 +87,7 @@ public class ACVRUpload extends AbstractAuditBoardDashboardEndpoint {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings({"PMD.ModifiedCyclomaticComplexity", "PMD.StdCyclomaticComplexity"})
   @Override
   public String endpointBody(final Request the_request, final Response the_response) {
     try {
@@ -103,6 +104,24 @@ public class ACVRUpload extends AbstractAuditBoardDashboardEndpoint {
         if (cdb == null) {
           LOGGER.error("could not get audit board dashboard");
           serverError(the_response, "Could not save ACVR to dashboard");
+        } else if (submission.isReaudit()) {
+
+          final CastVoteRecord cvr = Persistence.getByID(submission.cvrID(),
+                                                         CastVoteRecord.class);
+          final CastVoteRecord s = submission.auditCVR();
+          final CastVoteRecord newAcvr =
+            new CastVoteRecord(RecordType.AUDITOR_ENTERED, Instant.now(),
+                               s.countyID(), s.cvrNumber(), null, s.scannerID(),
+                               s.batchID(), s.recordID(), s.imprintedID(),
+                               s.ballotType(), s.contestInfo());
+          newAcvr.setComment(submission.getComment());
+
+          if (ComparisonAuditController.reaudit(cdb,cvr,newAcvr)) {
+            ok(the_response, "ACVR reaudited");
+          } else {
+            invariantViolation(the_response, "CVR has not previously been audited");
+          }
+
         } else if (cdb.ballotsRemainingInCurrentRound() > 0) {
           // FIXME extract-fn: setupACVR
           final CastVoteRecord acvr = submission.auditCVR();

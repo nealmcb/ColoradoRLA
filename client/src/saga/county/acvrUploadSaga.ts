@@ -1,4 +1,4 @@
-import { takeEvery } from 'redux-saga/effects';
+import { takeLatest } from 'redux-saga/effects';
 
 import notice from 'corla/notice';
 
@@ -17,7 +17,7 @@ function* uploadAcvrNetworkFail(): any {
 
 
 export default function* fileUploadSaga() {
-    yield takeEvery('UPLOAD_ACVR_OK', uploadAcvrOk);
-    yield takeEvery('UPLOAD_ACVR_FAIL', uploadAcvrFail);
-    yield takeEvery('UPLOAD_ACVR_NETWORK_FAIL', uploadAcvrNetworkFail);
+    yield takeLatest('UPLOAD_ACVR_OK', uploadAcvrOk);
+    yield takeLatest('UPLOAD_ACVR_FAIL', uploadAcvrFail);
+    yield takeLatest('UPLOAD_ACVR_NETWORK_FAIL', uploadAcvrNetworkFail);
 }

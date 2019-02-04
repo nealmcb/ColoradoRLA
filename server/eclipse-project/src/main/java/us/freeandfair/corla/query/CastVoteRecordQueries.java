@@ -543,6 +543,54 @@ public final class CastVoteRecordQueries {
     return cvr;
   }
 
+  /** Find max revision
+   *   looks for RCVRs that are old versions of a given CVR or ACVR
+   **/
+  public static Long maxRevision(final CastVoteRecord cvr) {
+    final Session s = Persistence.currentSession();
+    final Query q =
+      s.createQuery("select max(revision) from CastVoteRecord cvr " +
+                    " where uri like ?0 ");
+    final String uri = cvr.getUri();
+    // the rcvr corollary uri of either a cvr or an acvr, without the '?rev=1' at the
+    // end too because we are looking for all revisions
+    final String ruri = uri
+      .replaceFirst("^cvr", "rcvr")
+      .replaceFirst("^acvr", "rcvr")
+      .split("\\?")[0] + "%";
+
+    q.setString(0, ruri);
+    final Long result = (Long)q.getSingleResult();
+
+    if (null == result) {
+      return 0L;
+    } else {
+      return result;
+    }
+  }
+
+  /**
+     workaround. hibernate was ignoring the update of the object passed to the
+     method for some unknown reason
+   **/
+  public static Long forceUpdate(final CastVoteRecord cvr) {
+    final Session s = Persistence.currentSession();
+    final Query q =
+      s.createNativeQuery("update cast_vote_record " +
+                    "set record_type = :recordType, " +
+                    " revision = :revision, " +
+                    " uri = :uri " +
+                    " where id = :id ");
+    q.setParameter("recordType", cvr.recordType().toString());
+    q.setParameter("revision", cvr.getRevision());
+    q.setParameter("uri", cvr.getUri());
+    q.setParameter("id", cvr.id());
+    final int result = q.executeUpdate();
+    return Long.valueOf(result);
+  }
+
+
+
   /** Utility function **/
   public static <T> java.util.function.Predicate <T> distinctByKey(final Function<? super T, Object> keyExtractor)
   {

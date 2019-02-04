@@ -3,15 +3,36 @@ import { endpoint } from 'corla/config';
 import createSubmitAction from 'corla/action/createSubmitAction';
 
 
+interface Payload {
+    comment?: string;
+    id: number;
+    reaudit?: boolean;
+}
+
 const url = endpoint('ballot-not-found');
 
-const ballotNotFound = createSubmitAction({
-    failType: 'BALLOT_NOT_FOUND_FAIL',
-    networkFailType: 'BALLOT_NOT_FOUND_NETWORK_FAIL',
-    okType: 'BALLOT_NOT_FOUND_OK',
-    sendType: 'BALLOT_NOT_FOUND_SEND',
-    url,
-});
+const ballotNotFound = (
+    id: number,
+    reAudit = false,
+    comment = '',
+) => {
+    const action = createSubmitAction({
+        failType: 'BALLOT_NOT_FOUND_FAIL',
+        networkFailType: 'BALLOT_NOT_FOUND_NETWORK_FAIL',
+        okType: 'BALLOT_NOT_FOUND_OK',
+        sendType: 'BALLOT_NOT_FOUND_SEND',
+        url,
+    });
+
+    const payload: Payload = { id };
+
+    if (reAudit) {
+        payload.comment = comment;
+        payload.reaudit = reAudit;
+    }
+
+    action(payload);
+};
 
 
-export default (id: number) => ballotNotFound({ id });
+export default ballotNotFound;
