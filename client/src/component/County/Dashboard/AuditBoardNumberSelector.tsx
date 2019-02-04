@@ -1,9 +1,9 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 
 import { NumericInput } from '@blueprintjs/core';
 
 import setNumberOfAuditBoards from 'corla/action/county/setNumberOfAuditBoards';
-
 
 /**
  * Minimum number of audit boards that can participate.
@@ -15,6 +15,7 @@ interface AuditBoardNumberSelectorProps {
     numberOfBallotsToAudit?: number;
     isShown: boolean;
     isEnabled: boolean;
+    setNumberOfAuditBoards: (x: { auditBoardCount: number }) => void;
 }
 
 interface AuditBoardNumberSelectorState {
@@ -87,7 +88,7 @@ class AuditBoardNumberSelector
         const { auditBoardCount } = this.state;
 
         this.setState({ isEnabled: false });
-        setNumberOfAuditBoards({ auditBoardCount });
+        this.props.setNumberOfAuditBoards({ auditBoardCount });
     }
 
     private helperText(toAudit?: number) {
@@ -112,4 +113,8 @@ class AuditBoardNumberSelector
     }
 }
 
-export default AuditBoardNumberSelector;
+const mapDispatchToProps = () => {
+    return { setNumberOfAuditBoards };
+};
+
+export default connect(null, mapDispatchToProps)(AuditBoardNumberSelector);

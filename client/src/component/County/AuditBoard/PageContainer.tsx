@@ -1,6 +1,7 @@
 import * as React from 'react';
-
 import { RouteComponentProps } from 'react-router-dom';
+
+import * as _ from 'lodash';
 
 import withState from 'corla/component/withState';
 import withSync from 'corla/component/withSync';
@@ -72,7 +73,7 @@ interface SelectProps {
 
 function select(countyState: County.AppState): SelectProps {
     const countyInfo = countyInfoSelector(countyState);
-    const countyName = countyInfo!.name || '';
+    const countyName = _.get(countyInfo, 'name', '');
 
     return {
         auditBoards: countyState.auditBoards,
