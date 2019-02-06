@@ -1,6 +1,5 @@
 import { applyMiddleware, createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
-import thunk from 'redux-thunk';
 
 import session from './session';
 
@@ -32,7 +31,7 @@ export function preloadedState() {
 export const store = createStore(
     rootReducer,
     preloadedState(),
-    applyMiddleware(thunk, sagaMiddleware),
+    applyMiddleware(sagaMiddleware),
 );
 
 
