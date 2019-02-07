@@ -488,7 +488,18 @@ public final class ComparisonAuditController {
         for (int i = 0; i < auditCount; i++) {
           ca.recordDisagreement(auditInfo);
         }
-        disagreements.add(ca.auditReason());
+        if (ca.isCovering(cvrID) && auditReason.isTargeted()) {
+          LOGGER.debug(String.format("[audit: CVR %d is covered in a targeted audit."
+                                     + " contestName=%s, auditReason=%s]",
+                                     cvrID, contestName, auditReason));
+          disagreements.add(auditReason);
+        } else {
+          auditReason = AuditReason.OPPORTUNISTIC_BENEFITS;
+          LOGGER.debug(String.format("[audit: CVR %d has a disagreement, but isn't covered by"
+                                     + " contestName=%s, auditReason=%s]",
+                                     cvrID, contestName, auditReason));
+          disagreements.add(auditReason);
+        }
       }
 
       ca.signalSampleAudited(auditCount, cvrID);
@@ -524,6 +535,7 @@ public final class ComparisonAuditController {
     final Set<AuditReason> discrepancies = new HashSet<>();
     final Set<AuditReason> disagreements = new HashSet<>();
     final CastVoteRecord cvr_under_audit = the_info.cvr();
+    final Long cvrID = cvr_under_audit.id();
     final CastVoteRecord audit_cvr = the_info.acvr();
     int totalCount = 0;
 
@@ -534,6 +546,8 @@ public final class ComparisonAuditController {
     }
 
     for (final ComparisonAudit ca : the_cdb.comparisonAudits()) {
+      AuditReason auditReason = ca.auditReason();
+      final String contestName = ca.contestResult().getContestName();
 
       // how many times does this cvr appear in the audit samples; how many dups?
       final int multiplicity = ca.multiplicity(cvr_under_audit.id());
@@ -550,13 +564,36 @@ public final class ComparisonAuditController {
         for (int i = 0; i < auditCount; i++) {
           ca.removeDiscrepancy(the_info, discrepancy.getAsInt());
         }
-        discrepancies.add(ca.auditReason());
+
+        if (ca.isCovering(cvrID) && auditReason.isTargeted()) {
+          LOGGER.debug(String.format("[audit: CVR %d is covered in a targeted audit."
+                                     + " contestName=%s, auditReason=%s]",
+                                     cvrID, contestName, auditReason));
+          discrepancies.add(auditReason);
+        } else {
+          auditReason = AuditReason.OPPORTUNISTIC_BENEFITS;
+          LOGGER.debug(String.format("[audit: CVR %d has a discrepancy, but isn't covered by"
+                                     + " contestName=%s, auditReason=%s]",
+                                     cvrID, contestName, auditReason));
+          discrepancies.add(auditReason);
+        }
       }
       if (contest_disagreements.contains(ca.contestResult().getContestName())) {
         for (int i = 0; i < auditCount; i++) {
           ca.removeDisagreement(the_info);
         }
-        disagreements.add(ca.auditReason());
+        if (ca.isCovering(cvrID) && auditReason.isTargeted()) {
+          LOGGER.debug(String.format("[audit: CVR %d is covered in a targeted audit."
+                                     + " contestName=%s, auditReason=%s]",
+                                     cvrID, contestName, auditReason));
+          disagreements.add(auditReason);
+        } else {
+          auditReason = AuditReason.OPPORTUNISTIC_BENEFITS;
+          LOGGER.debug(String.format("[audit: CVR %d has a disagreement, but isn't covered by"
+                                     + " contestName=%s, auditReason=%s]",
+                                     cvrID, contestName, auditReason));
+          disagreements.add(auditReason);
+        }
       }
       ca.signalSampleUnaudited(auditCount, cvr_under_audit.id());
       Persistence.saveOrUpdate(ca);
