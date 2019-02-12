@@ -125,10 +125,15 @@ const ContestRow = (props: ContestRowProps) => {
 
     const defaultName = defaultCanonicalName(contest.name, standards);
 
+    // Trigger an update when a default gets chosen
+    if ('' !== defaultName) {
+        updateFormData({ id: contest.id, name: defaultName });
+    }
+
     const changeHandler = (e: React.FormEvent<HTMLSelectElement>) => {
         const v = e.currentTarget.value;
 
-        updateFormData({id: contest.id, name: v});
+        updateFormData({ id: contest.id, name: v });
     };
 
     return (
@@ -191,7 +196,7 @@ class StandardizeContestsPage extends React.Component<PageProps> {
                             names provided by the state. For each of the contests
                             listed, please choose the appropriate standardized
                             version from the options provided, then save your
-                            choices and move forward.
+                            selections and move forward.
                         </p>
 
                         <StandardizeContestsTable canonicalContests={ canonicalContests }
