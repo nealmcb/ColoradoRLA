@@ -268,10 +268,10 @@ public class AuditInfo implements Serializable {
       my_risk_limit = the_other_info.my_risk_limit;
     }
 
-    if (the_other_info.canonicalContests != null) {
+    if (the_other_info.canonicalContests().size() > 0) {
       canonicalContests = the_other_info.canonicalContests;
     }
-    if (the_other_info.canonicalChoices != null) {
+    if (the_other_info.getCanonicalChoices().size() > 0) {
       canonicalChoices = the_other_info.canonicalChoices;
     }
   }

@@ -231,9 +231,6 @@ public class Contest implements PersistentEntity, Serializable {
 
   /**
    * Change a choice name as part of Canonicalization.
-   *
-   * @param the_choice The choice.
-   * @return true if the choice is valid, false otherwise.
    */
   public void updateChoiceName(final String oldName,
                                final String newName) {

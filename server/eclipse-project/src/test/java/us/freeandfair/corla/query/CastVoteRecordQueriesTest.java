@@ -126,7 +126,7 @@ public class CastVoteRecordQueriesTest {
   public void canonicalChoicesTest() {
     CastVoteRecord cvr = noisyCVRSetup(3);
 
-    Integer result = CastVoteRecordQueries.updateCVRContestInfos(1L,"why?","because.");
+    Integer result = CastVoteRecordQueries.updateCVRContestInfos(1L,1L,"why?","because.");
     assertEquals((int) result, (int) 1,
                  "a result of 1 means one choice was changed");
     Persistence.currentSession().refresh(cvr);

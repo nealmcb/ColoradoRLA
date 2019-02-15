@@ -224,7 +224,12 @@ public final class CastVoteRecordQueries {
     return result;
   }
 
+  /**
+   * change the votes from the export as if the cvr expost file headers had
+   * contained the newChoice rather than the oldChoice
+   **/
   public static int updateCVRContestInfos(final Long countyId,
+                                          final Long contestId,
                                           final String oldChoice,
                                           final String newChoice) {
     final Session s = Persistence.currentSession();
@@ -233,11 +238,14 @@ public final class CastVoteRecordQueries {
       // will make it possible to fix mistakes that create duplicates
       .createNativeQuery("update cvr_contest_info set choices = "
                          + "regexp_replace(choices, cast( :oldChoice as varchar), cast( :newChoice as varchar)) "
-                         + " where county_id = :county_id and choices like :oldChoiceLike")
+                         + " where county_id = :county_id "
+                         + " and contest_id = :contest_id "
+                         + " and choices like :oldChoiceLike")
       .setParameter("oldChoice", oldChoice)
       .setParameter("oldChoiceLike","%"+oldChoice+"%")
       .setParameter("newChoice", newChoice)
-      .setParameter("county_id", countyId);
+      .setParameter("county_id", countyId)
+      .setParameter("contest_id", contestId);
 
     return q.executeUpdate();
   }
