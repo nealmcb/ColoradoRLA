@@ -93,7 +93,7 @@ public final class NaturalOrderComparator implements Comparator<String>, Seriali
     final Iterator<String> as = split(an_a).iterator();
     final Iterator<String> bs = split(an_b).iterator();
 
-    while (as.hasNext() && bs.hasNext()) {
+    while (as.hasNext() && bs.hasNext() && result == 0) {
       final String x = as.next();
       final String y = bs.next();
 
@@ -101,6 +101,14 @@ public final class NaturalOrderComparator implements Comparator<String>, Seriali
         result = compareAsDigits(x, y);
       } else {
         result = String.CASE_INSENSITIVE_ORDER.compare(x, y);
+
+        // take the opposite because we want the lower char number A to come
+        // before the larger char number B. Also, not greater than one for consistency
+        if (result > 0) {
+          result = -1;
+        } else if (result < 0) {
+          result = 1;
+        }// else result is zero, and that is fine
       }
     }
 
