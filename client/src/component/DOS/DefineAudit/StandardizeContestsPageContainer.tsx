@@ -80,6 +80,9 @@ const StandardizeContestsPageContainer = (props: Props) => {
         if (_.isEmpty(filteredContests)) {
             return <Redirect to={ NEXT_PATH } />;
         }
+    } else {
+        // it is ok to skip this whole step
+        return <Redirect to='/sos/audit/select-contests' />;
     }
 
     return <StandardizeContestsPage areContestsLoaded={ areContestsLoaded }
