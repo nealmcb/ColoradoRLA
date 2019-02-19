@@ -36,12 +36,12 @@ const flattenContests = (
     return _.flatMap(contests, (contest: Contest) => {
         return _.map(contest.choices, (choice: ContestChoice, idx) => {
             return {
-                countyName: counties[contest.countyId].name,
                 choiceIndex: idx,
                 choiceName: choice.name,
+                choices: canonicalChoices[contest.name],
                 contestId: contest.id,
                 contestName: contest.name,
-                choices: canonicalChoices[contest.name],
+                countyName: counties[contest.countyId].name,
             };
         });
     });

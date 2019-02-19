@@ -1,3 +1,3 @@
-declare module "react-hot-loader";
+declare module 'react-hot-loader';
 
-declare module "string-similarity";
+declare module 'string-similarity';

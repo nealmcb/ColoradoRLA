@@ -158,9 +158,9 @@ const TableRow = (props: TableRowProps) => {
                             defaultValue={ defaultName }>
                         <option key='' value=''>-- No change --</option>
                         {
-                          _.map(choices, (choice, idx) =>
-                              <option key={ idx } value={ choice }>{ choice }</option>
-                          )
+                          _.map(choices, (choice, idx) => {
+                              return <option key={ idx } value={ choice }>{ choice }</option>;
+                          })
                         }
                     </select>
                 </form>
@@ -268,7 +268,7 @@ class Page extends React.Component<PageProps> {
             _.merge(this.formData, {
                 [contestId]: {
                     [currentChoiceName]: newChoiceName,
-                }
+                },
             });
         }
     }

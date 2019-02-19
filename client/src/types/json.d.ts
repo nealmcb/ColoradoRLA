@@ -160,9 +160,9 @@ declare namespace JSON {
         contestId: number;
         countyId: number;
         name?: string;
-        choices?: {
+        choices?: Array<{
             oldName: string;
             newName: string;
-        }[];
+        }>;
     }
 }

@@ -13,8 +13,8 @@ export function format(
             return {
                 choices: _.map(data[contest.id], (newName, currentName) => {
                     return {
-                        oldName: currentName,
                         newName,
+                        oldName: currentName,
                     };
                 }),
                 contestId: contest.id,

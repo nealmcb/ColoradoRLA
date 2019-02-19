@@ -135,7 +135,7 @@ declare namespace DOS {
 
         namespace UploadFile {
             interface Form {
-                files: Array<Object>;
+                files: any[];
             }
         }
 
@@ -193,7 +193,7 @@ declare namespace DOS {
             interface FormData {
                 [contestId: number]: {
                     name: string;
-                }
+                };
             }
         }
     }
