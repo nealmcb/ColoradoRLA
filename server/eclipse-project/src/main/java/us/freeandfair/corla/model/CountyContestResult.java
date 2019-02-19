@@ -275,7 +275,16 @@ public class CountyContestResult implements PersistentEntity, Serializable {
     }
     return result;
   }
-  
+
+  /**
+   * Change a choice name as part of Canonicalization.
+   */
+  public void updateChoiceName(final String oldName,
+                               final String newName) {
+    final Integer vote_total = my_vote_totals.remove(oldName);
+    my_vote_totals.put(newName, vote_total);
+  }
+
   /**
    * Compute the pairwise margin between the specified choices.
    * If the first choice has more votes than the second, the
