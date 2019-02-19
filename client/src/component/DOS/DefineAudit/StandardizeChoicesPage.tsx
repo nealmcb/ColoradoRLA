@@ -25,7 +25,7 @@ const MIN_MATCH_THRESHOLD = 0.67;
  * from.
  *
  * The default selection will be the empty string if there was not a better
- * choice in `canonicalNames` for the given contest name.
+ * choice in `canonicalNames` for the given choice name.
  */
 const defaultCanonicalName = (
     name: string,
@@ -55,99 +55,112 @@ const Breadcrumb = () => (
             <a className='pt-breadcrumb' href='/sos/audit'>Audit Admin</a>
         </li>
         <li>
-            <a className='pt-breadcrumb pt-breadcrumb-current'>Standardize Contest Names</a>
+            <a className='pt-breadcrumb pt-breadcrumb-current'>Standardize Choice Names</a>
         </li>
     </ul>
 );
 
 interface UpdateFormMessage {
-    id: number;
-    name: string;
+    contestId: number;
+    currentChoiceName: string;
+    newChoiceName: string;
 }
 
 interface TableProps {
     contests: DOS.Contests;
-    canonicalContests: DOS.CanonicalContests;
+    rows: DOS.Form.StandardizeChoices.Row[];
     updateFormData: (msg: UpdateFormMessage) => void;
 }
 
-const StandardizeContestsTable = (props: TableProps) => {
-    const { canonicalContests, contests, updateFormData } = props;
+const Table = (props: TableProps) => {
+    const { contests, rows, updateFormData } = props;
 
     return (
         <table className='pt-table pt-striped'>
             <thead>
                 <tr>
-                    <th>County</th>
-                    <th>Current Contest Name</th>
-                    <th>Standardized Contest Name</th>
+                    <th>County Name</th>
+                    <th>Contest Name</th>
+                    <th>Current Choice Name</th>
+                    <th>Standardized Choice Name</th>
                 </tr>
             </thead>
-            <ContestBody contests={ contests }
-                         canonicalContests={ canonicalContests }
-                         updateFormData={ updateFormData } />
+            <TableBody contests={ contests }
+                       rows={ rows }
+                       updateFormData={ updateFormData } />
         </table>
     );
 };
 
-interface BodyProps {
+interface TableBodyProps {
     contests: DOS.Contests;
-    canonicalContests: DOS.CanonicalContests;
+    rows: DOS.Form.StandardizeChoices.Row[];
     updateFormData: (msg: UpdateFormMessage) => void;
 }
 
-const ContestBody = (props: BodyProps) => {
-    const { canonicalContests, contests, updateFormData } = props;
+const TableBody = (props: TableBodyProps) => {
+    const { contests, rows, updateFormData } = props;
 
-    const rows = _.map(contests, c => {
-        return <ContestRow key={ c.id }
-                           contest={ c }
-                           canonicalContests={ canonicalContests }
-                           updateFormData={ updateFormData } />;
-    });
+    const key = (row: DOS.Form.StandardizeChoices.Row) =>
+        row.contestName + ',' + row.choiceName;
 
     return (
-      <tbody>{ rows }</tbody>
+        <tbody>
+        {
+            _.map(rows, row =>
+                <TableRow key={ key(row) }
+                          row={ row }
+                          updateFormData={ updateFormData} />)
+        }
+        </tbody>
     );
 };
 
-interface ContestRowProps {
-    contest: Contest;
-    canonicalContests: DOS.CanonicalContests;
+interface TableRowProps {
+    row: DOS.Form.StandardizeChoices.Row;
     updateFormData: (msg: UpdateFormMessage) => void;
 }
 
-const ContestRow = (props: ContestRowProps) => {
-    const { canonicalContests, contest, updateFormData } = props;
-    const countyName = counties[contest.countyId].name;
+const TableRow = (props: TableRowProps) => {
+    const { row, updateFormData } = props;
 
-    const standards = canonicalContests[countyName];
+    const choices = row.choices;
 
-    const defaultName = defaultCanonicalName(contest.name, standards);
+    const defaultName = defaultCanonicalName(row.choiceName, choices);
 
     // Trigger an update when a default gets chosen
     if ('' !== defaultName) {
-        updateFormData({ id: contest.id, name: defaultName });
+        updateFormData({
+            contestId: row.contestId,
+            currentChoiceName: row.choiceName,
+            newChoiceName: defaultName,
+        });
     }
 
     const changeHandler = (e: React.FormEvent<HTMLSelectElement>) => {
         const v = e.currentTarget.value;
 
-        updateFormData({ id: contest.id, name: v });
+        updateFormData({
+            contestId: row.contestId,
+            currentChoiceName: row.choiceName,
+            newChoiceName: v,
+        });
     };
 
     return (
         <tr>
-            <td>{ counties[contest.countyId].name }</td>
-            <td>{ contest.name }</td>
+            <td>{ row.countyName }</td>
+            <td>{ row.contestName }</td>
+            <td>{ row.choiceName }</td>
             <td>
                 <form>
-                    <select name={ String(contest.id) }
-                            onChange={ changeHandler }
+                    <select onChange={ changeHandler }
                             defaultValue={ defaultName }>
-                        <option value=''>-- No change --</option>
+                        <option key='' value=''>-- No change --</option>
                         {
-                          _.map(standards, n => <option value={ n }>{ n }</option>)
+                          _.map(choices, (choice, idx) => {
+                              return <option key={ idx } value={ choice }>{ choice }</option>;
+                          })
                         }
                     </select>
                 </form>
@@ -157,15 +170,15 @@ const ContestRow = (props: ContestRowProps) => {
 };
 
 interface PageProps {
-    areContestsLoaded: boolean;
-    canonicalContests: DOS.CanonicalContests;
+    areChoicesLoaded: boolean;
     contests: DOS.Contests;
-    forward: (x: DOS.Form.StandardizeContests.FormData) => void;
+    rows: DOS.Form.StandardizeChoices.Row[];
+    forward: (x: DOS.Form.StandardizeChoices.FormData) => void;
     back: () => void;
 }
 
-class StandardizeContestsPage extends React.Component<PageProps> {
-    public formData: DOS.Form.StandardizeContests.FormData = {};
+class Page extends React.Component<PageProps> {
+    public formData: DOS.Form.StandardizeChoices.FormData = {};
 
     public constructor(props: PageProps) {
         super(props);
@@ -175,35 +188,36 @@ class StandardizeContestsPage extends React.Component<PageProps> {
 
     public render() {
         const {
-            areContestsLoaded,
+            areChoicesLoaded,
             back,
-            canonicalContests,
             contests,
+            rows,
             forward,
         } = this.props;
 
-        if (areContestsLoaded) {
+        if (areChoicesLoaded) {
             this.formData = {};
 
             return (
                 <div>
                     <Nav />
                     <Breadcrumb />
-                    <h2>Standardize Contest Names</h2>
+                    <h2>Standardize Choice Names</h2>
                     <div className='pt-card'>
                         <p>
-                            Contest names must be standardized to group records
-                            correctly across jurisdictions. Below is a list of
-                            contests that do not match the standardized contest
-                            names provided by the state. For each of the contests
+                            Choice names for each contest must be standardized
+                            to group records correctly across jurisdictions.
+                            Below is a list of choice names that do not match
+                            the standardized names provided for that particular
+                            contest by the state. For each of the choices
                             listed, please choose the appropriate standardized
                             version from the options provided, then save your
                             selections and move forward.
                         </p>
 
-                        <StandardizeContestsTable canonicalContests={ canonicalContests }
-                                                  contests={ contests }
-                                                  updateFormData={ this.updateFormData } />
+                        <Table contests={ contests }
+                               rows={ rows }
+                               updateFormData={ this.updateFormData } />
                     </div>
                     <div>
                         <button onClick={ back }
@@ -222,9 +236,9 @@ class StandardizeContestsPage extends React.Component<PageProps> {
                 <div>
                     <Nav />
                     <Breadcrumb />
-                    <h2>Standardize Contest Names</h2>
+                    <h2>Standardize Choice Names</h2>
                     <div className='pt-card'>
-                        Waiting for counties to upload contest data.
+                        Waiting for counties to upload choice data.
                     </div>
                     <div>
                         <button onClick={ back }
@@ -242,14 +256,22 @@ class StandardizeContestsPage extends React.Component<PageProps> {
     }
 
     private updateFormData(msg: UpdateFormMessage) {
-        const { id, name } = msg;
+        const { contestId, currentChoiceName, newChoiceName } = msg;
 
-        if (_.isEmpty(name)) {
-            delete this.formData[id];
+        if ('' === newChoiceName) {
+            delete this.formData[contestId][currentChoiceName];
+
+            if (_.isEmpty(this.formData[contestId])) {
+                delete this.formData[contestId];
+            }
         } else {
-            this.formData[id] = { name };
+            _.merge(this.formData, {
+                [contestId]: {
+                    [currentChoiceName]: newChoiceName,
+                },
+            });
         }
     }
 }
 
-export default StandardizeContestsPage;
+export default Page;

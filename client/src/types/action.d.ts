@@ -41,23 +41,23 @@ declare namespace Action {
         | UploadingCvrExport;
 
     interface BallotNotFoundFail {
-        type: 'BALLOT_NOT_FOUND_FAIL',
-        data: any,
+        type: 'BALLOT_NOT_FOUND_FAIL';
+        data: any;
     }
 
     interface BallotNotFoundNetworkFail {
-        type: 'BALLOT_NOT_FOUND_NETWORK_FAIL',
-        data: any,
+        type: 'BALLOT_NOT_FOUND_NETWORK_FAIL';
+        data: any;
     }
 
     interface BallotNotFoundOk {
-        type: 'BALLOT_NOT_FOUND_OK',
-        data: any,
+        type: 'BALLOT_NOT_FOUND_OK';
+        data: any;
     }
 
     interface BallotNotFoundSend {
-        type: 'BALLOT_NOT_FOUND_SEND',
-        data: any,
+        type: 'BALLOT_NOT_FOUND_SEND';
+        data: any;
     }
 
     interface CountyCVRImportFailNotice {
@@ -131,8 +131,8 @@ declare namespace Action {
     }
 
     interface FinalReviewComplete {
-        type: 'FINAL_REVIEW_COMPLETE',
-        data: any,
+        type: 'FINAL_REVIEW_COMPLETE';
+        data: any;
     }
 
     interface ImportCvrExportOk {
@@ -162,7 +162,7 @@ declare namespace Action {
         data: {
             comment: string;
             cvrId: number;
-        }
+        };
     }
 
     interface UpdateAcvrForm {

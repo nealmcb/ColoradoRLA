@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 
 export function format(
     contests: DOS.Contests,
-    data: DOS.Form.StandardizeContests.FormData,
+    data: DOS.Form.StandardizeChoices.FormData,
 ): JSON.Standardize[] {
     return _.chain(contests)
         // Keep just the changes
@@ -11,9 +11,14 @@ export function format(
         })
         .map((contest: Contest) => {
             return {
+                choices: _.map(data[contest.id], (newName, currentName) => {
+                    return {
+                        newName,
+                        oldName: currentName,
+                    };
+                }),
                 contestId: contest.id,
                 countyId: contest.countyId,
-                name: data[contest.id].name,
             };
         })
         .value();

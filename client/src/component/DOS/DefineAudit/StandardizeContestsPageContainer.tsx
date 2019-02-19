@@ -20,7 +20,7 @@ import withPoll from 'corla/component/withPoll';
 import counties from 'corla/data/counties';
 
 // The next URL path to transition to.
-const NEXT_PATH = '/sos/audit/select-contests';
+const NEXT_PATH = '/sos/audit/standardize-choices';
 
 // The previous URL path to transition to.
 const PREV_PATH = '/sos/audit';
@@ -59,8 +59,8 @@ const StandardizeContestsPageContainer = (props: Props) => {
         history,
     } = props;
 
-    const nextPage = (formData: DOS.Form.StandardizeContests.FormData) => {
-        standardizeContests(formData);
+    const nextPage = (data: DOS.Form.StandardizeContests.FormData) => {
+        standardizeContests(contests, data);
         history.push(NEXT_PATH);
     };
 

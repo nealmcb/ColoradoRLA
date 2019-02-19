@@ -15,15 +15,14 @@ import static us.freeandfair.corla.asm.ASMEvent.DoSDashboardEvent.PARTIAL_AUDIT_
 
 import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.PersistenceException;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
-
-import org.hibernate.Session;
-import org.hibernate.query.Query;
 
 import spark.Request;
 import spark.Response;
@@ -31,8 +30,14 @@ import spark.Response;
 import us.freeandfair.corla.Main;
 import us.freeandfair.corla.asm.ASMEvent;
 import us.freeandfair.corla.model.AuditInfo;
+import us.freeandfair.corla.model.Contest;
 import us.freeandfair.corla.model.DoSDashboard;
+import us.freeandfair.corla.model.CountyContestResult;
+import us.freeandfair.corla.json.CanonicalUpdate;
+import us.freeandfair.corla.json.CanonicalUpdate.ChoiceChange;
 import us.freeandfair.corla.persistence.Persistence;
+import us.freeandfair.corla.query.CastVoteRecordQueries;
+import us.freeandfair.corla.query.CountyContestResultQueries;
 
 /**
  * The endpoint for renaming contests.
@@ -46,6 +51,13 @@ import us.freeandfair.corla.persistence.Persistence;
 // but with both we need a suppression rule for one of them.
 @SuppressWarnings({"PMD.AtLeastOneConstructor"})
 public class SetContestNames extends AbstractDoSDashboardEndpoint {
+
+  /**
+   * Class-wide logger
+   */
+  public static final Logger LOGGER =
+    LogManager.getLogger(SetContestNames.class);
+
   /**
    * The event to return for this endpoint.
    */
@@ -55,7 +67,7 @@ public class SetContestNames extends AbstractDoSDashboardEndpoint {
    * Type information for the new contest names.
    */
   private static final Type TYPE_TOKEN =
-      new TypeToken<List<Map<String, String>>>() { }.getType();
+    new TypeToken<List<CanonicalUpdate>>(){}.getType();
 
   /**
    * {@inheritDoc}
@@ -90,45 +102,66 @@ public class SetContestNames extends AbstractDoSDashboardEndpoint {
   @Override
   public String endpointBody(final Request request, final Response response) {
     try {
-      final List<Map<String, String>> mappings =
-          Main.GSON.fromJson(request.body(), TYPE_TOKEN);
+      final List<CanonicalUpdate> canons = Main.GSON.fromJson(request.body(), TYPE_TOKEN);
 
-      if (mappings == null) {
+      if (canons == null) {
         badDataContents(response, "malformed contest mappings");
       } else {
         final DoSDashboard dosdb = Persistence.getByID(DoSDashboard.ID, DoSDashboard.class);
         if (dosdb == null) {
-          Main.LOGGER.error("could not get department of state dashboard");
+          LOGGER.error("could not get department of state dashboard");
           serverError(response, "could not set contest mappings");
         }
 
-        int updateCount = 0;
-        final Session s = Persistence.currentSession();
-
-        final Query q = s.createQuery(
-            "update Contest set my_name = :name" +
-            " where my_id = :id");
-
-        for (final Map<String, String> mapping : mappings) {
-          final Long id = Long.parseLong(mapping.get("contest"));
-          final String name = mapping.get("name");
-
-          q.setParameter("id", id);
-          q.setParameter("name", name);
-
-          updateCount += q.executeUpdate();
-        }
+        final int updateCount = changeNames(canons);
 
         asmEvent.set(nextEvent(dosdb));
         ok(response, String.format("re-mapped %d contest names", updateCount));
       }
     } catch (final PersistenceException e) {
-      Main.LOGGER.error("unable to re-map contest names", e);
+      LOGGER.error("unable to re-map contest names", e);
       serverError(response, "unable to re-map contest names");
     } catch (final JsonParseException e) {
       badDataContents(response, "malformed contest mapping");
     }
     return my_endpoint_result.get();
+  }
+
+  private int changeNames(final List<CanonicalUpdate> canons) {
+
+    int updateCount = 0;
+    for (final CanonicalUpdate canon : canons) {
+      final Long id = Long.parseLong(canon.contestId);
+      final Contest contest = Persistence.getByID(id, Contest.class);
+      // change contest name
+      if (null != canon.name) {
+        contest.setName(canon.name);
+      }
+      // change choice names
+      if (null != canon.choices) {
+        for (final ChoiceChange choiceChange: canon.choices) {
+          if (null != choiceChange.oldName
+              && null != choiceChange.newName
+              && !choiceChange.oldName.equals(choiceChange.newName)) {
+            LOGGER.info("changing choice name as part of canonicalization:\n   "
+                        + choiceChange.oldName +" -> "+ choiceChange.newName
+                        + " contest: " + contest.name() + " county: " + contest.county());
+            contest.updateChoiceName(choiceChange.oldName, choiceChange.newName);
+            CastVoteRecordQueries.updateCVRContestInfos(contest.county().id(),
+                                                        contest.id(),
+                                                        choiceChange.oldName,
+                                                        choiceChange.newName);
+            final CountyContestResult ccr = CountyContestResultQueries
+              .matching(contest.county(), contest);
+            ccr.updateChoiceName(choiceChange.oldName, choiceChange.newName);
+            Persistence.update(ccr);
+          }
+        }
+      }
+
+      updateCount += 1;
+    }
+    return updateCount;
   }
 
   /**
@@ -143,10 +176,10 @@ public class SetContestNames extends AbstractDoSDashboardEndpoint {
     if (info.electionDate() == null || info.electionType() == null ||
         info.publicMeetingDate() == null || info.riskLimit() == null ||
         info.seed() == null || dosDashboard.contestsToAudit().isEmpty()) {
-      Main.LOGGER.debug("partial audit information submitted");
+      LOGGER.debug("partial audit information submitted");
       result = PARTIAL_AUDIT_INFO_EVENT;
     } else {
-      Main.LOGGER.debug("complete audit information submitted");
+      LOGGER.debug("complete audit information submitted");
       result = COMPLETE_AUDIT_INFO_EVENT;
     }
 
