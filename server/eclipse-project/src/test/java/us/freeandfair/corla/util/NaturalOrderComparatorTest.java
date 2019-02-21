@@ -19,5 +19,19 @@ public class NaturalOrderComparatorTest {
       assertEquals(c.compare("Batch 11", "Batch 2"), 1);
       assertEquals(c.compare("Batch 20", "batch 19"), 1);
       assertEquals(c.compare("Batch 123", "Batch 123.a"), -1);
+      assertEquals(c.compare("Batch A", "Batch b"), 1);
   }
+
+
+  @Test()
+  public void compareDatesTest() {
+    assertEquals(c.compare("Feb 12, 2019, 10:22 am", "Feb 12, 2019, 10:22 am"), 0, "match");
+    assertEquals(c.compare("Feb 12, 2019, 10:22 am", "Feb 12, 2019, 10:23 am"), -1, "1 minute later");
+    assertEquals(c.compare("Feb 13, 2019, 10:22 am", "Feb 12, 2019, 10:23 am"), 1, "1 day earlier");
+    assertEquals(c.compare("Feb 13, 2019, 10:22 am", "Feb 12, 2019, 10:23 pm"), 1, "am before pm");
+    assertEquals(c.compare("Feb 13, 2019, 10:22 am", "Aug 12, 2019, 10:22 pm"), -1,
+                 " Aug before Feb because it is a string comparison not a date comparison");
+  }
+
+
 }
