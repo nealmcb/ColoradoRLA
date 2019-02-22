@@ -49,6 +49,7 @@ const SaveButton = (props: SaveButtonProps) => {
         if (!forms.electionDateForm) { return; }
         if (!forms.electionTypeForm) { return; }
         if (!forms.publicMeetingDateForm) { return; }
+        if (!forms.uploadFile) { return; }
 
         if (!forms.electionDateForm.date) { return; }
         if (!forms.electionTypeForm.type) { return; }
@@ -61,11 +62,7 @@ const SaveButton = (props: SaveButtonProps) => {
         if (!forms.riskLimit) { return; }
         const riskLimit = forms.riskLimit.comparisonLimit;
 
-        let uploadFile = [];
-
-        if (forms.uploadFile && forms.uploadFile.files) {
-            uploadFile = forms.uploadFile.files.map((file: any) => file);
-        }
+        const uploadFile = forms.uploadFile.files.map((file: any) => file);
 
         setAuditInfo({
             election: {
