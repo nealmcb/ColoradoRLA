@@ -4,10 +4,11 @@ import { Link } from 'react-router-dom';
 
 import * as _ from 'lodash';
 
+import { endpoint } from 'corla/config';
+
 import counties from 'corla/data/counties';
 
 import Nav from '../Nav';
-
 
 interface BreadcrumbProps {
     contest: Contest;
@@ -57,11 +58,20 @@ const ContestChoices = (props: ChoicesProps) => {
 };
 
 interface PageProps {
-    contest: Contest;
+    contest?: Contest;
+}
+
+function contestReportUrl(contestName: string) {
+    return endpoint('publish-audit-report')
+        + '?contestName=' + encodeURIComponent(contestName);
 }
 
 const ContestDetailPage = (props: PageProps) => {
     const { contest } = props;
+
+    if (!contest) {
+        return <div />;
+    }
 
     const row = (k: string, v: (number | string)) => (
         <tr key={ k } >
@@ -76,8 +86,21 @@ const ContestDetailPage = (props: PageProps) => {
         <div>
             <Nav />
             <Breadcrumb contest={ contest } />
-            <h2>Status</h2>
             <div className='pt-card'>
+                <h2>Contest Report</h2>
+                <p>
+                    The contest report is a contest-centric report detailing
+                    the ballots that have been audited
+                    for <b>{ contest.name }</b>, including the county that
+                    audited each ballot.
+                </p>
+                <a className='pt-button pt-large pt-intent-primary'
+                   href={ contestReportUrl(contest.name) }>
+                   Download contest report
+                </a>
+            </div>
+            <div className='pt-card'>
+                <h2>Contest Data</h2>
                 <h3>Contest Data</h3>
                 <table className='pt-html-table pt-html-table-bordered pt-small'>
                     <tbody>
@@ -94,6 +117,5 @@ const ContestDetailPage = (props: PageProps) => {
         </div>
     );
 };
-
 
 export default ContestDetailPage;
