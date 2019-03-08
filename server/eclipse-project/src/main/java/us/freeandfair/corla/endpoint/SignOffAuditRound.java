@@ -270,6 +270,9 @@ public class SignOffAuditRound extends AbstractAuditBoardDashboardEndpoint {
     for (final CountyDashboard cdb : Persistence.getAll(CountyDashboard.class)) {
       if (cdb.id().equals(the_id)) {
         continue; // <- sneaky filter for all but this county
+        // ROUND_COMPLETE_EVENT has already happened for this county above, and
+        // the notifyAuditComplete will handle COUNTY_AUDIT_COMPLETE_EVENT for
+        // this county
       }
 
       if (!cdb.id().equals(the_id)) {
@@ -326,10 +329,6 @@ public class SignOffAuditRound extends AbstractAuditBoardDashboardEndpoint {
     }
     if (all_complete) {
       ASMUtilities.step(DOS_AUDIT_COMPLETE_EVENT,
-                        DoSDashboardASM.class,
-                        DoSDashboardASM.IDENTITY);
-    } else {
-      ASMUtilities.step(DOS_COUNTY_AUDIT_COMPLETE_EVENT,
                         DoSDashboardASM.class,
                         DoSDashboardASM.IDENTITY);
     }
