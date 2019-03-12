@@ -328,8 +328,6 @@ public class StartAuditRound extends AbstractDoSDashboardEndpoint {
       // the ASM states, and false otherwise as we just assume audit
       // reasonableness in the absence of ASMs. We'll remind you about
       // it at the end.
-      boolean audit_complete = true;
-
       // FIXME map a function over a collection of dashboardsToStart
       // FIXME extract-fn (for days): update every county dashboard with
       // a list of ballots to audit
@@ -422,11 +420,6 @@ public class StartAuditRound extends AbstractDoSDashboardEndpoint {
                             String.valueOf(cdb.id()));
           ASMUtilities.save(countyDashboardASM);
 
-          // figure out whether this county is done, or whether there's
-          // an audit to run (audit_complete is initially true, so if
-          // any dashboards are NOT in a final state, we're not done.
-          audit_complete &= countyDashboardASM.isInFinalState();
-
         // FIXME hoist me; we don't need to know about HTTP requests or
         // responses at this level.
         } catch (final IllegalArgumentException e) {
@@ -441,16 +434,7 @@ public class StartAuditRound extends AbstractDoSDashboardEndpoint {
         }
       } // end of dashboard twiddling
 
-      // At this point, anyone who needed another round should have one.
-      // If everyone is done, we're all done.
-
-      // FIXME hoist me
-      if (audit_complete) {
-        my_event.set(DOS_AUDIT_COMPLETE_EVENT);
-        ok(the_response, "audit complete");
-      } else {
-        ok(the_response, "round started");
-      }
+      ok(the_response, "round started");
       // end of extraction. Now we can talk about HTTP requests / responses again!
     } catch (final PersistenceException e) {
       LOGGER.error("PersistenceException " + e);
