@@ -40,6 +40,11 @@ import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.CellUtil;
+import org.apache.poi.ss.util.RegionUtil;
+
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import us.freeandfair.corla.controller.ComparisonAuditController;
@@ -68,12 +73,13 @@ public class CountyReport {
    * The affirmation statement.
    */
   public static final String AFFIRMATION_STATEMENT =
-      "We hereby affirm that the results presented in this report\n" +
-      " are accurate to the best of our knowledge.";
+      "We hereby affirm that the results presented in this report are" +
+      "\naccurate to the best of our knowledge.";
 
   /**
    * The font size for Excel.
    */
+  // POI interop requires a short here
   @SuppressWarnings("PMD.AvoidUsingShortType")
   public static final short FONT_SIZE = 12;
 
@@ -250,6 +256,10 @@ public class CountyReport {
     final CellStyle standard_style = workbook.createCellStyle();
     standard_style.setFont(standard_font);
     standard_style.setDataFormat(format.getFormat("@"));
+    final CellStyle wrapped_style = workbook.createCellStyle();
+    wrapped_style.setFont(standard_font);
+    wrapped_style.setDataFormat(format.getFormat("@"));
+    wrapped_style.setWrapText(true);
     final CellStyle standard_right_style = workbook.createCellStyle();
     standard_right_style.setFont(standard_font);
     standard_right_style.setAlignment(HorizontalAlignment.RIGHT);
@@ -606,6 +616,8 @@ public class CountyReport {
 
     row_number++;
 
+    summary_sheet.getPrintSetup().setLandscape(true);
+    summary_sheet.getPrintSetup().setFitWidth((short) 1);
     for (int i = 0; i < max_cell_number; i++) {
       summary_sheet.autoSizeColumn(i);
     }
@@ -631,7 +643,7 @@ public class CountyReport {
       cell = row.createCell(cell_number++);
       cell.setCellType(CellType.STRING);
       cell.setCellStyle(bold_style);
-      cell.setCellValue("Number of Ballot Cards Audited");
+      cell.setCellValue("Ballot Cards Audited");
 
       cell = row.createCell(cell_number++);
       cell.setCellType(CellType.NUMERIC);
@@ -765,6 +777,7 @@ public class CountyReport {
         cell.setCellValue(booleanYesNo(!audit_info.disagreement().isEmpty()));
       }
 
+      round_sheet.getPrintSetup().setFitWidth((short) 1);
       for (int i = 0; i < max_cell_number; i++) {
         round_sheet.autoSizeColumn(i);
       }
@@ -772,23 +785,30 @@ public class CountyReport {
 
     // affirmation sheet
     final Sheet affirmation_sheet = workbook.createSheet("Affirmation");
+    final float affirmationRowHeight = affirmation_sheet.getDefaultRowHeightInPoints();
     row_number = 0;
     row = affirmation_sheet.createRow(row_number++);
     cell_number = 0;
     max_cell_number = 0;
 
-    cell = row.createCell(cell_number++);
-    cell.setCellType(CellType.STRING);
-    cell.setCellStyle(bold_style);
-    cell.setCellValue("Affirmation");
+    CellUtil.createCell(row, cell_number++, "Affirmation", bold_style);
 
     cell_number = 0;
     row_number++;
     row = affirmation_sheet.createRow(row_number++);
-    cell = row.createCell(cell_number++);
-    cell.setCellType(CellType.STRING);
-    cell.setCellStyle(standard_style);
-    cell.setCellValue(AFFIRMATION_STATEMENT);
+    // Two lines to accommodate current affirmation text
+    row.setHeightInPoints(affirmationRowHeight * 2);
+    CellUtil.createCell(row, cell_number++, AFFIRMATION_STATEMENT, wrapped_style);
+
+    // Merge the affirmation row columns 0-2
+    affirmation_sheet.addMergedRegion(
+        new CellRangeAddress(
+            row_number - 1,
+            row_number - 1,
+            0,
+            2
+        )
+    );
 
     for (int roundIndex = 0; roundIndex < my_rounds.size(); roundIndex++) {
       final Round round = my_rounds.get(roundIndex);
@@ -799,18 +819,22 @@ public class CountyReport {
       cell_number = 0;
       row_number++;
       row = affirmation_sheet.createRow(row_number++);
-      cell = row.createCell(cell_number++);
-      cell.setCellType(CellType.STRING);
-      cell.setCellStyle(bold_style);
-      cell.setCellValue(String.format("Round %d", round.number()));
+      CellUtil.createCell(
+          row,
+          cell_number++,
+          String.format("Round %d", round.number()),
+          bold_style
+      );
 
       for (final Integer boardIndex : boardIndices) {
         cell_number = 0;
         row = affirmation_sheet.createRow(row_number++);
-        cell = row.createCell(cell_number++);
-        cell.setCellType(CellType.STRING);
-        cell.setCellStyle(bold_style);
-        cell.setCellValue(String.format("Audit board %d:", boardIndex + 1));
+        CellUtil.createCell(
+            row,
+            cell_number++,
+            String.format("Audit board %d:", boardIndex + 1),
+            bold_style
+        );
 
         final List<Elector> boardSignatories = signatories.get(boardIndex);
         for (final Elector signatory : boardSignatories) {
@@ -827,20 +851,50 @@ public class CountyReport {
     cell_number = 0;
     row_number++;
     row = affirmation_sheet.createRow(row_number++);
-    cell = row.createCell(cell_number++);
-    cell.setCellType(CellType.STRING);
-    cell.setCellStyle(bold_style);
-    cell.setCellValue("County Clerk");
+    CellUtil.createCell(row, cell_number++, "County Clerk", bold_style);
 
     cell_number = 0;
     row = affirmation_sheet.createRow(row_number++);
     cell = row.createCell(cell_number++);
     cell.setCellType(CellType.STRING);
-    cell.setCellStyle(box_style);
+
+    // Clerk signature row columns 0-2
+    final CellRangeAddress clerkSignatureRange = new CellRangeAddress(
+        row_number - 1,
+        row_number - 1,
+        0,
+        2
+    );
+
+    // Merge the clerk signature row
+    affirmation_sheet.addMergedRegion(clerkSignatureRange);
+
+    RegionUtil.setBorderTop(
+        BorderStyle.THICK,
+        clerkSignatureRange,
+        affirmation_sheet
+    );
+    RegionUtil.setBorderRight(
+        BorderStyle.THICK,
+        clerkSignatureRange,
+        affirmation_sheet
+    );
+    RegionUtil.setBorderBottom(
+        BorderStyle.THICK,
+        clerkSignatureRange,
+        affirmation_sheet
+    );
+    RegionUtil.setBorderLeft(
+        BorderStyle.THICK,
+        clerkSignatureRange,
+        affirmation_sheet
+    );
 
     row.setHeight((short) 800);
 
-    affirmation_sheet.autoSizeColumn(0);
+    for (int i = 0; i <= 2; i++) {
+      affirmation_sheet.autoSizeColumn(i);
+    }
 
     return workbook;
   }

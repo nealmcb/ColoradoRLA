@@ -66,6 +66,7 @@ public class StateReport {
   /**
    * The font size for Excel.
    */
+  // POI interop requires a short here
   @SuppressWarnings("PMD.AvoidUsingShortType")
   public static final short FONT_SIZE = 12;
 
