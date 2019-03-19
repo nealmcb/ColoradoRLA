@@ -7,6 +7,9 @@ POSTGRESQL_TAG ?= latest
 SERVER_REPOSITORY ?= quay.io/democracyworks/rla-server
 SERVER_TAG ?= latest
 
+SERVER_YOURKIT_REPOSITORY ?= quay.io/democracyworks/rla-server
+SERVER_YOURKIT_TAG ?= latest-yourkit
+
 ### Apache httpd
 
 .PHONY: httpd-build httpd-deploy
@@ -45,3 +48,16 @@ server-build:
 
 server-deploy:
 	docker push $(SERVER_REPOSITORY):$(SERVER_TAG)
+
+### RLA server with YourKit
+
+.PHONY: server-yourkit-build server-yourkit-deploy
+
+server-yourkit-build:
+	docker build --pull \
+		-f server-yourkit/Dockerfile \
+		-t $(SERVER_YOURKIT_REPOSITORY):$(SERVER_YOURKIT_TAG) \
+		../
+
+server-yourkit-deploy:
+	docker push $(SERVER_YOURKIT_REPOSITORY):$(SERVER_YOURKIT_TAG)
