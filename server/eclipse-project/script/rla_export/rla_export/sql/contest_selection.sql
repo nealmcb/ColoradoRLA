@@ -5,9 +5,13 @@
 -- correlated with cvr_id in contest_comparison export, and with audited_cvr_count.
 
 SELECT
-   min_margin,
-   contest_name,
-   contest_cvr_ids
+   cr.min_margin,
+   cr.contest_name,
+   ca.contest_cvr_ids
 FROM
-   contest_result
+   comparison_audit AS ca
+LEFT JOIN
+   contest_result AS cr
+   ON ca.contest_result_id = cr.id
+
 ;
