@@ -321,7 +321,7 @@ public final class BallotSelection {
                                   // keep rand around to store on cvr for reporting
                                   rand,
                                   // preserve the order of random selections, 0-based
-                                  ++i,
+                                  i++,
                                   selection.contestName);
     }
   }

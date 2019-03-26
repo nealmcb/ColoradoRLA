@@ -323,8 +323,8 @@ public class ReportRows {
     final BigDecimal result =  Audit.pValueApproximation(ca.getAuditedSampleCount(),
                                                          ca.getDilutedMargin(),
                                                          ca.getGamma(),
-                                                         ca.discrepancyCount(-2),
                                                          ca.discrepancyCount(-1),
+                                                         ca.discrepancyCount(-2),
                                                          ca.discrepancyCount(1),
                                                          ca.discrepancyCount(2));
     return result.setScale(3, BigDecimal.ROUND_HALF_UP).toString();
