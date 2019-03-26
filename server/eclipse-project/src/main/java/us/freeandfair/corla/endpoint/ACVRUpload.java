@@ -84,12 +84,33 @@ public class ACVRUpload extends AbstractAuditBoardDashboardEndpoint {
     my_event.set(null);
   }
 
+  /** build new acvr **/
+  public CastVoteRecord buildNewAcvr(final SubmittedAuditCVR submission,
+                                     final CastVoteRecord cvr,
+                                     final CountyDashboard cdb) {
+    final CastVoteRecord s = submission.auditCVR();
+    final CastVoteRecord newAcvr =
+      new CastVoteRecord(RecordType.AUDITOR_ENTERED,
+                         Instant.now(),
+                         s.countyID(), s.cvrNumber(), null, s.scannerID(),
+                         s.batchID(), s.recordID(), s.imprintedID(),
+                         s.ballotType(), s.contestInfo());
+    newAcvr.setAuditBoardIndex(submission.getAuditBoardIndex());
+    newAcvr.setCvrId(submission.cvrID());
+    newAcvr.setRoundNumber(cdb.currentRound().number());
+    newAcvr.setRand(cvr.getRand());
+
+    return newAcvr;
+  }
+
   /**
    * {@inheritDoc}
    */
   @SuppressWarnings({"PMD.ModifiedCyclomaticComplexity", "PMD.StdCyclomaticComplexity"})
   @Override
   public String endpointBody(final Request the_request, final Response the_response) {
+    final CastVoteRecord newAcvr;
+
     try {
       final SubmittedAuditCVR submission =
         Main.GSON.fromJson(the_request.body(), SubmittedAuditCVR.class);
@@ -108,37 +129,30 @@ public class ACVRUpload extends AbstractAuditBoardDashboardEndpoint {
 
           final CastVoteRecord cvr = Persistence.getByID(submission.cvrID(),
                                                          CastVoteRecord.class);
-          final CastVoteRecord s = submission.auditCVR();
-          final CastVoteRecord newAcvr =
-            new CastVoteRecord(RecordType.AUDITOR_ENTERED, Instant.now(),
-                               s.countyID(), s.cvrNumber(), null, s.scannerID(),
-                               s.batchID(), s.recordID(), s.imprintedID(),
-                               s.ballotType(), s.contestInfo());
-          newAcvr.setComment(submission.getComment());
+          newAcvr = buildNewAcvr(submission, cvr, cdb);
 
-          if (ComparisonAuditController.reaudit(cdb,cvr,newAcvr)) {
+          if (ComparisonAuditController.reaudit(cdb,cvr,newAcvr, submission.getComment())) {
             ok(the_response, "ACVR reaudited");
           } else {
             invariantViolation(the_response, "CVR has not previously been audited");
           }
 
         } else if (cdb.ballotsRemainingInCurrentRound() > 0) {
+
+          // Now we have a thing we can give our controller, maybe.
+          final CastVoteRecord cvr = Persistence.getByID(submission.cvrID(),
+                                                         CastVoteRecord.class);
+
           // FIXME extract-fn: setupACVR
           final CastVoteRecord acvr = submission.auditCVR();
           acvr.setID(null);
 
-          final CastVoteRecord real_acvr =
-              new CastVoteRecord(RecordType.AUDITOR_ENTERED, Instant.now(),
-                                 acvr.countyID(), acvr.cvrNumber(), null, acvr.scannerID(),
-                                 acvr.batchID(), acvr.recordID(), acvr.imprintedID(),
-                                 acvr.ballotType(), acvr.contestInfo());
-          Persistence.saveOrUpdate(real_acvr);
+          newAcvr = buildNewAcvr(submission, cvr, cdb);
+
+          Persistence.saveOrUpdate(newAcvr);
           LOGGER.info("Audit CVR for CVR id " + submission.cvrID() +
-                           " parsed and stored as id " + real_acvr.id());
-          // FIXME extract-fn: setupACVR
-          // Now we have a thing we can give our controller, maybe.
-          final CastVoteRecord cvr = Persistence.getByID(submission.cvrID(),
-                                                         CastVoteRecord.class);
+                           " parsed and stored as id " + newAcvr.id());
+
           if (cvr == null) {
             LOGGER.error("could not find original CVR");
             // FIXME throw and push HTTP response up.
@@ -147,7 +161,7 @@ public class ACVRUpload extends AbstractAuditBoardDashboardEndpoint {
 
             // The positive outcome is a little hard to notice in all the noise
             // FIXME return an appropriate value and push HTTP response up
-            if (ComparisonAuditController.submitAuditCVR(cdb, cvr, real_acvr)) {
+            if (ComparisonAuditController.submitAuditCVR(cdb, cvr, newAcvr)) {
               LOGGER.debug("ACVR OK");
               Persistence.saveOrUpdate(cdb);
               ok(the_response, "ACVR submitted");

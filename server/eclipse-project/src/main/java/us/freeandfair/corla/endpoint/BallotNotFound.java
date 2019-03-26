@@ -83,7 +83,29 @@ public class BallotNotFound extends AbstractAuditBoardDashboardEndpoint {
   protected void reset() {
     my_event.set(null);
   }
-  
+
+  /** build new acvr, similar to ACVRUpload#buildNewAcvr,
+   *   but details come from the cvr
+   **/
+  public CastVoteRecord buildNewAcvr(final SubmittedBallotNotFound submission,
+                                     final CastVoteRecord cvr,
+                                     final CountyDashboard cdb,
+                                     final RecordType recordType,
+                                     final List<CVRContestInfo> contestInfo) {
+    final CastVoteRecord newAcvr =
+      new CastVoteRecord(recordType,
+                         Instant.now(), cvr.countyID(), cvr.cvrNumber(), null,
+                         cvr.scannerID(), cvr.batchID(), cvr.recordID(),
+                         cvr.imprintedID(), cvr.ballotType(),
+                         contestInfo);
+    newAcvr.setAuditBoardIndex(submission.getAuditBoardIndex());
+    newAcvr.setCvrId(submission.id());
+    newAcvr.setRoundNumber(cdb.currentRound().number());
+    newAcvr.setRand(cvr.getRand());
+
+    return newAcvr;
+  }
+
   /**
    * Marks the specified ballot as "not found" by the audit board.
    * The ballot to so mark is indicated by the ID of its corresponding
@@ -134,20 +156,19 @@ public class BallotNotFound extends AbstractAuditBoardDashboardEndpoint {
         contest_info.add(new CVRContestInfo(ci.contest(), "ballot not found", 
                                             null, new ArrayList<String>()));
       }
-      final CastVoteRecord acvr =
-          new CastVoteRecord(RecordType.PHANTOM_BALLOT,
-                             Instant.now(), cvr.countyID(), cvr.cvrNumber(), null,
-                             cvr.scannerID(), cvr.batchID(), cvr.recordID(),
-                             cvr.imprintedID(), cvr.ballotType(),
-                             contest_info);
+      final CastVoteRecord newAcvr = buildNewAcvr(sbnf,
+                                                  cvr,
+                                                  cdb,
+                                                  RecordType.PHANTOM_BALLOT,
+                                                  contest_info);
+
       boolean result;
       if (sbnf.isReaudit()) {
-        acvr.setComment(sbnf.getComment());
-
-        result = ComparisonAuditController.reaudit(cdb,cvr,acvr);
+        final String comment = sbnf.getComment();
+        result = ComparisonAuditController.reaudit(cdb, cvr, newAcvr, comment);
       } else {
-        Persistence.saveOrUpdate(acvr);
-        result = ComparisonAuditController.submitAuditCVR(cdb, cvr, acvr);
+        Persistence.saveOrUpdate(newAcvr);
+        result = ComparisonAuditController.submitAuditCVR(cdb, cvr, newAcvr);
       }
 
       if (result) {

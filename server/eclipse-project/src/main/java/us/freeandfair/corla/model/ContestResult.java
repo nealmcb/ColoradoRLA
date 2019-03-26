@@ -7,8 +7,6 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -36,7 +34,6 @@ import javax.persistence.Version;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import us.freeandfair.corla.persistence.LongListConverter;
 import us.freeandfair.corla.persistence.PersistentEntity;
 import us.freeandfair.corla.persistence.StringSetConverter;
 
@@ -184,13 +181,6 @@ public class ContestResult implements PersistentEntity, Serializable {
   private AuditReason auditReason;
 
   /**
-   * The sequence of CastVoteRecord ids for this contest ordered by County id
-   */
-  @Column(name = "contest_cvr_ids", columnDefinition = TEXT)
-  @Convert(converter = LongListConverter.class)
-  private List<Long> contestCVRIds = new ArrayList<Long>();
-
-  /**
    * Constructs a new empty ContestResult (solely for persistence).
    */
   public ContestResult() {
@@ -282,29 +272,6 @@ public class ContestResult implements PersistentEntity, Serializable {
   }
 
   /**
-   * Sets the current collection of Contest CVR IDs to params
-   * @param contestCVRIds a list
-   */
-  public void setContestCVRIds (final List<Long> contestCVRIds) {
-    this.contestCVRIds = contestCVRIds;
-  }
-
-  /**
-   * Adds to the current collection of Contest CVR IDs
-   * @param contestCVRIds a list
-   */
-  public void addContestCVRIds (final List<Long> contestCVRIds) {
-    this.contestCVRIds.addAll(contestCVRIds);
-  }
-
-  /**
-   * getter
-   */
-  public List<Long> getContestCVRIds() {
-    return this.contestCVRIds;
-  }
-
-  /**
    * getter
    */
   public int winnersAllowed() {
@@ -369,6 +336,11 @@ public class ContestResult implements PersistentEntity, Serializable {
    */
   public Map<String, Integer> getVoteTotals() {
     return Collections.unmodifiableMap(this.vote_totals);
+  }
+
+  /** data access helper **/
+  public Integer totalVotes() {
+    return getVoteTotals().values().stream().reduce(0, Integer::sum);
   }
 
   /**
@@ -457,7 +429,7 @@ public class ContestResult implements PersistentEntity, Serializable {
    */
   @Override
   public String toString() {
-    return "ContestResult [id=" + id() + " contestName=" + getContestName() +  " contestCVRIds=" + getContestCVRIds() + "]";
+    return "ContestResult [id=" + id() + " contestName=" + getContestName() + "]";
   }
 
   /**

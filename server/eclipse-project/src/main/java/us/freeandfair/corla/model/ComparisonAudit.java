@@ -15,6 +15,8 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Collections;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -27,6 +29,7 @@ import java.util.stream.Stream;
 import javax.persistence.Cacheable;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -50,6 +53,7 @@ import us.freeandfair.corla.math.Audit;
 import us.freeandfair.corla.model.CVRContestInfo.ConsensusValue;
 import us.freeandfair.corla.model.CastVoteRecord.RecordType;
 import us.freeandfair.corla.persistence.PersistentEntity;
+import us.freeandfair.corla.persistence.LongListConverter;
 
 /**
  * A class representing the state of a single audited contest for
@@ -215,6 +219,13 @@ public class ComparisonAudit implements PersistentEntity {
   private Boolean my_estimated_recalculate_needed = true;
 
   /**
+   * The sequence of CastVoteRecord ids for this contest ordered by County id
+   */
+  @Column(name = "contest_cvr_ids", columnDefinition = "text")
+  @Convert(converter = LongListConverter.class)
+  private List<Long> contestCVRIds = new ArrayList<Long>();
+
+  /**
    * A map from CVRAuditInfo objects to their discrepancy values for this
    * audited contest.
    */
@@ -334,7 +345,7 @@ public class ComparisonAudit implements PersistentEntity {
   }
 
   /**
-   * @return the risk limit associated with this audit.
+   * @return the diluted margin from the ContestResult.
    */
   public BigDecimal getDilutedMargin() {
     return this.diluted_margin;
@@ -680,7 +691,22 @@ public class ComparisonAudit implements PersistentEntity {
 
   /** was the given cvrid selected for this contest? **/
   public boolean isCovering(final Long cvrId) {
-    return contestResult().getContestCVRIds().contains(cvrId);
+    return getContestCVRIds().contains(cvrId);
+  }
+
+  /**
+   * Adds to the current collection of Contest CVR IDs
+   * @param contestCVRIds a list
+   */
+  public void addContestCVRIds (final List<Long> contestCVRIds) {
+    this.contestCVRIds.addAll(contestCVRIds);
+  }
+
+  /**
+   * getter
+   */
+  public List<Long> getContestCVRIds() {
+    return this.contestCVRIds;
   }
 
   /**
@@ -706,7 +732,7 @@ public class ComparisonAudit implements PersistentEntity {
    * (across all rounds)
    **/
   public int multiplicity(final Long cvrId) {
-    return Collections.frequency(contestResult().getContestCVRIds(), cvrId);
+    return Collections.frequency(getContestCVRIds(), cvrId);
   }
 
   /**
@@ -764,6 +790,15 @@ public class ComparisonAudit implements PersistentEntity {
     LOGGER.info(String.format("[recordDiscrepancy type=%s, record=%s]",
                               the_type, the_record));
     my_discrepancies.put(the_record, the_type);
+  }
+
+  /**
+   * get the discrepancy value that was recorded for this
+   * ComparisonAudit(contest) on the given CVRAuditInfo(ballot). used for
+   * reporting.
+   **/
+  public Integer getDiscrepancy(final CVRAuditInfo cai) {
+    return my_discrepancies.get(cai);
   }
 
   /**
@@ -1102,7 +1137,7 @@ public class ComparisonAudit implements PersistentEntity {
                           this.contestResult().getCounties(),
                           this.getAuditedSampleCount(),
                           this.getOverstatements(),
-                          this.contestResult().getContestCVRIds(),
+                          this.getContestCVRIds(),
                           my_audit_status,
                           this.auditReason());
   }

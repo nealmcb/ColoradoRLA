@@ -195,6 +195,11 @@ final public class CastVoteRecord implements Comparable<CastVoteRecord>,
   private String comment;
 
   /**
+   * who is submitting this ACVR, used for reporting
+   **/
+  private Integer auditBoardIndex;
+
+  /**
    * A transient flag that indicates whether this CVR was audited; this is only
    * used for passing information around within the RLA tool and is not serialized
    * in the database; the authoritative source of information about whether a CVR
@@ -202,6 +207,22 @@ final public class CastVoteRecord implements Comparable<CastVoteRecord>,
    * object.
    */
   private transient boolean my_audit_flag;
+
+
+  /**
+   * The CVR to audit, for ACVRs only
+   */
+  private Long cvrId;
+
+  /**
+   * The round that the submission happened in, for ACVRs only
+   **/
+  private Integer roundNumber;
+
+  /**
+   * The generated random number that selected/resolves to this cvr
+   **/
+  private Integer rand;
 
   /**
    * both a performance optimization and work around for a feature lacking from
@@ -312,9 +333,10 @@ final public class CastVoteRecord implements Comparable<CastVoteRecord>,
   }
 
   /** set the record type to EDITED and the uri to rcvr:... **/
-  public void setToReaudited(final Long revision) {
+  public void setToReaudited(final Long revision, final String comment) {
     setRecordType(RecordType.REAUDITED);
     setRevision(revision);
+    setComment(comment);
 
     setUri();
   }
@@ -335,6 +357,18 @@ final public class CastVoteRecord implements Comparable<CastVoteRecord>,
   /** get comment **/
   public String getComment() {
     return this.comment;
+  }
+
+ /**
+   * set the auditBoardIndex
+   **/
+  public void setAuditBoardIndex(final Integer auditBoardIndex) {
+    this.auditBoardIndex = auditBoardIndex;
+  }
+
+  /** get auditBoardIndex **/
+  public Integer getAuditBoardIndex() {
+    return this.auditBoardIndex;
   }
 
   /**
@@ -400,8 +434,27 @@ final public class CastVoteRecord implements Comparable<CastVoteRecord>,
     return my_ballot_type;
   }
 
+  /** get the round that this acvr is audited in **/
+  public Integer getRoundNumber () {
+     return this.roundNumber;
+  }
 
-  /** get the uri for fast selection **/
+  /** set the round that this acvr is audited in **/
+  public void setRoundNumber (final Integer roundNumber) {
+    this.roundNumber = roundNumber ;
+  }
+
+  /** get the random number **/
+  public Integer getRand () {
+    return this.rand;
+  }
+
+  /** set the random number **/
+  public void setRand (final Integer rand) {
+    this.rand = rand;
+  }
+
+ /** get the uri for fast selection **/
   public String getUri() {
     return this.uri;
   }
@@ -439,6 +492,20 @@ final public class CastVoteRecord implements Comparable<CastVoteRecord>,
                          scannerID(),
                          batchID());
   }
+
+  /**
+   * keep a record of what this ACVR was submitted to audit, which is lost when
+   * reauditing because the CVRAuditInfo join is broke when reauditing
+   **/
+  public void setCvrId(final Long cvrId) {
+    this.cvrId = cvrId;
+  }
+
+  /** get the cvrId **/
+  public Long getCvrId() {
+    return this.cvrId;
+  }
+
 
   /**
    * @return the choices made in this cast vote record.
@@ -537,6 +604,9 @@ final public class CastVoteRecord implements Comparable<CastVoteRecord>,
       result &= nullableEquals(other_cvr.recordType(), recordType());
       result &= nullableEquals(other_cvr.getRevision(), getRevision());
       result &= nullableEquals(other_cvr.getUri(), getUri());
+      result &= nullableEquals(other_cvr.getAuditBoardIndex(), getAuditBoardIndex());
+      result &= nullableEquals(other_cvr.getRoundNumber(), getRoundNumber());
+      result &= nullableEquals(other_cvr.getRand(), getRand());
     } else {
       result = false;
     }
