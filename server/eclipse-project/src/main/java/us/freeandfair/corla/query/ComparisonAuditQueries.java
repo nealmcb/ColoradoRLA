@@ -10,14 +10,6 @@
 
 package us.freeandfair.corla.query;
 
-import java.util.List;
-
-import javax.persistence.PersistenceException;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-
 import org.hibernate.query.Query;
 import org.hibernate.Session;
 
@@ -25,7 +17,6 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import us.freeandfair.corla.model.AuditStatus;
-import us.freeandfair.corla.model.ContestResult;
 import us.freeandfair.corla.model.ComparisonAudit;
 import us.freeandfair.corla.persistence.Persistence;
 
@@ -47,34 +38,26 @@ public final class ComparisonAuditQueries {
   }
 
   /**
-   * Obtain all ComparisonAudit objects for the specified ContestResult.
+   * Obtain the ComparisonAudit object for the specified contest name.
    *
    * @param contestName The contest name
-   * @return the matched objects.
+   * @return the matched object
    */
-  public static List<ComparisonAudit> matching(final String contestName) {
-    List<ComparisonAudit> result = null;
-    final ContestResult contestResult = ContestResultQueries.findOrCreate(contestName);
+  public static ComparisonAudit matching(final String contestName) {
+    final Session s = Persistence.currentSession();
+    final Query q =
+      s.createQuery("select ca from ComparisonAudit ca "
+                    + " join ContestResult cr "
+                    + "   on ca.my_contest_result = cr "
+                    + " where cr.contestName = :contestName");
+
+    q.setParameter("contestName", contestName);
 
     try {
-      final Session s = Persistence.currentSession();
-      final CriteriaBuilder cb = s.getCriteriaBuilder();
-      final CriteriaQuery<ComparisonAudit> cq = cb.createQuery(ComparisonAudit.class);
-      final Root<ComparisonAudit> root = cq.from(ComparisonAudit.class);
-
-      cq.select(root).where(cb.equal(root.get("my_contest_result"), contestResult));
-
-      final TypedQuery<ComparisonAudit> query = s.createQuery(cq);
-      result = query.getResultList();
-    } catch (final PersistenceException e) {
-      LOGGER.error("could not query database for comparison audits");
+      return (ComparisonAudit) q.getSingleResult();
+    } catch (javax.persistence.NoResultException e ) {
+      return null;
     }
-    if (result == null) {
-      LOGGER.debug("found no comparison audits matching + " + contestResult);
-    } else {
-      LOGGER.debug("found comparison audits " + result);
-    }
-    return result;
   }
 
 
@@ -90,8 +73,8 @@ public final class ComparisonAuditQueries {
 
   /** setAuditStatus on matching contestName **/
   public static void updateStatus(final String contestName, final AuditStatus auditStatus) {
-    final List<ComparisonAudit> cas = matching(contestName);
-    for (final ComparisonAudit ca: cas) { //there will only be one
+    final ComparisonAudit ca = matching(contestName);
+    if (null != ca) {
       ca.setAuditStatus(auditStatus);
     }
   }
