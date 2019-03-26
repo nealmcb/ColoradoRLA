@@ -305,7 +305,7 @@ public class ReportRows {
       "min margin",
       "votes for winner",
       "votes for runner up",
-      "total votes (marked)",
+      "total votes",
       "disagreement count (included in +2 and +1)"
     };
 
@@ -361,7 +361,7 @@ public class ReportRows {
       row.put("min margin", toString(ca.contestResult().getMinMargin()));
       row.put("votes for winner", toString(ContestCounter.rankTotals(ca.contestResult().getVoteTotals()).get(0).getValue()));
       row.put("votes for runner up", toString(ContestCounter.rankTotals(ca.contestResult().getVoteTotals()).get(1).getValue()));
-      row.put("total votes (marked)", toString(ca.contestResult().totalVotes()));
+      row.put("total votes", toString(ca.contestResult().totalVotes()));
       row.put("disagreement count (included in +2 and +1)", toString(ca.disagreementCount()));
 
       rows.add(row.toArray());

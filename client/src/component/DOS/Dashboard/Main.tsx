@@ -4,6 +4,7 @@ import RoundContainer from './RoundContainer';
 
 import fetchReport from 'corla/action/dos/fetchReport';
 
+import { endpoint } from 'corla/config';
 
 interface RiskLimitInfoProps {
     riskLimit: number;
@@ -51,6 +52,18 @@ const NotDefined = () => {
     );
 };
 
+function activityAllReportUrl() {
+    return endpoint('publish-audit-report')
+         + '?reportType=activity-all'
+         + '&contentType=xlsx';
+}
+
+function resultsAllReportUrl() {
+    return endpoint('publish-audit-report')
+         + '?reportType=results-all'
+         + '&contentType=xlsx';
+}
+
 interface MainProps {
     auditDefined: boolean;
     canRenderReport: boolean;
@@ -76,12 +89,23 @@ const Main = (props: MainProps) => {
                 <div className='pt-ui-text-large'>Congratulations! The audit is complete.</div>
                 </div>
                 <div className='pt-card'>
-                    <div className='pt-ui-text-large'>Click to download final audit report.</div>
+                    <div className='pt-ui-text-large'>Download final audit report.</div>
                     <button
                         className='pt-button pt-intent-primary'
                         onClick={ fetchReport }>
-                        Download
+                        Audit Report
                     </button>
+                    <span>&nbsp;|&nbsp;</span>
+                    <a className='pt-button pt-intent-primary'
+                       href={ activityAllReportUrl() }>
+                        Activity Report
+                    </a>
+                    <span>&nbsp;|&nbsp;</span>
+                    <a className='pt-button pt-intent-primary'
+                       target="_blank"
+                       href={ resultsAllReportUrl() }>
+                        Results Report
+                    </a>
                 </div>
             </div>
         );
@@ -92,14 +116,26 @@ const Main = (props: MainProps) => {
             { auditDefinition }
             <RoundContainer />
             <div className='pt-card'>
-                <div className='pt-ui-text-large'>Click to download intermediate audit report.</div>
+                <div className='pt-ui-text-large'>Download intermediate reports</div>
                 <button
-                    className='pt-button  pt-intent-primary'
+                    className='pt-button pt-intent-primary'
                     disabled={ !canRenderReport }
                     onClick={ fetchReport }>
-                    Download
+                    Audit Report
                 </button>
+                <span>&nbsp;|&nbsp;</span>
+                <a className='pt-button pt-intent-primary'
+                   href={ activityAllReportUrl() }>
+                    Activity Report
+                </a>
+                <span>&nbsp;|&nbsp;</span>
+                <a className='pt-button pt-intent-primary'
+                   target="_blank"
+                   href={ resultsAllReportUrl() }>
+                    Results Report
+                </a>
             </div>
+
         </div>
     );
 };
