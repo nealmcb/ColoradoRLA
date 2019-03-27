@@ -3,12 +3,11 @@ import * as React from 'react';
 import * as _ from 'lodash';
 
 import { Button, Checkbox, Classes, EditableText, MenuItem } from '@blueprintjs/core';
-import { Select } from '@blueprintjs/labs';
+import { ItemRenderer, Select } from '@blueprintjs/select';
 
 import counties from 'corla/data/counties';
 
 import { naturalSortBy } from 'corla/util';
-
 
 const auditReasons: DOS.Form.SelectContests.Reason[] = [
     /* county contest should be the default because there are more of them and this will save clicks. default is first */
@@ -66,10 +65,13 @@ const ContestRow = (props: RowProps) => {
         return null;
     }
 
-    const renderItem = ({ handleClick, item, isActive }: MenuItemData) => {
+    const renderItem: ItemRenderer<DOS.Form.SelectContests.Reason> = (
+        item,
+        { handleClick, modifiers }
+    ) => {
         return (
             <MenuItem
-                className={ isActive ? Classes.ACTIVE : '' }
+                className={ modifiers.active ? Classes.ACTIVE : '' }
                 key={ item.id }
                 onClick={ handleClick }
                 text={ item.text } />
@@ -88,7 +90,7 @@ const ContestRow = (props: RowProps) => {
             popoverProps={ { popoverClassName } }>
             <Button
                 text={ status.reason.text }
-                rightIconName='double-caret-vertical' />
+                rightIcon='double-caret-vertical' />
         </AuditReasonSelect>
     );
 

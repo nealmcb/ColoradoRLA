@@ -24,10 +24,12 @@ const activeStyle = {
 };
 
 class UploadFileButton extends React.Component<UploadFileButtonProps, UploadFileButtonState> {
-  constructor() {
-    super();
+  constructor(props: UploadFileButtonProps) {
+    super(props);
+
     this.state = { files: [] };
   }
+
   public render() {
     this.props.forms.uploadFile = this.state;
 

@@ -29,7 +29,7 @@ class FinalReviewDialog extends React.Component<FinalReviewDialogProps, FinalRev
         const title = cvr ? 'Re-audit ' + cvr.imprinted_id : 'Re-audit';
 
         return (
-            <Dialog iconName='confirm'
+            <Dialog icon='confirm'
                     isOpen={ this.props.isOpen }
                     onClose={ this.handleCancel }
                     title={ title }>

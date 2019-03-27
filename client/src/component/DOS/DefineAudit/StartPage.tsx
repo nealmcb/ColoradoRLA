@@ -12,9 +12,7 @@ import UploadFileButton from './UploadFileButton';
 
 import setAuditInfo from 'corla/action/dos/setAuditInfo';
 
-import { timezone } from 'corla/config';
 import * as format from 'corla/format';
-
 
 const Breadcrumb = () => (
     <ul className='pt-breadcrumbs'>
@@ -159,6 +157,5 @@ const AuditPage = (props: PageProps) => {
         </div>
     );
 };
-
 
 export default AuditPage;

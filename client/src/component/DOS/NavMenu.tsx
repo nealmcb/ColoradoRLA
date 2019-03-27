@@ -23,7 +23,7 @@ class SoSNavMenu extends React.Component<any, any> {
             <Link to='/sos'>
                 <MenuItem
                     text='Home'
-                    iconName='home'
+                    icon='home'
                 />
             </Link>
         );
@@ -32,7 +32,7 @@ class SoSNavMenu extends React.Component<any, any> {
             <Link to='/sos/county'>
                 <MenuItem
                     text='Counties'
-                    iconName='map'
+                    icon='map'
                 />
             </Link>
         );
@@ -41,7 +41,7 @@ class SoSNavMenu extends React.Component<any, any> {
             <Link to='/sos/contest'>
                 <MenuItem
                     text='Contests'
-                    iconName='numbered-list'
+                    icon='numbered-list'
                 />
             </Link>
         );
@@ -50,7 +50,7 @@ class SoSNavMenu extends React.Component<any, any> {
             <Link to='/sos/audit'>
                 <MenuItem
                     text='Define Audit'
-                    iconName='eye-open'
+                    icon='eye-open'
                     disabled={ disableAuditButton }
                 />
             </Link>

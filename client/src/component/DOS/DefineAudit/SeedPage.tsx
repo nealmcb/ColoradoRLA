@@ -4,9 +4,6 @@ import Nav from '../Nav';
 
 import SeedForm from './SeedForm';
 
-import * as corlaDate from 'corla/date';
-
-
 const Breadcrumb = () => (
     <ul className='pt-breadcrumbs'>
         <li>
@@ -35,24 +32,20 @@ interface PageProps {
     uploadRandomSeed: OnClick;
 }
 
-
 class AuditSeedPage extends React.Component<PageProps> {
-    /* const AuditSeedPage = (props: PageProps) => { */
-    /* const { back, nextPage, publicMeetingDate, seed, valid, uploadRandomSeed } = props; */
-
     public state: any;
 
     constructor(props: PageProps) {
         super(props);
-        this.props = props;
+
         this.state = {
-            form: {seed: props.seed},
+            form: { seed: props.seed },
             formValid: false,
         };
     }
 
     public setValid(valid: boolean)  {
-        this.setState({formValid: valid});
+        this.setState({ formValid: valid });
     }
 
     public render() {
@@ -87,8 +80,6 @@ class AuditSeedPage extends React.Component<PageProps> {
         this.props.uploadRandomSeed(this.state.form.seed);
         this.props.nextPage();
     }
-
 }
-
 
 export default AuditSeedPage;
