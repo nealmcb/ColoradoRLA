@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
+import { Icon, Intent} from '@blueprintjs/core';
+
 import BallotManifestFormContainer from './BallotManifest/FormContainer';
 import CVRExportFormContainer from './CVRExport/FormContainer';
-
 
 interface MatchStatusProps {
     ballotManifestCount: number;
@@ -20,19 +21,19 @@ const MatchStatus = (props: MatchStatusProps) => {
 
     if (ballotManifestCount === cvrExportCount) {
         return (
-            <div className='pt-card' >
-                <span className='pt-icon pt-intent-success pt-icon-tick-circle' />
+            <div className='pt-card'>
+                <Icon icon='tick-circle' intent={ Intent.SUCCESS } />
                 <span> </span>
                 CVR Export and Ballot Manifest record counts <strong>match.</strong>
             </div>
         );
     } else {
         return (
-            <div className='pt-card' >
-                <span className='pt-icon pt-intent-danger pt-icon-error' />
+            <div className='pt-card'>
+                <Icon icon='error' intent={ Intent.DANGER } />
                 <span> </span>
                 CVR Export and Ballot Manifest record counts <strong>do not match.</strong>
-                <div className='pt-card' >
+                <div className='pt-card'>
                     <div>Ballot Manifest count: { ballotManifestCount }</div>
                     <div>CVR Export count: { cvrExportCount }</div>
                 </div>
@@ -103,6 +104,5 @@ function select(countyState: County.AppState) {
 
     return { countyState, missedDeadline, uploadedBothFiles };
 }
-
 
 export default connect(select)(FileUploadContainer);

@@ -6,7 +6,7 @@ import Nav from '../Nav';
 
 import counties from 'corla/data/counties';
 
-import { format } from 'corla/date';
+import { formatLocalDate } from 'corla/date';
 
 const Breadcrumb = () => (
     <ul className='pt-breadcrumbs'>
@@ -61,7 +61,7 @@ const SelectedContests = (props: SelectedContestsProps) => {
         <div className='pt-card'>
             <h3>Selected Contests</h3>
             <div className='pt-card'>
-                <table className='pt-table pt-bordered pt-condensed'>
+                <table className='pt-html-table pt-html-table-bordered pt-small'>
                     <thead>
                         <tr>
                             <th>County</th>
@@ -112,15 +112,17 @@ const AuditReview = (props: AuditReviewProps) => {
                 In particular, you will not be able to change which contests are under audit.
             </div>
             <div className='pt-card'>
-                <table className='pt-table'>
+                <table className='pt-html-table'>
                     <tbody>
                         <tr>
                             <td>Public Meeting Date:</td>
-                            <td>{ dosState.publicMeetingDate && format(dosState.publicMeetingDate) }</td>
+                            <td>{ dosState.publicMeetingDate
+                                  && formatLocalDate(dosState.publicMeetingDate) }</td>
                         </tr>
                         <tr>
                             <td>Election Date:</td>
-                            <td>{ dosState.election && dosState.election.date && format(dosState.election.date) }</td>
+                            <td>{ dosState.election && dosState.election.date
+                                  && formatLocalDate(dosState.election.date) }</td>
                         </tr>
                         <tr>
                             <td>Election Type:</td>

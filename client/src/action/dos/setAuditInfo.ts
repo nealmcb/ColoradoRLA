@@ -4,7 +4,6 @@ import { endpoint } from 'corla/config';
 
 import createSubmitAction from 'corla/action/createSubmitAction';
 
-
 const url = endpoint('update-audit-info');
 
 const setAuditInfo = createSubmitAction({
@@ -21,11 +20,14 @@ function format(info: DOS.AuditInfo) {
         election_type: get(info, 'election.type'),
         public_meeting_date: info.publicMeetingDate,
         risk_limit: info.riskLimit,
-        upload_file: info.uploadFile,
+        upload_file: info.uploadFiles && info.uploadFiles.map(s => {
+            return {
+                contents: s,
+            };
+        }),
     };
 
     return omitBy(data, isNil);
 }
-
 
 export default (info: DOS.AuditInfo) => setAuditInfo(format(info));

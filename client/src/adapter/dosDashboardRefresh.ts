@@ -99,14 +99,10 @@ function parseAuditedContests(data: any) {
 function parseElection(data: any): any {
     const info = data.audit_info;
 
-    if (!info) {
-        return null;
-    }
+    const date = info.election_date ? new Date(info.election_date) : new Date();
+    const type = info.election_type;
 
-    return {
-        date: new Date(info.election_date),
-        type: info.election_type,
-    };
+    return { date, type };
 }
 
 function parsePublicMeetingDate(data: any): Option<Date> {

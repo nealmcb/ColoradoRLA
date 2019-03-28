@@ -79,7 +79,7 @@ const ContestDetailPage = (props: PageProps) => {
             <h2>Status</h2>
             <div className='pt-card'>
                 <h3>Contest Data</h3>
-                <table className='pt-table pt-bordered pt-condensed'>
+                <table className='pt-html-table pt-html-table-bordered pt-small'>
                     <tbody>
                         { row('County', county.name) }
                         { row('Name', contest.name) }

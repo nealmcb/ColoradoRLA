@@ -1,25 +1,19 @@
 import * as React from 'react';
 
-import * as moment from 'moment';
-
 import { DateInput, IDateFormatProps } from '@blueprintjs/datetime';
 
-function momentFormatter(format: string): IDateFormatProps {
+import { formatLocalDate, parseLocalDate } from 'corla/date';
+
+function blueprintFormatter(): IDateFormatProps {
     return {
-        formatDate: date => {
-            if (date) {
-                return moment.utc(date).format(format);
-            } else {
-                return moment.utc().format(format);
-            }
-        },
-        parseDate: str => moment(str).toDate(),
-        placeholder: format,
+        formatDate: d => d ? formatLocalDate(d) : formatLocalDate(new Date()),
+        parseDate: s => parseLocalDate(s),
+        placeholder: formatLocalDate(new Date()),
     };
 }
 
 interface FormProps {
-    forms: DOS.Form.AuditDef.Forms;
+    onChange: (d: Date) => void;
     initDate: Date;
 }
 
@@ -32,29 +26,29 @@ class ElectionDateForm extends React.Component<FormProps, FormState> {
         super(props);
 
         this.state = {
-            date: moment.utc(props.initDate).format('YYYY-MM-DD'),
+            date: formatLocalDate(props.initDate),
         };
+
+        this.onDateChange = this.onDateChange.bind(this);
     }
 
     public render() {
         return (
             <div className='pt-card'>
                 <div>Election Date</div>
-                <DateInput { ...momentFormatter('YYYY-MM-DD') }
+                <DateInput { ...blueprintFormatter() }
                            onChange={ this.onDateChange }
-                           value={ moment.utc(this.state.date).toDate() } />
+                           value={ parseLocalDate(this.state.date) } />
             </div>
         );
     }
 
-    private onDateChange = (selectedDate: Date) => {
-        const isoString = moment.utc(selectedDate).format('YYYY-MM-DD');
-
+    private onDateChange(selectedDate: Date) {
         this.setState({
-            date: isoString,
+            date: formatLocalDate(selectedDate),
         });
 
-        this.props.forms.electionDateForm = this.state;
+        this.props.onChange(selectedDate);
     }
 }
 

@@ -76,7 +76,7 @@ const Table = (props: TableProps) => {
     const { contests, rows, updateFormData } = props;
 
     return (
-        <table className='pt-table pt-striped'>
+        <table className='pt-html-table pt-html-table-striped'>
             <thead>
                 <tr>
                     <th>County Name</th>

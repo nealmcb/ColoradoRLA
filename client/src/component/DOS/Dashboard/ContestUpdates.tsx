@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import * as _ from 'lodash';
 
-import { EditableText, Tooltip } from '@blueprintjs/core';
+import { Button, EditableText, Icon, Intent, Tooltip } from '@blueprintjs/core';
 
 import setHandCount from 'corla/action/dos/setHandCount';
 
@@ -21,7 +21,7 @@ const RemainingToAuditHeader = () => {
             content={ content }>
             <div>
                 <span>Remaining to Audit </span>
-                <span className='pt-icon-standard pt-icon-help' />
+                <Icon icon='help' />
             </div>
         </Tooltip>
     );
@@ -35,7 +35,8 @@ const HandCountButton = (props: ButtonProps) => {
     const { contest } = props;
 
     const onClick = () => {
-        const msg = `You have selected "${contest.name}" to hand count - are you sure you want to proceed? This action cannot be undone if you choose to hand count "${contest.name}."`;
+        const msg = `You have selected "${contest.name}" to hand count - are you sure you want to proceed?`
+                  + ` This action cannot be undone if you choose to hand count "${contest.name}."`;
 
         if (confirm(msg)) {
             setHandCount(contest.id);
@@ -43,9 +44,10 @@ const HandCountButton = (props: ButtonProps) => {
     };
 
     return (
-        <button className='pt-button pt-intent-primary' onClick={ onClick }>
-            <span className='pt-icon pt-icon-hand-up' />
-        </button>
+        <Button intent={ Intent.PRIMARY }
+                onClick={ onClick }>
+            <Icon icon='hand-up' />
+        </Button>
     );
 };
 
@@ -153,7 +155,7 @@ class ContestUpdates extends React.Component<UpdatesProps, UpdatesState> {
                         onChange={ this.onFilterChange } />
                 </div>
                 <div className='pt-card'>
-                    <table className='pt-table'>
+                    <table className='pt-html-table'>
                         <thead>
                             <tr>
                                 <th>Hand Count</th>
@@ -190,8 +192,8 @@ class ContestUpdates extends React.Component<UpdatesProps, UpdatesState> {
         }
 
         return this.state.order === 'asc'
-             ? <span className='pt-icon-standard pt-icon-sort-asc' />
-             : <span className='pt-icon-standard pt-icon-sort-desc' />;
+             ? <Icon icon='sort-asc' />
+             : <Icon icon='sort-desc' />;
     }
 
     private onFilterChange = (filter: string) => {

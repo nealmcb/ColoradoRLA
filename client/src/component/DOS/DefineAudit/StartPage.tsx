@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-import corlaDate from 'corla/date';
-
 import Nav from '../Nav';
 
 import ElectionDateForm from './ElectionDateForm';
@@ -9,8 +7,6 @@ import ElectionTypeForm from './ElectionTypeForm';
 import PublicMeetingDateForm from './PublicMeetingDateForm';
 import RiskLimitForm from './RiskLimitForm';
 import UploadFileButton from './UploadFileButton';
-
-import setAuditInfo from 'corla/action/dos/setAuditInfo';
 
 import * as format from 'corla/format';
 
@@ -36,41 +32,13 @@ function round(val: number, digits: number) {
 
 interface SaveButtonProps {
     disabled: boolean;
-    forms: DOS.Form.AuditDef.Forms;
     nextPage: OnClick;
 }
 
 const SaveButton = (props: SaveButtonProps) => {
-    const { disabled, forms, nextPage } = props;
+    const { disabled, nextPage } = props;
 
     const buttonClick = () => {
-        if (!forms.electionDateForm) { return; }
-        if (!forms.electionTypeForm) { return; }
-        if (!forms.publicMeetingDateForm) { return; }
-        if (!forms.uploadFile) { return; }
-
-        if (!forms.electionDateForm.date) { return; }
-        if (!forms.electionTypeForm.type) { return; }
-        if (!forms.publicMeetingDateForm.date) { return; }
-
-        const electionDate = corlaDate.parse(forms.electionDateForm.date);
-        const { type } = forms.electionTypeForm;
-        const publicMeetingDate = corlaDate.parse(forms.publicMeetingDateForm.date);
-
-        if (!forms.riskLimit) { return; }
-        const riskLimit = forms.riskLimit.comparisonLimit;
-
-        const uploadFile = forms.uploadFile.files.map((file: any) => file);
-
-        setAuditInfo({
-            election: {
-                date: electionDate,
-                type,
-            },
-            publicMeetingDate,
-            riskLimit,
-            uploadFile,
-        });
         nextPage();
     };
 
@@ -84,34 +52,36 @@ const SaveButton = (props: SaveButtonProps) => {
     );
 };
 
-
 interface PageProps {
-    election: Election;
-    formValid: boolean;
-    nextPage: OnClick;
+    electionDate: Date;
+    isFormValid: boolean;
     publicMeetingDate: Date;
     riskLimit: number;
-    setFormValid: OnClick;
+    nextPage: OnClick;
+    type: ElectionType;
+    setElectionDate: (d: Date) => void;
+    setPublicMeetingDate: (d: Date) => void;
+    setRiskLimit: (l: number) => void;
+    setType: (t: ElectionType) => void;
+    setUploadedFiles: (fs: string[]) => void;
 }
 
 const AuditPage = (props: PageProps) => {
     const {
-        election,
-        formValid,
-        nextPage,
+        electionDate,
+        isFormValid,
         publicMeetingDate,
         riskLimit,
-        setFormValid,
+        type,
+        nextPage,
+        setElectionDate,
+        setPublicMeetingDate,
+        setRiskLimit,
+        setType,
+        setUploadedFiles,
     } = props;
 
-    const electionAndRiskLimitSet = riskLimit
-                                 && election
-                                 && election.date
-                                 && election.type;
-
-    const forms: DOS.Form.AuditDef.Forms = {};
-
-    const disableButton = !formValid;
+    const disableButton = !isFormValid;
 
     return (
         <div>
@@ -123,14 +93,17 @@ const AuditPage = (props: PageProps) => {
             <div className='pt-card'>
                 <h3>Election Info</h3>
                 <div>Enter the date the election will take place, and the type of election.</div>
-                <ElectionDateForm forms={ forms } initDate={election && election.date} />
-                <ElectionTypeForm forms={ forms } initType={election && election.type} setFormValid={ setFormValid } />
+                <ElectionDateForm onChange={ setElectionDate }
+                                  initDate={ electionDate } />
+                <ElectionTypeForm onChange={ setType }
+                                  initType={ type } />
             </div>
 
             <div className='pt-card'>
                 <h3>Public Meeting Date</h3>
                 <div>Enter the date of the public meeting to establish the random seed.</div>
-                <PublicMeetingDateForm forms={ forms } initDate={ publicMeetingDate } />
+                <PublicMeetingDateForm onChange={ setPublicMeetingDate }
+                                       initDate={ publicMeetingDate } />
             </div>
 
             <div className='pt-card'>
@@ -138,20 +111,18 @@ const AuditPage = (props: PageProps) => {
                 <div>
                   <strong>Enter the risk limit for comparison audits as a percentage.</strong>
                 </div>
-                <RiskLimitForm forms={ forms }
-                               riskLimit={ riskLimit }
-                               setFormValid={ setFormValid } />
+                <RiskLimitForm onChange={ setRiskLimit }
+                               riskLimit={ riskLimit } />
 
             </div>
 
             <div className='pt-card'>
                 <h3>Contests</h3>
-                <UploadFileButton forms={ forms } />
+                <UploadFileButton onChange={ setUploadedFiles } />
             </div>
 
             <div className='control-buttons'>
               <SaveButton disabled={ disableButton }
-                          forms={ forms }
                           nextPage={ nextPage } />
             </div>
         </div>

@@ -56,7 +56,8 @@ class AuditSeedPage extends React.Component<PageProps> {
                 <div className='pt-card'>
                     <h3>Audit Definition - Enter Random Seed</h3>
                     <div className='pt-card'>
-                        Enter the random seed generated from the public meeting on { this.props.formattedPublicMeetingDate }.
+                        Enter the random seed generated from the public meeting
+                        on { this.props.formattedPublicMeetingDate }.
                     </div>
                     <div className='pt-card'>
                         <SeedForm initSeed={ this.state.form.seed }
@@ -65,10 +66,13 @@ class AuditSeedPage extends React.Component<PageProps> {
                     </div>
                 </div>
                 <div>
-                    <button onClick={ this.props.back } className='pt-button pt-breadcrumb'>
+                    <button className='pt-button pt-breadcrumb'
+                            onClick={ this.props.back }>
                         Back
                     </button>
-                    <button onClick={ this.onSaveAndNext } disabled={!this.state.formValid} className='pt-button pt-intent-primary pt-breadcrumb'>
+                    <button className='pt-button pt-intent-primary pt-breadcrumb'
+                            disabled={!this.state.formValid}
+                            onClick={ this.onSaveAndNext }>
                         Save & Next
                     </button>
                 </div>

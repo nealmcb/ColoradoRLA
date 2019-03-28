@@ -110,12 +110,17 @@ class FinalReviewPage extends React.Component<FinalReviewPageProps, FinalReviewP
                         </p>
 
                         <ul>
-                            <li><b>Click the "re-audit" button next to the appropriate ballot card in the list below</b></li>
+                            <li>
+                                <b>
+                                    Click the "re-audit" button next to the
+                                    appropriate ballot card in the list below
+                                </b>
+                            </li>
                         </ul>
 
                         <p>
-                            When you are finished, click "Review Complete - Finish Round." Once clicked, ballot data from
-                            this round of the audit is no longer editable.
+                            When you are finished, click "Review Complete - Finish Round."
+                            Once clicked, ballot data from this round of the audit is no longer editable.
                         </p>
 
                         <Button onClick={ reviewCompleteHandler(auditBoardIndex) }>
@@ -123,7 +128,7 @@ class FinalReviewPage extends React.Component<FinalReviewPageProps, FinalReviewP
                         </Button>
                     </div>
 
-                    <table className='pt-table pt-bordered pt-condensed pt-interactive'
+                    <table className='pt-html-table pt-html-table-bordered pt-small pt-interactive'
                            style={{ marginLeft: 'auto', marginRight: 'auto' }}>
                         <thead>
                             <tr>

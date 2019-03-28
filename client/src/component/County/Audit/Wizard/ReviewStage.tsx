@@ -2,6 +2,8 @@ import * as React from 'react';
 
 import * as _ from 'lodash';
 
+import { Icon } from '@blueprintjs/core';
+
 import SubmittingACVR from './SubmittingACVR';
 
 interface EditButtonProps {
@@ -11,7 +13,7 @@ interface EditButtonProps {
 const EditButton = ({ back }: EditButtonProps) => {
     return (
         <a onClick={ back }>
-            <span className='pt-icon-standard pt-icon-edit review-edit-selection'></span>
+            <Icon icon='edit' className='review-edit-selection' />
             Edit
         </a>
     );
@@ -38,11 +40,26 @@ const AuditInstructions = (props: InstructionsProps) => {
             <div className='current-ballot-info'>
                 <h3 className='sidebar-heading'>Current ballot:</h3>
                 <ul className='current-ballot-stats'>
-                    <li>Storage bin: <span className='pt-ui-text pt-ui-text-large'>{ storageBin }</span></li>
-                    <li>Tabulator: <span className='pt-ui-text pt-ui-text-large'>{ currentBallot.scannerId }</span></li>
-                    <li>Batch: <span className='pt-ui-text pt-ui-text-large'>{ currentBallot.batchId }</span></li>
-                    <li>Ballot position: <span className='pt-ui-text pt-ui-text-large'>{ currentBallot.recordId }</span></li>
-                    <li>Ballot type: <span className='pt-ui-text pt-ui-text-large'>{ currentBallot.ballotType }</span></li>
+                    <li>
+                        Storage bin:
+                        <span className='pt-ui-text pt-ui-text-large'>{ storageBin }</span>
+                    </li>
+                    <li>
+                        Tabulator:
+                        <span className='pt-ui-text pt-ui-text-large'>{ currentBallot.scannerId }</span>
+                    </li>
+                    <li>
+                        Batch:
+                        <span className='pt-ui-text pt-ui-text-large'>{ currentBallot.batchId }</span>
+                    </li>
+                    <li>
+                        Ballot position:
+                        <span className='pt-ui-text pt-ui-text-large'>{ currentBallot.recordId }</span>
+                    </li>
+                    <li>
+                        Ballot type:
+                        <span className='pt-ui-text pt-ui-text-large'>{ currentBallot.ballotType }</span>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -65,14 +82,14 @@ const BallotContestReview = (props: BallotContestReviewProps) => {
 
     const noConsensusDiv = (
         <div>
-            <span className='no-consensus pt-icon-standard pt-icon-disable'></span>
+            <Icon icon='disable' className='no-consensus' />
             No audit board consensus
         </div>
     );
 
     const noMarksDiv = (
         <div>
-            <span className='blank-vote pt-icon-standard pt-icon-cross'></span>
+            <Icon icon='cross' className='blank-vote' />
             Blank vote - no mark
         </div>
     );
@@ -202,7 +219,9 @@ const ReviewStage = (props: ReviewStageProps) => {
                 <div className='audit-page-header'>
                     <h2 className='audit-page-title'>Ballot Card Verification</h2>
                     <div className='audit-page-subtitle'>Review ballot</div>
-                    <div className='ballot-number'>Auditing ballot card { currentBallotNumber } of { totalBallotsForBoard }</div>
+                    <div className='ballot-number'>
+                        Auditing ballot card { currentBallotNumber } of { totalBallotsForBoard }
+                    </div>
                 </div>
 
                 <div className='col-layout row1'>
