@@ -102,7 +102,7 @@ const Main = (props: MainProps) => {
                     </a>
                     <span>&nbsp;|&nbsp;</span>
                     <a className='pt-button pt-intent-primary'
-                       target="_blank"
+                       target='_blank'
                        href={ resultsAllReportUrl() }>
                         Results Report
                     </a>
@@ -130,7 +130,7 @@ const Main = (props: MainProps) => {
                 </a>
                 <span>&nbsp;|&nbsp;</span>
                 <a className='pt-button pt-intent-primary'
-                   target="_blank"
+                   target='_blank'
                    href={ resultsAllReportUrl() }>
                     Results Report
                 </a>
