@@ -319,7 +319,7 @@ public class ReportRows {
   }
 
   /** risk limit achieved according to math.Audit **/
-  public static String riskLimitAchieved(final ComparisonAudit ca) {
+  public static BigDecimal riskMeasurement(final ComparisonAudit ca) {
     final BigDecimal result =  Audit.pValueApproximation(ca.getAuditedSampleCount(),
                                                          ca.getDilutedMargin(),
                                                          ca.getGamma(),
@@ -327,9 +327,13 @@ public class ReportRows {
                                                          ca.discrepancyCount(-2),
                                                          ca.discrepancyCount(1),
                                                          ca.discrepancyCount(2));
-    return result.setScale(3, BigDecimal.ROUND_HALF_UP).toString();
+    return result.setScale(3, BigDecimal.ROUND_HALF_UP);
   }
 
+  /** compare risk sought vs measured **/
+  public static boolean riskLimitMet(final BigDecimal sought, final BigDecimal measured) {
+    return sought.compareTo(measured) > 0;
+  }
 
   /**
    * for each contest(per row), show all the variables that are interesting or
@@ -342,13 +346,15 @@ public class ReportRows {
     for (final ComparisonAudit ca: Persistence.getAll(ComparisonAudit.class)) {
       final Row row = SummaryReport.newRow();
 
+      final BigDecimal riskMsmnt = riskMeasurement(ca);
+
       // general info
       row.put("Contest", ca.contestResult().getContestName());
       row.put("targeted", toString(ca.isTargeted()));
       row.put("Winner", toString(ca.contestResult().getWinners().iterator().next()));
+      row.put("Risk Limit met?", String.valueOf(riskLimitMet(ca.getRiskLimit(), riskMsmnt)));
       row.put("Risk Limit Sought", toString(ca.getRiskLimit()));
-      // to perform calculations:
-      row.put("Risk Limit Achieved", riskLimitAchieved(ca));
+      row.put("Risk measurement ", riskMsmnt.toString());
       row.put("diluted margin", toString(ca.getDilutedMargin()));
       row.put("disc +2", toString(ca.discrepancyCount(2)));
       row.put("disc +1", toString(ca.discrepancyCount(1)));
