@@ -64,7 +64,12 @@ public class ExportQueriesTest {
     ExportQueries.csvOut(q, os);
 
     assertEquals(os.toString(), "seed\n1234\n");
+  }
 
-
+  @Test()
+  public void sqlFilesTest()
+    throws java.io.IOException {
+    Map<String,String> files = ExportQueries.sqlFiles();
+    assertTrue(files.get("seed").contains("SELECT seed FROM dos_dashboard"));
   }
 }
