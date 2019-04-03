@@ -49,11 +49,11 @@ public class ExportQueriesTest {
   @Test()
   public void jsonRowsTest() {
     String q = "SELECT seed FROM dos_dashboard";
-    List<String> results = ExportQueries.jsonRows(q);
-    List<String> expected = new ArrayList();
-    expected.add("{\"seed\":\"1234\"}");
+    ByteArrayOutputStream os = new ByteArrayOutputStream();
 
-    assertEquals(results, expected);
+    ExportQueries.jsonOut(q, os);
+
+    assertEquals(os.toString(), "[{\"seed\":\"1234\"}]");
   }
 
   @Test()

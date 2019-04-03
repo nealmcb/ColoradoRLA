@@ -11,6 +11,11 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.stream.Stream;
+
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 import org.postgresql.copy.CopyManager;
 import org.postgresql.core.BaseConnection;
 
@@ -23,6 +28,13 @@ import us.freeandfair.corla.persistence.Persistence;
 
 /** export queries **/
 public class ExportQueries {
+
+  /**
+   * Class-wide logger
+   */
+  public static final Logger LOGGER =
+    LogManager.getLogger(ExportQueries.class);
+
 
   /** to use the hibernate jdbc connection  **/
   public static class CSVWork implements Work {
@@ -58,20 +70,51 @@ public class ExportQueries {
   /** no instantiation **/
   private ExportQueries(){};
 
-  /** list each row as a string which is a json object **/
-  public static List<String> jsonRows(final String query){
+
+  /**
+   * write an array of json objects, which are each individual result rows, to
+   * the OutputStream
+   **/
+  public static void jsonOut(final String query, final OutputStream os){
     final Session s = Persistence.currentSession();
-    final String jsonQuery = String.format("SELECT cast(row_to_json(r) as varchar(256))"
+    final String withoutSemi = query.replace(";", "");
+    final String jsonQuery = String.format("SELECT cast(row_to_json(r) as text)"
                                            + " FROM (%s) r",
-                                           query);
-    final Query q = s.createNativeQuery(jsonQuery);
-    return q.list();
+                                           withoutSemi);
+    final Query q = s.createNativeQuery(jsonQuery)
+      .setReadOnly(true)
+      .setFetchSize(1000);
+
+    // interleave an object separator (the comma and line break) into the stream
+    // of json objects to create valid json thx! https://stackoverflow.com/a/25624818
+    final Stream<Object[]> results = q.stream()
+      .flatMap(i -> Stream.of(new String[]{",\n"}, i))
+      .skip(1); //remove the first separator
+
+
+    // write json by hand to preserve streaming writes in case of big data
+    try {
+    os.write("[".getBytes(StandardCharsets.UTF_8));
+    results.forEach(line -> {
+        try {
+          os.write(line[0].toString().getBytes(StandardCharsets.UTF_8));
+        } catch (java.io.IOException e) {
+          LOGGER.error(e.getMessage());
+        }
+      });
+
+    os.write("]".getBytes(StandardCharsets.UTF_8));
+    } catch (java.io.IOException e) {
+      //log it
+      LOGGER.error(e.getMessage());
+    }
   }
 
   /** send query results to output stream as csv **/
   public static void csvOut(final String query, final OutputStream os) {
     final Session s = Persistence.currentSession();
-    s.doWork(new CSVWork(query,os));
+    final String withoutSemi = query.replace(";", "");
+    s.doWork(new CSVWork(withoutSemi,os));
   }
 
   /** ls a directory on the classpath **/

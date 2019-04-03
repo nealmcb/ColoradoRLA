@@ -61,10 +61,11 @@ public class PublishAuditReport extends AbstractDoSDashboardEndpoint {
       + string.substring(1);
   }
 
-  private String fileName(final String reportType) {
+  private String fileName(final String reportType, final String extension) {
     try {
-      return Rfc5987Util.encode(String.format("%s_Report.xlsx",
-                                              capitalize(reportType)),
+      return Rfc5987Util.encode(String.format("%s_Report.%s",
+                                              capitalize(reportType),
+                                              extension),
                                 "UTF-8");
     } catch(final UnsupportedEncodingException e) {
       return String.format("%s_Report.xlsx",
@@ -90,20 +91,26 @@ public class PublishAuditReport extends AbstractDoSDashboardEndpoint {
 
     byte[] reportBytes;
     try {
+
+      final OutputStream os = SparkHelper.getRaw(response).getOutputStream();
       switch (contentType) {
       case "xlsx": case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
         reportBytes = AuditReport.generate("xlsx", reportType, contestName);
         response.header("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        response.header("Content-Disposition", "attachment; filename*=UTF-8''" + fileName(reportType));
+        response.header("Content-Disposition", "attachment; filename*=UTF-8''" + fileName(reportType, "xlsx"));
+        os.write(reportBytes);
+        os.close();
+        break;
+      case "csv-zip": case "application/zip":
+        response.header("Content-Type", "application/zip");
+        response.header("Content-Disposition", "attachment; filename*=UTF-8''" + fileName(reportType, "zip"));
+        AuditReport.generateZip(os);
+        os.close();
         break;
       default:
         invariantViolation(response, "Accept header or query param contentType is missing or invalid");
         return my_endpoint_result.get();
       }
-
-      final OutputStream os = SparkHelper.getRaw(response).getOutputStream();
-      os.write(reportBytes);
-      os.close();
 
       ok(response);
     } catch (final IOException e) {

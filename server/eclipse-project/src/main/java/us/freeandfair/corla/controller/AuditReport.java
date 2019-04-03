@@ -1,9 +1,14 @@
 package us.freeandfair.corla.controller;
 
-
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.io.IOException;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.zip.ZipOutputStream;
+import java.util.zip.ZipEntry;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -12,6 +17,7 @@ import us.freeandfair.corla.report.WorkbookWriter;
 import us.freeandfair.corla.report.ReportRows;
 import us.freeandfair.corla.model.DoSDashboard;
 import us.freeandfair.corla.persistence.Persistence;
+import us.freeandfair.corla.query.ExportQueries;
 
 /**
  * Find the data for a report and format it to be rendered into a presentation
@@ -88,4 +94,32 @@ public final class AuditReport {
     return writer.write();
   }
 
+
+  public static void generateZip(final OutputStream os) {
+    try {
+      ZipOutputStream zos = new ZipOutputStream(os);
+      Map<String,String> files = ExportQueries.sqlFiles();
+
+      for (Map.Entry<String,String> entry: files.entrySet()) {
+        final String filename =  entry.getKey() + ".csv";
+        final ZipEntry zipEntry = new ZipEntry(filename);
+        zos.putNextEntry(zipEntry);
+        ExportQueries.csvOut(entry.getValue(),
+                             zos);
+        zos.closeEntry();
+      }
+
+      for (Map.Entry<String,String> entry: files.entrySet()) {
+        final String filename =  entry.getKey() + ".json";
+        final ZipEntry zipEntry = new ZipEntry(filename);
+        zos.putNextEntry(zipEntry);
+        ExportQueries.jsonOut(entry.getValue(), zos);
+        zos.closeEntry();
+      }
+
+      zos.close();
+    } catch (java.io.IOException e) {
+
+    }
+  }
 }
