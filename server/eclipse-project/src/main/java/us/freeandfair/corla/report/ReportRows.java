@@ -293,13 +293,16 @@ public class ReportRows {
       "targeted",
       "Winner",
 
-      "Risk Limit Achieved",
+      "Risk Limit met?",
+      "Risk measurement",
+      "Audit Risk Limit",
       "diluted margin",
       "disc +2",
       "disc +1",
       "disc -1",
       "disc -2",
       "gamma",
+      "audited sample count",
 
       "ballot count",
       "min margin",
@@ -335,6 +338,14 @@ public class ReportRows {
     return sought.compareTo(measured) > 0;
   }
 
+  public static String yesNo(final Boolean bool) {
+    if (bool) {
+      return "Yes";
+    } else {
+      return "No";
+    }
+  }
+
   /**
    * for each contest(per row), show all the variables that are interesting or
    * needed to perform the risk limit calculation
@@ -343,24 +354,25 @@ public class ReportRows {
     final List<List<String>> rows = new ArrayList();
 
     rows.add(Arrays.asList(SummaryReport.HEADERS));
-    for (final ComparisonAudit ca: Persistence.getAll(ComparisonAudit.class)) {
+    for (final ComparisonAudit ca: ComparisonAuditQueries.sortedList()) {
       final Row row = SummaryReport.newRow();
 
       final BigDecimal riskMsmnt = riskMeasurement(ca);
 
       // general info
       row.put("Contest", ca.contestResult().getContestName());
-      row.put("targeted", toString(ca.isTargeted()));
+      row.put("targeted", yesNo(ca.isTargeted()));
       row.put("Winner", toString(ca.contestResult().getWinners().iterator().next()));
-      row.put("Risk Limit met?", String.valueOf(riskLimitMet(ca.getRiskLimit(), riskMsmnt)));
-      row.put("Risk Limit Sought", toString(ca.getRiskLimit()));
-      row.put("Risk measurement ", riskMsmnt.toString());
+      row.put("Risk Limit met?", yesNo(riskLimitMet(ca.getRiskLimit(), riskMsmnt)));
+      row.put("Risk measurement", riskMsmnt.toString());
+      row.put("Audit Risk Limit", toString(ca.getRiskLimit()));
       row.put("diluted margin", toString(ca.getDilutedMargin()));
       row.put("disc +2", toString(ca.discrepancyCount(2)));
       row.put("disc +1", toString(ca.discrepancyCount(1)));
       row.put("disc -1", toString(ca.discrepancyCount(-1)));
       row.put("disc -2", toString(ca.discrepancyCount(-2)));
       row.put("gamma", toString(ca.getGamma()));
+      row.put("audited sample count", toString(ca.getAuditedSampleCount()));
 
       // very detailed extra info
       row.put("ballot count", toString(ca.contestResult().getBallotCount()));

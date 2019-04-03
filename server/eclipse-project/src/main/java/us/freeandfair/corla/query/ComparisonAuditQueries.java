@@ -10,6 +10,10 @@
 
 package us.freeandfair.corla.query;
 
+import java.util.List;
+import java.util.Collections;
+import java.util.Comparator;
+
 import org.hibernate.query.Query;
 import org.hibernate.Session;
 
@@ -35,6 +39,28 @@ public final class ComparisonAuditQueries {
    */
   private ComparisonAuditQueries() {
     // do nothing
+  }
+
+  private static class TargetedSort implements Comparator<ComparisonAudit> {
+    @Override
+    public int compare(final ComparisonAudit a, final ComparisonAudit b) {
+      // negative to put true first
+      final int t = -Boolean.compare(a.isTargeted(), b.isTargeted());
+      if (0 != t) {
+        return t;
+      } else {
+        return a.contestResult().getContestName().compareTo(b.contestResult().getContestName());
+      }
+    }
+  }
+
+  /** All the comparison audits for all the contests, sorted by targeted, then
+   * alphabetical **/
+  public static List<ComparisonAudit> sortedList() {
+    // sorting by db doesn't stick for some reason
+    List<ComparisonAudit> results = Persistence.getAll(ComparisonAudit.class);
+    Collections.sort(results, new TargetedSort());
+    return results;
   }
 
   /**
