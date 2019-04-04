@@ -23,6 +23,7 @@ import org.apache.log4j.Logger;
 import us.freeandfair.corla.model.AuditStatus;
 import us.freeandfair.corla.model.ComparisonAudit;
 import us.freeandfair.corla.persistence.Persistence;
+import us.freeandfair.corla.util.SuppressFBWarnings;
 
 /**
  * Queries having to do with ComparisonAudit entities.
@@ -42,6 +43,8 @@ public final class ComparisonAuditQueries {
   }
 
   /** sort by targeted, then contest name **/
+  // I disagree, FB
+  @SuppressFBWarnings({"RV_NEGATING_RESULT_OF_COMPARETO", "SE_COMPARATOR_SHOULD_BE_SERIALIZABLE"})
   private static class TargetedSort implements Comparator<ComparisonAudit> {
 
     /** sort by targeted, then contest name **/
