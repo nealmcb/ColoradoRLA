@@ -1,12 +1,10 @@
 package us.freeandfair.corla.controller;
 
-import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.IOException;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.zip.ZipOutputStream;
 import java.util.zip.ZipEntry;
 
@@ -51,7 +49,8 @@ public final class AuditReport {
    * - the Activity report shows previous revisions, the Audit Report does not
    * - the Result Report shows the random number that was generated for
        the CVR (and the position),  the Activity Report does not
-   * - the Result Report shows duplicates(multiplicity), the Activity Report does not
+   * - the Result Report shows duplicates(multiplicity),
+   *   the Activity Report does not
    *
    * contestName is optional if reportType is *-all
    **/
@@ -96,12 +95,13 @@ public final class AuditReport {
   }
 
 
+  /** all the reports in one "package" **/
   public static void generateZip(final OutputStream os) {
     try {
-      ZipOutputStream zos = new ZipOutputStream(os);
-      Map<String,String> files = ExportQueries.sqlFiles();
+      final ZipOutputStream zos = new ZipOutputStream(os);
+      final Map<String,String> files = ExportQueries.sqlFiles();
 
-      for (Map.Entry<String,String> entry: files.entrySet()) {
+      for (final Map.Entry<String,String> entry: files.entrySet()) {
         final String filename =  entry.getKey() + ".csv";
         final ZipEntry zipEntry = new ZipEntry(filename);
         zos.putNextEntry(zipEntry);
@@ -110,7 +110,7 @@ public final class AuditReport {
         zos.closeEntry();
       }
 
-      for (Map.Entry<String,String> entry: files.entrySet()) {
+      for (final Map.Entry<String,String> entry: files.entrySet()) {
         final String filename =  entry.getKey() + ".json";
         final ZipEntry zipEntry = new ZipEntry(filename);
         zos.putNextEntry(zipEntry);
@@ -127,7 +127,7 @@ public final class AuditReport {
       zos.closeEntry();
 
 
-      StateReport sr = new StateReport();
+      final StateReport sr = new StateReport();
       zos.putNextEntry(new ZipEntry(sr.filenameExcel()));
       zos.write(sr.generateExcel());
       zos.closeEntry();
@@ -135,8 +135,8 @@ public final class AuditReport {
 
 
       zos.close();
-    } catch (java.io.IOException e) {
-
+    } catch (IOException e) {
+      LOGGER.error(e.getMessage());
     }
   }
 }

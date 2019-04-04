@@ -338,6 +338,7 @@ public class ReportRows {
     return sought.compareTo(measured) > 0;
   }
 
+  /** yes/no instead of true/false **/
   public static String yesNo(final Boolean bool) {
     if (bool) {
       return "Yes";
@@ -346,6 +347,7 @@ public class ReportRows {
     }
   }
 
+  /** significant figures **/
   public static BigDecimal sigFig(final BigDecimal num, final int digits) {
     return num.setScale(digits, BigDecimal.ROUND_HALF_UP);
   }

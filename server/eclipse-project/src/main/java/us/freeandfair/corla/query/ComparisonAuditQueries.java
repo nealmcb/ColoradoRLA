@@ -41,15 +41,18 @@ public final class ComparisonAuditQueries {
     // do nothing
   }
 
+  /** sort by targeted, then contest name **/
   private static class TargetedSort implements Comparator<ComparisonAudit> {
+
+    /** sort by targeted, then contest name **/
     @Override
     public int compare(final ComparisonAudit a, final ComparisonAudit b) {
       // negative to put true first
       final int t = -Boolean.compare(a.isTargeted(), b.isTargeted());
-      if (0 != t) {
-        return t;
-      } else {
+      if (0 == t) {
         return a.contestResult().getContestName().compareTo(b.contestResult().getContestName());
+      } else {
+        return t;
       }
     }
   }
@@ -58,7 +61,7 @@ public final class ComparisonAuditQueries {
    * alphabetical **/
   public static List<ComparisonAudit> sortedList() {
     // sorting by db doesn't stick for some reason
-    List<ComparisonAudit> results = Persistence.getAll(ComparisonAudit.class);
+    final List<ComparisonAudit> results = Persistence.getAll(ComparisonAudit.class);
     Collections.sort(results, new TargetedSort());
     return results;
   }
