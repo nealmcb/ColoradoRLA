@@ -107,7 +107,8 @@ public class CastVoteRecordQueriesTest {
     // assertEquals
     Long curMax = 2L;
     CastVoteRecord cvr = noisyCVRSetup(2);
-    cvr.setToReaudited(curMax + 1L, "a comment");
+    cvr.setRevision(curMax + 1L);
+    cvr.setToReaudited();
     Long result = CastVoteRecordQueries.forceUpdate(cvr);
     assertEquals((long) 1L, (long)result);
     Long maxRev = CastVoteRecordQueries.maxRevision(cvr);

@@ -578,16 +578,13 @@ public final class CastVoteRecordQueries {
     final Session s = Persistence.currentSession();
     final Query q =
       s.createQuery("select max(revision) from CastVoteRecord cvr " +
-                    " where uri like ?0 ");
-    final String uri = cvr.getUri();
-    // the rcvr corollary uri of either a cvr or an acvr, without the '?rev=1' at the
-    // end too because we are looking for all revisions
-    final String ruri = uri
-      .replaceFirst("^cvr", "rcvr")
-      .replaceFirst("^acvr", "rcvr")
-      .split("\\?")[0] + "%";
+                    " where revision is not null" +
+                    " and my_county_id = :countyId" +
+                    " and my_imprinted_id = :imprintedId");
 
-    q.setString(0, ruri);
+    q.setLong("countyId", cvr.countyID());
+    q.setString("imprintedId", cvr.imprintedID());
+
     final Long result = (Long)q.getSingleResult();
 
     if (null == result) {
@@ -638,7 +635,7 @@ public final class CastVoteRecordQueries {
     final Query q =
       s.createQuery("select acvr from CastVoteRecord acvr "
                     + " where acvr.cvrId in (:cvrIds))"
-                    + " and acvr.revision is null");
+                    + " and acvr.record_type != 'REAUDITED' ");
 
     q.setParameter("cvrIds", contestCVRIds);
 

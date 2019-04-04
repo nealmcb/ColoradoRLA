@@ -133,11 +133,8 @@ public class ReportRows {
    * because that process loses the association.
    **/
   public static Integer findDiscrepancy(final ComparisonAudit audit, final CastVoteRecord acvr) {
-    if (null == acvr.getRevision()) {
-      // not a revised/overwritten submission
-      final CVRAuditInfo cai = Persistence.getByID(acvr.getCvrId(), CVRAuditInfo.class);
-      return audit.getDiscrepancy(cai);
-    } else {
+    if (CastVoteRecord.RecordType.REAUDITED == acvr.recordType()) {
+      // we recompute here because we don't have cai.acvr_id = acvr.id
       final CastVoteRecord cvr = Persistence.getByID(acvr.getCvrId(), CastVoteRecord.class);
       final OptionalInt disc = audit.computeDiscrepancy(cvr, acvr);
       if (disc.isPresent()) {
@@ -145,6 +142,10 @@ public class ReportRows {
       } else {
         return null;
       }
+    } else {
+      // not a revised/overwritten submission
+      final CVRAuditInfo cai = Persistence.getByID(acvr.getCvrId(), CVRAuditInfo.class);
+      return audit.getDiscrepancy(cai);
     }
   }
 
@@ -200,6 +201,13 @@ public class ReportRows {
                                       TimeZone.getDefault().toZoneId()));
   }
 
+  /** render consensus to yesNo **/
+  public static String renderConsensus(final CVRContestInfo.ConsensusValue consensus) {
+    // consensus can be null if not sent in the request, so there was a
+    // consensus, unless they said no.
+    return yesNo(CVRContestInfo.ConsensusValue.NO != consensus);
+  }
+
   /** add fields common to both activity and results reports **/
   public static Row addBaseFields(final Row row, final ComparisonAudit audit, final CastVoteRecord acvr) {
     final Integer discrepancy = findDiscrepancy(audit, acvr);
@@ -207,7 +215,7 @@ public class ReportRows {
 
     if (infoMaybe.isPresent()) {
       final CVRContestInfo info = infoMaybe.get();
-      row.put("consensus", toString(info.consensus()));
+      row.put("consensus", renderConsensus(info.consensus()));
       row.put("comment", info.comment());
     }
 

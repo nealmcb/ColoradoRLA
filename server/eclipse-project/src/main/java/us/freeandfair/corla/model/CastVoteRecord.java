@@ -333,11 +333,8 @@ final public class CastVoteRecord implements Comparable<CastVoteRecord>,
   }
 
   /** set the record type to EDITED and the uri to rcvr:... **/
-  public void setToReaudited(final Long revision, final String comment) {
+  public void setToReaudited() {
     setRecordType(RecordType.REAUDITED);
-    setRevision(revision);
-    setComment(comment);
-
     setUri();
   }
 
@@ -607,6 +604,7 @@ final public class CastVoteRecord implements Comparable<CastVoteRecord>,
       result &= nullableEquals(other_cvr.getAuditBoardIndex(), getAuditBoardIndex());
       result &= nullableEquals(other_cvr.getRoundNumber(), getRoundNumber());
       result &= nullableEquals(other_cvr.getRand(), getRand());
+      result &= nullableEquals(other_cvr.getComment(), getComment());
     } else {
       result = false;
     }
