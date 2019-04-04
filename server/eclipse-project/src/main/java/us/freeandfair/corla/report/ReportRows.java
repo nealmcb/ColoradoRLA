@@ -294,9 +294,9 @@ public class ReportRows {
       "Winner",
 
       "Risk Limit met?",
-      "Risk measurement",
-      "Audit Risk Limit",
-      "diluted margin",
+      "Risk measurement %",
+      "Audit Risk Limit %",
+      "diluted margin %",
       "disc +2",
       "disc +1",
       "disc -1",
@@ -346,6 +346,15 @@ public class ReportRows {
     }
   }
 
+  public static BigDecimal sigFig(final BigDecimal num, final int digits) {
+    return num.setScale(digits, BigDecimal.ROUND_HALF_UP);
+  }
+
+  /** * 100 **/
+  public static BigDecimal percentage(final BigDecimal num) {
+    return BigDecimal.valueOf(100).multiply(num);
+  }
+
   /**
    * for each contest(per row), show all the variables that are interesting or
    * needed to perform the risk limit calculation
@@ -364,9 +373,9 @@ public class ReportRows {
       row.put("targeted", yesNo(ca.isTargeted()));
       row.put("Winner", toString(ca.contestResult().getWinners().iterator().next()));
       row.put("Risk Limit met?", yesNo(riskLimitMet(ca.getRiskLimit(), riskMsmnt)));
-      row.put("Risk measurement", riskMsmnt.toString());
-      row.put("Audit Risk Limit", toString(ca.getRiskLimit()));
-      row.put("diluted margin", toString(ca.getDilutedMargin()));
+      row.put("Risk measurement %", sigFig(percentage(riskMsmnt), 1).toString());
+      row.put("Audit Risk Limit %", sigFig(percentage(ca.getRiskLimit()),1).toString());
+      row.put("diluted margin %", percentage(ca.getDilutedMargin()).toString());
       row.put("disc +2", toString(ca.discrepancyCount(2)));
       row.put("disc +1", toString(ca.discrepancyCount(1)));
       row.put("disc -1", toString(ca.discrepancyCount(-1)));

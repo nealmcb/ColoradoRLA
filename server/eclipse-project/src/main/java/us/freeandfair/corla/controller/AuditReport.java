@@ -48,9 +48,9 @@ public final class AuditReport {
    * - the Activity report is sorted by timestamp, the Audit Report by random
        number sequence
    * - the Activity report shows previous revisions, the Audit Report does not
-   * - the Audit Report shows the random number that was generated for
+   * - the Result Report shows the random number that was generated for
        the CVR (and the position),  the Activity Report does not
-   * - the Audit Report shows duplicates(multiplicity), the Activity Report does not
+   * - the Result Report shows duplicates(multiplicity), the Activity Report does not
    *
    * contestName is optional if reportType is *-all
    **/
@@ -116,6 +116,15 @@ public final class AuditReport {
         ExportQueries.jsonOut(entry.getValue(), zos);
         zos.closeEntry();
       }
+
+      zos.putNextEntry(new ZipEntry("ActivityReport.xlsx"));
+      zos.write(generate("xlsx", "activity-all", null));
+      zos.closeEntry();
+
+      zos.putNextEntry(new ZipEntry("ResultsReport.xlsx"));
+      zos.write(generate("xlsx", "results-all", null));
+      zos.closeEntry();
+
 
       zos.close();
     } catch (java.io.IOException e) {

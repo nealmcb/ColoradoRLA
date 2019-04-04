@@ -72,8 +72,7 @@ public class ExportQueries {
 
 
   /**
-   * write an array of json objects, which are each individual result rows, to
-   * the OutputStream
+   * write the resulting rows from the query, as json objects, to the OutputStream
    **/
   public static void jsonOut(final String query, final OutputStream os){
     final Session s = Persistence.currentSession();
@@ -91,12 +90,13 @@ public class ExportQueries {
       .flatMap(i -> Stream.of(new String[]{",\n"}, i))
       .skip(1); //remove the first separator
 
-
     // write json by hand to preserve streaming writes in case of big data
     try {
     os.write("[".getBytes(StandardCharsets.UTF_8));
     results.forEach(line -> {
         try {
+          // the object array is the columns, but in this case there is only
+          // one, so we take it at index 0
           os.write(line[0].toString().getBytes(StandardCharsets.UTF_8));
         } catch (java.io.IOException e) {
           LOGGER.error(e.getMessage());
