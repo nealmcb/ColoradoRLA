@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 
 import us.freeandfair.corla.report.WorkbookWriter;
 import us.freeandfair.corla.report.ReportRows;
+import us.freeandfair.corla.report.StateReport;
 import us.freeandfair.corla.model.DoSDashboard;
 import us.freeandfair.corla.persistence.Persistence;
 import us.freeandfair.corla.query.ExportQueries;
@@ -124,6 +125,13 @@ public final class AuditReport {
       zos.putNextEntry(new ZipEntry("ResultsReport.xlsx"));
       zos.write(generate("xlsx", "results-all", null));
       zos.closeEntry();
+
+
+      StateReport sr = new StateReport();
+      zos.putNextEntry(new ZipEntry(sr.filenameExcel()));
+      zos.write(sr.generateExcel());
+      zos.closeEntry();
+
 
 
       zos.close();

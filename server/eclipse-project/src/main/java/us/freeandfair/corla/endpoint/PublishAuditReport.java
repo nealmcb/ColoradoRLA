@@ -68,8 +68,9 @@ public class PublishAuditReport extends AbstractDoSDashboardEndpoint {
                                               extension),
                                 "UTF-8");
     } catch(final UnsupportedEncodingException e) {
-      return String.format("%s_Report.xlsx",
-                           capitalize(reportType));
+      return String.format("%s_Report.%s",
+                           capitalize(reportType),
+                           extension);
     }
  }
 
@@ -101,7 +102,7 @@ public class PublishAuditReport extends AbstractDoSDashboardEndpoint {
         os.write(reportBytes);
         os.close();
         break;
-      case "csv-zip": case "application/zip":
+      case "zip": case "application/zip":
         response.header("Content-Type", "application/zip");
         response.header("Content-Disposition", "attachment; filename*=UTF-8''" + fileName(reportType, "zip"));
         AuditReport.generateZip(os);

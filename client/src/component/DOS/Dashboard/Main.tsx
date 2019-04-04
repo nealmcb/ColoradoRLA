@@ -52,17 +52,6 @@ const NotDefined = () => {
     );
 };
 
-function activityAllReportUrl() {
-    return endpoint('publish-audit-report')
-         + '?reportType=activity-all'
-         + '&contentType=xlsx';
-}
-
-function resultsAllReportUrl() {
-    return endpoint('publish-audit-report')
-         + '?reportType=results-all'
-         + '&contentType=xlsx';
-}
 
 interface MainProps {
     auditDefined: boolean;
@@ -95,17 +84,6 @@ const Main = (props: MainProps) => {
                         onClick={ fetchReport }>
                         Audit Report
                     </button>
-                    <span>&nbsp;|&nbsp;</span>
-                    <a className='pt-button pt-intent-primary'
-                       href={ activityAllReportUrl() }>
-                        Activity Report
-                    </a>
-                    <span>&nbsp;|&nbsp;</span>
-                    <a className='pt-button pt-intent-primary'
-                       target='_blank'
-                       href={ resultsAllReportUrl() }>
-                        Results Report
-                    </a>
                 </div>
             </div>
         );
@@ -123,17 +101,6 @@ const Main = (props: MainProps) => {
                     onClick={ fetchReport }>
                     Audit Report
                 </button>
-                <span>&nbsp;|&nbsp;</span>
-                <a className='pt-button pt-intent-primary'
-                   href={ activityAllReportUrl() }>
-                    Activity Report
-                </a>
-                <span>&nbsp;|&nbsp;</span>
-                <a className='pt-button pt-intent-primary'
-                   target='_blank'
-                   href={ resultsAllReportUrl() }>
-                    Results Report
-                </a>
             </div>
 
         </div>
