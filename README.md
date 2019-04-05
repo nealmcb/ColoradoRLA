@@ -35,10 +35,13 @@ A [risk-limiting audit](https://en.wikipedia.org/wiki/Risk-limiting_audit) is an
 
 In Colorado, citizen Audit Boards examine a random sample of original paper ballots from an election, comparing the votes marked on each original paper ballot with the electronic representation of votes recorded by the vote tabulation system. Under most circumstances, this method requires auditing far fewer ballots than a full hand recount or fixed-percentage audit, while also providing strong statistical evidence that the outcome of the election was correct.
 
-# Docker Quick Start
+# Development Quick Start
 
-Primarily used to spin up the system for development in a controlled way. This
-is a work in progress but is usable.
+We publish Docker containers for the three major components of the system, built
+automatically from the `master` branch.
+
+You can use these containers to get started working on a single piece of the
+system.
 
 ## Requirements
 
@@ -47,20 +50,10 @@ is a work in progress but is usable.
 
 ## Setup
 
-This step is optional the first time, but you need to run it when you have new
-code changes you want to incorporate. You can pass specific services to
-`docker-compose build` if you don’t want to rebuild everything.
+Ensure you have the latest images:
 
 ```sh
-## Pull latest versions of all images
-docker-compose build --pull
-```
-
-If you have run the RLA tool in the past, you might want to ensure extant
-containers have been removed:
-
-```sh
-docker-compose down
+docker-compose pull
 ```
 
 ## Running
@@ -79,8 +72,7 @@ the PostgreSQL image:
 
 ```sh
 docker-compose exec postgresql \
-  /bin/bash -c \
-  'psql -U corla -d corla < /root/corla-test-credentials.psql'
+  /bin/bash -c 'psql -U corla -d corla < /root/corla-test-credentials.psql'
 ```
 
 With the test credentials loaded, you should be able to log in as a state
