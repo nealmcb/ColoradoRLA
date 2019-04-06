@@ -1,13 +1,14 @@
 package us.freeandfair.corla.query;
 
 import java.io.OutputStream;
-import java.io.File;
-import java.net.URL;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
 
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.stream.Stream;
@@ -116,13 +117,34 @@ public class ExportQueries {
     s.doWork(new CSVWork(withoutSemi,os));
   }
 
-  /** ls a directory on the classpath **/
-  private static File[] getResourceFolderFiles (final String folder) {
-    final ClassLoader loader = Thread.currentThread().getContextClassLoader();
-    final URL url = loader.getResource(folder);
-    final String path = url.getPath();
-    return new File(path).listFiles();
-  }
+  /**
+   * The directory listing of the sql resource directory on the classpath,
+   * hopefully!
+   * I couldn't figure out how to do this from within a deployed jar, so here we
+   * are
+   **/
+  public static List<String> getSqlFolderFiles () {
+    final List<String> paths = new ArrayList<String>();
+    final String folder = "sql";
+    final String[] fileNames = {
+      "batch_count_comparison.sql",
+      "contest.sql",
+      "contest_comparison.sql",
+      "contest_detail.sql",
+      "contest_selection.sql",
+      "contests_by_county.sql",
+      "cvr_hash.sql",
+      "manifest_hash.sql",
+      "tabulate.sql",
+      "tabulate_county.sql",
+      "upload_status.sql",
+      "seed.sql"
+    };
+    for (final String f: fileNames ) {
+      paths.add(String.format("%s/%s", folder, f));
+    }
+    return paths;
+}
 
   /** remove path and ext leaving the file name **/
   private static String fileName(final String path) {
@@ -131,13 +153,24 @@ public class ExportQueries {
     return path.substring(slash,dot);
   }
 
-
   /** file contents to string **/
-  private static String fileContents(final String path)
-  throws java.io.IOException {
+  // I respectfully disagree
+  @SuppressWarnings({"PMD.AssignmentInOperand"})
+  public static String fileContents(final String path)
+    throws java.io.IOException {
+
     final StringBuilder contents = new StringBuilder();
-    Files.lines(Paths.get(path), StandardCharsets.UTF_8)
-      .forEach(line -> contents.append(line + "\n"));
+    final ClassLoader loader = Thread.currentThread().getContextClassLoader();
+    final InputStream is = loader.getResourceAsStream(path);
+    final InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
+    final BufferedReader br = new BufferedReader(isr);
+    String line;
+    while ((line = br.readLine()) != null) {
+      contents.append(line);
+      contents.append('\n');
+    }
+    is.close();
+    br.close();
     return contents.toString();
   }
 
@@ -148,10 +181,10 @@ public class ExportQueries {
   public static Map<String,String> sqlFiles()
     throws java.io.IOException {
     final Map files = new HashMap<String,String>();
-    for (final File file : getResourceFolderFiles("sql/")) {
-      if(file.getPath().endsWith(".sql")) {
-        files.put(fileName(file.getPath()),
-                  fileContents(file.getPath()));
+    for (final String path : getSqlFolderFiles()) {
+      if(path.endsWith(".sql")) {
+        files.put(fileName(path),
+                  fileContents(path));
       }
     }
     return files;
