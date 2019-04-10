@@ -92,63 +92,10 @@ declare namespace DOS {
         election: Election;
         publicMeetingDate: Date;
         riskLimit: number;
-        uploadFile: any;
+        uploadFiles?: string[];
     }
 
     namespace Form {
-        namespace AuditDef {
-            interface Forms {
-                electionDateForm?: DOS.Form.ElectionDate.Form;
-                electionTypeForm?: DOS.Form.ElectionType.Form;
-                publicMeetingDateForm?: DOS.Form.PublicMeetingDate.Form;
-                riskLimit?: DOS.Form.RiskLimit.Form;
-                uploadFile?: DOS.Form.UploadFile.Form;
-            }
-        }
-
-        namespace ElectionDate {
-            interface Form {
-                date: string;
-            }
-        }
-
-        namespace ElectionType {
-            interface Form {
-                type?: ElectionType;
-            }
-        }
-
-        namespace PublicMeetingDate {
-            interface Form {
-                date: string;
-            }
-        }
-
-        namespace RiskLimit {
-            interface Form {
-                ballotPollingField: string;
-                ballotPollingLimit: number;
-                comparisonField: string;
-                comparisonLimit: number;
-            }
-        }
-
-        namespace UploadFile {
-            interface Form {
-                files: any[];
-            }
-        }
-
-        namespace Seed {
-            interface Ref {
-                seedForm?: DOS.Form.Seed.Form;
-            }
-
-            interface Form {
-                seed: string;
-            }
-        }
-
         namespace SelectContests {
             interface Ref {
                 selectContestsForm?: DOS.Form.SelectContests.FormData;

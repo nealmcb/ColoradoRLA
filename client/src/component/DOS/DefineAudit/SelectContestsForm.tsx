@@ -2,16 +2,24 @@ import * as React from 'react';
 
 import * as _ from 'lodash';
 
-import { Button, Checkbox, Classes, EditableText, MenuItem } from '@blueprintjs/core';
-import { Select } from '@blueprintjs/labs';
+import {
+    Button,
+    Checkbox,
+    Classes,
+    EditableText,
+    Icon,
+    MenuItem,
+} from '@blueprintjs/core';
+
+import { ItemRenderer, Select } from '@blueprintjs/select';
 
 import counties from 'corla/data/counties';
 
 import { naturalSortBy } from 'corla/util';
 
-
 const auditReasons: DOS.Form.SelectContests.Reason[] = [
-    /* county contest should be the default because there are more of them and this will save clicks. default is first */
+    // County contest is first because there are typically more of them, so this
+    // arrangement saves clicks.
     { id: 'county_wide_contest', text: 'County Contest' },
     { id: 'state_wide_contest', text: 'State Contest' },
 ];
@@ -66,10 +74,13 @@ const ContestRow = (props: RowProps) => {
         return null;
     }
 
-    const renderItem = ({ handleClick, item, isActive }: MenuItemData) => {
+    const renderItem: ItemRenderer<DOS.Form.SelectContests.Reason> = (
+        item,
+        { handleClick, modifiers },
+    ) => {
         return (
             <MenuItem
-                className={ isActive ? Classes.ACTIVE : '' }
+                className={ modifiers.active ? Classes.ACTIVE : '' }
                 key={ item.id }
                 onClick={ handleClick }
                 text={ item.text } />
@@ -88,7 +99,7 @@ const ContestRow = (props: RowProps) => {
             popoverProps={ { popoverClassName } }>
             <Button
                 text={ status.reason.text }
-                rightIconName='double-caret-vertical' />
+                rightIcon='double-caret-vertical' />
         </AuditReasonSelect>
     );
 
@@ -256,7 +267,7 @@ class SelectContestsForm extends React.Component<FormProps, FormState> {
                     column's data. To reverse sort, click on the column name again.
                 </div>
                 <div className='pt-card'>
-                    <table className='pt-table pt-bordered pt-condensed'>
+                    <table className='pt-html-table pt-html-table-bordered pt-small'>
                         <thead>
                             <tr>
                                 {/* see comment above */}
@@ -289,8 +300,8 @@ class SelectContestsForm extends React.Component<FormProps, FormState> {
         }
 
         return this.state.order === 'asc'
-             ? <span className='pt-icon-standard pt-icon-sort-asc' />
-             : <span className='pt-icon-standard pt-icon-sort-desc' />;
+             ? <Icon icon='sort-asc' />
+             : <Icon icon='sort-desc' />;
     }
 
     private resetForm(contests: DOS.Contests) {

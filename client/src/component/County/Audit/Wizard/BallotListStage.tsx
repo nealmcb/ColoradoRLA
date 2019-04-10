@@ -94,7 +94,7 @@ const BallotListStage = (props: BallotListStageProps) => {
                    Download ballot list as CSV
                 </button>
                 <div className='pt-card'>
-                    <table className='pt-table pt-bordered pt-condensed'>
+                    <table className='pt-html-table pt-html-table-bordered pt-small'>
                         <thead>
                             <tr>
                                 <th>Storage bin</th>

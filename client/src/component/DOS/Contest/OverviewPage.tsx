@@ -62,7 +62,7 @@ const ContestTable = (props: TableProps) => {
     ));
 
     return (
-        <table className='pt-table pt-bordered pt-condensed'>
+        <table className='pt-html-table pt-html-table-bordered pt-small'>
             <thead>
                 <tr>
                     <th>County</th>

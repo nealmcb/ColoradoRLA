@@ -2,25 +2,19 @@
 version: "2.1"
 services:
   server:
-    build:
-      context: .
-      dockerfile: ./docker/server/Dockerfile
+    image: quay.io/democracyworks/rla-server:latest
     depends_on:
       - postgresql
     ports:
       - "8888:8888"
 
   postgresql:
-    build:
-      context: .
-      dockerfile: ./docker/postgresql/Dockerfile
+    image: quay.io/democracyworks/rla-postgres:latest
     ports:
       - "5432:5432"
 
   httpd:
-    build:
-      context: .
-      dockerfile: ./docker/httpd/Dockerfile
+    image: quay.io/democracyworks/rla-httpd:latest
     depends_on:
       - server
     links:

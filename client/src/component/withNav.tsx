@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Popover, Position } from '@blueprintjs/core';
+import { Button, Intent, Popover, Position } from '@blueprintjs/core';
 import { Link } from 'react-router-dom';
 
 import * as config from 'corla/config';
@@ -12,7 +12,7 @@ import logout from 'corla/action/logout';
 
 
 const MenuButton = () =>
-    <button className='pt-button pt-minimal pt-icon-menu' />;
+    <Button icon='menu' minimal />;
 
 const Heading = () =>
     <div className='pt-navbar-heading'>Colorado RLA</div>;
@@ -26,39 +26,36 @@ interface HomeButtonProps {
 
 const HomeButton = ({ path }: HomeButtonProps) => (
     <Link to={ path }>
-        <button className='pt-button pt-minimal pt-icon-home'>Home</button>
+        <Button icon='home' minimal text='Home' />
     </Link>
 );
-
-const UserButton = () =>
-    <button className='pt-button pt-minimal pt-icon-user' />;
-
-const SettingsButton = () =>
-    <button className='pt-button pt-minimal pt-icon-cog' />;
 
 interface LogoutButtonProps {
     logout: OnClick;
 }
 
 const LogoutButton = ({ logout }: LogoutButtonProps) =>
-    <button className='pt-button pt-minimal pt-icon-log-out' onClick={ logout } />;
+    <Button icon='log-out' minimal onClick={ logout } text='Log out' />;
 
 interface ResetButtonProps {
     reset: OnClick;
 }
 
 const ResetDatabaseButton = ({ reset }: ResetButtonProps) => (
-    <button
-        className='pt-button pt-intent-danger pt-icon-warning-sign'
-        onClick={ reset }>
+    <Button icon='warning-sign'
+            intent={ Intent.DANGER }
+            onClick={ reset }>
         DANGER: Reset Database
-    </button>
+    </Button>
 );
 
 
 export default function withNav(Menu: React.ComponentClass, path: string) {
     const resetSection = path === '/sos' && config.debug
-                       ? <ResetDatabaseButton reset={ resetDatabase } />
+                       ? <div>
+                            <ResetDatabaseButton reset={ resetDatabase } />
+                            <Divider />
+                        </div>
                        : <div />;
 
     return () => (
@@ -71,7 +68,6 @@ export default function withNav(Menu: React.ComponentClass, path: string) {
             </div>
             <div className='pt-navbar-group pt-align-right'>
                 { resetSection }
-                <Divider />
                 <HomeButton path={ path } />
                 <Divider />
                 <LogoutButton logout={ logout }/>

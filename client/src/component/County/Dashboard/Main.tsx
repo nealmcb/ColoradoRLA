@@ -4,6 +4,8 @@ import * as React from 'react';
 
 import { History } from 'history';
 
+import { Button, Intent } from '@blueprintjs/core';
+
 import action from 'corla/action';
 
 import AuditBoardNumberSelector from 'corla/component/County/Dashboard/AuditBoardNumberSelector';
@@ -49,13 +51,15 @@ const AuditBoardButtons = (props: AuditBoardButtonsProps) => {
     };
 
     const boardButton = (boardIndex: number, hasBoard: boolean) => {
-        const buttonIntent = hasBoard ? 'pt-intent-warning' : 'pt-intent-primary';
+        const buttonIntent = hasBoard ? Intent.WARNING : Intent.PRIMARY;
+
         return (
-            <button className={ 'pt-button pt-icon-people ' + buttonIntent }
+            <Button icon='people'
+                    intent={ buttonIntent }
                     key={ boardIndex.toString() }
                     onClick={ (e: any) => handleButtonClick(e, boardIndex, hasBoard) }>
                 Audit Board { boardIndex + 1 }
-            </button>
+            </Button>
         );
     };
 

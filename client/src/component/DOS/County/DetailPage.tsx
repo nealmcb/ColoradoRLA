@@ -49,7 +49,7 @@ const AuditBoard = (props: AuditBoardProps) => {
     return (
         <div className='pt-card'>
             <h3>Audit Board</h3>
-            <table className='pt-table pt-bordered pt-condensed'>
+            <table className='pt-html-table pt-html-table-bordered pt-small'>
                 <tbody>
                     <tr>
                         <td><strong>Board Member #1:</strong></td>
@@ -104,7 +104,7 @@ const CountyDetails = (props: DetailsProps) => {
         <div className='pt-card'>
             <div className='pt-card'>
                 <h3>County Info</h3>
-                <table className='pt-table pt-bordered pt-condensed'>
+                <table className='pt-html-table pt-html-table-bordered pt-small'>
                     <tbody>
                         <tr>
                             <td><strong>Name:</strong></td>

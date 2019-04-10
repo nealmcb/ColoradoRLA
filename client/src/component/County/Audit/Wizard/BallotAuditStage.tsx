@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import * as _ from 'lodash';
 
-import { Checkbox, EditableText, MenuDivider } from '@blueprintjs/core';
+import { Button, Checkbox, EditableText, Intent, MenuDivider } from '@blueprintjs/core';
 
 import BackButton from './BackButton';
 import WaitingForNextBallot from './WaitingForNextBallot';
@@ -20,7 +20,8 @@ interface NotFoundProps {
 const BallotNotFoundForm = (props: NotFoundProps) => {
     const { notFound, currentBallot } = props;
     const onClick = () => {
-        if (confirm('By continuing, this ballot will be recorded as “not found” and you will move on to the next ballot.')) {
+        if (confirm('By continuing, this ballot will be recorded as “not found”'
+                    + ' and you will move on to the next ballot.')) {
             notFound();
         }
     };
@@ -60,11 +61,26 @@ const AuditInstructions = (props: AuditInstructionsProps) => {
             <div className='current-ballot-info'>
                 <h3 className='sidebar-heading'>Current ballot:</h3>
                 <ul className='current-ballot-stats'>
-                    <li>Storage bin: <span className='pt-ui-text pt-ui-text-large'>{ storageBin }</span></li>
-                    <li>Tabulator: <span className='pt-ui-text pt-ui-text-large'>{ currentBallot.scannerId }</span></li>
-                    <li>Batch: <span className='pt-ui-text pt-ui-text-large'>{ currentBallot.batchId }</span></li>
-                    <li>Ballot position: <span className='pt-ui-text pt-ui-text-large'>{ currentBallot.recordId }</span></li>
-                    <li>Ballot type: <span className='pt-ui-text pt-ui-text-large'>{ currentBallot.ballotType }</span></li>
+                    <li>
+                        Storage bin:
+                        <span className='pt-ui-text pt-ui-text-large'>{ storageBin }</span>
+                    </li>
+                    <li>
+                        Tabulator:
+                        <span className='pt-ui-text pt-ui-text-large'>{ currentBallot.scannerId }</span>
+                    </li>
+                    <li>
+                        Batch:
+                        <span className='pt-ui-text pt-ui-text-large'>{ currentBallot.batchId }</span>
+                    </li>
+                    <li>
+                        Ballot position:
+                        <span className='pt-ui-text pt-ui-text-large'>{ currentBallot.recordId }</span>
+                    </li>
+                    <li>
+                        Ballot type:
+                        <span className='pt-ui-text pt-ui-text-large'>{ currentBallot.ballotType }</span>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -146,7 +162,11 @@ const ContestComments = (props: CommentsProps) => {
         <div className='comment-box'>
             <label className='comment-box-label'>
                 <CommentIcon />
-                <EditableText multiline value={ comments || '' } onChange={ onChange } placeholder='Add comment' className='comment-field'/>
+                <EditableText className='comment-field'
+                              multiline
+                              onChange={ onChange }
+                              placeholder='Add comment'
+                              value={ comments || '' } />
             </label>
         </div>
     );
@@ -333,9 +353,13 @@ const BallotAuditStage = (props: StageProps) => {
         <div className='rla-page'>
             <div className='audit-page-container'>
                 <div className='audit-page-header'>
-                    <h2 className='audit-page-title'>Audit Board { `${auditBoardIndex + 1}` }: Ballot Card Verification</h2>
+                    <h2 className='audit-page-title'>
+                        Audit Board { `${auditBoardIndex + 1}` }: Ballot Card Verification
+                    </h2>
                     <div className='audit-page-subtitle'>Enter ballot information</div>
-                    <div className='ballot-number'>Auditing ballot card { currentBallotNumber } of { totalBallotsForBoard }</div>
+                    <div className='ballot-number'>
+                        Auditing ballot card { currentBallotNumber } of { totalBallotsForBoard }
+                    </div>
                 </div>
 
                 <div className='col-layout row1'>
@@ -378,7 +402,8 @@ const BallotAuditStage = (props: StageProps) => {
                                         Even if you think that the voter did not select enough
                                         choices, select all of the choices exactly as they appear
                                         on the ballot. If the voter did not select any choice, mark
-                                        the “Blank vote – no mark” button. If you need more specific guidance, consult the Voter Intent Guide.
+                                        the “Blank vote – no mark” button. If you need more specific
+                                        guidance, consult the Voter Intent Guide.
                                     </p>
                                 </div>
 
@@ -400,9 +425,10 @@ const BallotAuditStage = (props: StageProps) => {
                                         select the candidate the voter wrote in in the RLA software.
                                         If the candidate does not appear in the RLA software,
                                         select the “Blank vote – no mark” button and add a comment with what
-                                        is written on the Write-in line. If there is an overvote with an uncertified write-in,
-                                        select the “Blank vote – no mark” button; the software will not let you select any other choices.
-                                        If you need more specific guidance, consult the Voter Intent Guide.
+                                        is written on the Write-in line. If there is an overvote with an uncertified
+                                        write-in, select the “Blank vote – no mark” button; the software will not let
+                                        you select any other choices. If you need more specific guidance, consult the
+                                        Voter Intent Guide.
                                     </p>
                                 </div>
 
@@ -411,10 +437,10 @@ const BallotAuditStage = (props: StageProps) => {
                                 <div id='content5' className= 'accordion-item-content'>
                                     <p>
                                         If the members of the audit board can’t agree on what the voter intended
-                                        when they marked their ballot, select the “No consensus” button for that contest.
-                                        Before moving on, take a break and then try again to reach a consensus using the
-                                        Voter Intent Guide. If you select “No consensus” you may have to audit more
-                                        ballots later.
+                                        when they marked their ballot, select the “No consensus” button for that
+                                        contest. Before moving on, take a break and then try again to reach a consensus
+                                        using the Voter Intent Guide. If you select “No consensus” you may have to audit
+                                        more ballots later.
                                     </p>
                                 </div>
                             </div>
@@ -424,11 +450,18 @@ const BallotAuditStage = (props: StageProps) => {
                     <div className='col2'>
                         <div className='main-col-instructions'>
                             <div className='not-found-header'>For each ballot contest:</div>
-                            <p>Select exactly the same voting choices as the voter marked on the paper ballot you are examining.</p>
-                            <p>Example 1: If the voter marked three candidates on their ballot in this contest, select the exact
-                                same three candidates below.</p>
-                            <p>Example 2: If the voter did not vote for any of the candidates or choices in this contest, select
-                            “Blank vote – no mark”</p>
+                            <p>
+                                Select exactly the same voting choices as the voter marked on the paper ballot you are
+                                examining.
+                            </p>
+                            <p>
+                                Example 1: If the voter marked three candidates on their ballot in this contest, select
+                                the exact same three candidates below.
+                            </p>
+                            <p>
+                                Example 2: If the voter did not vote for any of the candidates or choices in this
+                                contest, select “Blank vote – no mark”
+                            </p>
                         </div>
                         <BallotAuditForm
                             countyState={ countyState }
@@ -439,9 +472,12 @@ const BallotAuditStage = (props: StageProps) => {
                 <div className='button-container'>
                     <BackButton back={ prevStage } />
 
-                    <button className='pt-large pt-button pt-intent-success pt-breadcrumb' onClick={ validatingAcvr(nextStage) }>
+                    <Button className='pt-breadcrumb'
+                            intent={ Intent.SUCCESS }
+                            large
+                            onClick={ validatingAcvr(nextStage) }>
                         Review
-                    </button>
+                    </Button>
                 </div>
             </div>
         </div>

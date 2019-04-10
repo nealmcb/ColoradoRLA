@@ -75,7 +75,7 @@ const StandardizeContestsTable = (props: TableProps) => {
     const { canonicalContests, contests, updateFormData } = props;
 
     return (
-        <table className='pt-table pt-striped'>
+        <table className='pt-html-table pt-html-table-striped'>
             <thead>
                 <tr>
                     <th>County</th>

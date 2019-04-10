@@ -1,0 +1,17 @@
+---
+version: "2.1"
+services:
+  server:
+    build:
+      context: .
+      dockerfile: ./docker/server/Dockerfile
+
+  postgresql:
+    build:
+      context: .
+      dockerfile: ./docker/postgresql/Dockerfile
+
+  httpd:
+    build:
+      context: .
+      dockerfile: ./docker/httpd/Dockerfile

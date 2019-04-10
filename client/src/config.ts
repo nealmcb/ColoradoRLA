@@ -11,8 +11,6 @@ const endpointPrefix = DEBUG ? devEndpointPrefix : prodEndpointPrefix;
 
 export const endpoint = (path: string) => `${endpointPrefix}/${path}`;
 
-export const timezone = 'America/Denver';
-
 export const helpEmail = 'voting.systems@sos.state.co.us';
 
 export const helpTel = '877-436-5677';

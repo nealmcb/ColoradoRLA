@@ -10,7 +10,7 @@ import SignOffFormContainer from './SignOffFormContainer';
 
 import finishAudit from 'corla/action/county/finishAudit';
 
-import corlaDate from 'corla/date';
+import { formatLocalDate } from 'corla/date';
 import * as format from 'corla/format';
 
 
@@ -85,7 +85,7 @@ const EndOfRoundPage = (props: PageProps) => {
         return <LastRoundComplete />;
     }
 
-    const electionDate = corlaDate.format(election.date);
+    const electionDate = formatLocalDate(election.date);
     const electionType = format.electionType(election.type);
 
     return (

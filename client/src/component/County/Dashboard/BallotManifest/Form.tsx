@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { EditableText, FileUpload, FormGroup } from '@blueprintjs/core';
+import { EditableText, FileInput, FormGroup } from '@blueprintjs/core';
 
 
 interface FormProps {
@@ -49,7 +49,7 @@ const BallotManifestForm = (props: FormProps) => {
             <div className='pt-card'>
                 <div style={{ width: '600px' }}>
                     <FormGroup label={ <span className='pt-ui-text-large'>Ballot Manifest</span> }>
-                        <FileUpload fill={ true } text={ fileName } onInputChange={ onFileChange } />
+                        <FileInput fill={ true } text={ fileName } onInputChange={ onFileChange } />
                     </FormGroup>
                     <FormGroup label={ <span className='pt-ui-text-large'>SHA-256 hash for Ballot Manifest</span> }>
                         <EditableText className='pt-input'

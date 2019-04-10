@@ -4,13 +4,11 @@ import { Radio, RadioGroup } from '@blueprintjs/core';
 
 import * as format from 'corla/format';
 
-
 const ELECTION_TYPES: ElectionType[] =
     ['coordinated', 'primary', 'general', 'recall'];
 
 interface FormProps {
-    forms: DOS.Form.AuditDef.Forms;
-    setFormValid: OnClick;
+    onChange: (t: ElectionType) => void;
     initType: ElectionType;
 }
 
@@ -24,8 +22,6 @@ class ElectionTypeForm extends React.Component<FormProps, FormState> {
     };
 
     public render() {
-        this.props.forms.electionTypeForm = this.state;
-
         const { type } = this.state;
 
         const radios = ELECTION_TYPES.map(ty => {
@@ -50,11 +46,10 @@ class ElectionTypeForm extends React.Component<FormProps, FormState> {
     private onFormChange = (e: React.ChangeEvent<any>) => {
         const type = e.target.value;
 
-        this.props.setFormValid({ type: !!type });
-
         this.setState({ type });
+
+        this.props.onChange(type);
     }
 }
-
 
 export default ElectionTypeForm;

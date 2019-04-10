@@ -2,14 +2,13 @@ import * as React from 'react';
 
 import * as _ from 'lodash';
 
-import { EditableText, Tooltip } from '@blueprintjs/core';
+import { EditableText, Icon, Tooltip } from '@blueprintjs/core';
 
 import counties from 'corla/data/counties';
 
 import { formatCountyAndBoardASMState } from 'corla/format';
 
 import { naturalSortBy } from 'corla/util';
-
 
 const RemainingInRoundHeader = () => {
     const content =
@@ -22,24 +21,7 @@ const RemainingInRoundHeader = () => {
             <div>
                 <span>Remaining in Round</span>
                 <span> </span>
-                <span className='pt-icon-standard pt-icon-help' />
-            </div>
-        </Tooltip>
-    );
-};
-
-const EstRemainingHeader = () => {
-    const content =
-        'Estimated number of ballots remaining to audit to meet risk limit.';
-
-    return (
-        <Tooltip
-            className='pt-tooltip-indicator'
-            content={ content }>
-            <div>
-                <span>Est. Remaining Ballots</span>
-                <span> </span>
-                <span className='pt-icon-standard pt-icon-help' />
+                <Icon icon='help' />
             </div>
         </Tooltip>
     );
@@ -173,8 +155,6 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
                     <td>{ row.oppDisc }</td>
                     <td>{ row.disagreements }</td>
                     <td>{ row.remRound }</td>
-                    {/* not applicable to Counties anymore, only ComparisonAudit */}
-                    {/* <td>{ x[8] }</td> */}
                 </tr>
             );
         });
@@ -196,7 +176,7 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
                     To reverse sort, click on the column name again.</strong>
                 </div>
                 <div className='pt-card'>
-                    <table className='pt-table pt-bordered pt-condensed '>
+                    <table className='pt-html-table pt-html-table-bordered pt-small'>
                         <thead>
                             <tr>
                                 <th onClick={ this.sortBy('name') }>
@@ -234,12 +214,6 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
                                     <span> </span>
                                     { this.sortIconForCol('remRound') }
                                 </th>
-                                {/* not applicable to Counties anymore, only ComparisonAudit */}
-                                {/* <th onClick={ this.sortBy('remTotal') }> */}
-                                    {/* <EstRemainingHeader /> */}
-                                    {/* <span> </span> */}
-                                    {/* { this.sortIconForCol('remTotal') } */}
-                                    {/* </th> */}
                             </tr>
                         </thead>
                         <tbody>
@@ -257,8 +231,8 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
         }
 
         return this.state.order === 'asc'
-             ? <span className='pt-icon-standard pt-icon-sort-asc' />
-             : <span className='pt-icon-standard pt-icon-sort-desc' />;
+             ? <Icon icon='sort-asc' />
+             : <Icon icon='sort-desc' />;
     }
 
     private onFilterChange = (filter: string) => {

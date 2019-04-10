@@ -32,7 +32,7 @@ const ContestInfoTable = (props: ContestInfoTableProps) => {
     return (
         <div className='pt-card'>
             <span>{ contest.name }</span>
-            <table className='pt-table rla-county-contest-info'>
+            <table className='pt-html-table rla-county-contest-info'>
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -105,7 +105,7 @@ const CountyInfo = (props: CountyInfoProps) => {
         <div className='county-info pt-card'>
             <h3>County Info</h3>
             <div className='pt-card'>
-                <table className='pt-table pt-condensed'>
+                <table className='pt-html-table pt-small'>
                     <tbody>{ rows }</tbody>
                 </table>
             </div>
