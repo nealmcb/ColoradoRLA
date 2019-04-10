@@ -10,6 +10,8 @@ with the following tags indicating the components affected:
 - `TOOLING` refers to changes to tooling that falls outside the UI or API, such
   as the RLA export.
 
+## 2.2.0 (UNRELEASED) - New Features
+- [UI - Upgrade to React 16 and BlueprintJS v2][pr134]
 
 ## 2.1.2 - Bugfix release
 - [API - fix end of round bug][pr128]
@@ -18,7 +20,7 @@ with the following tags indicating the components affected:
 - [API|UI - Canonical Choices][pr126]
 - [API|UI - Re-audit ballots][pr117]
 
-## 2.0.13 - New Features 
+## 2.0.13 - New Features
 - [API - Add delete file button][pr110]
 
 ## 2.0.12 - Bugfix release
@@ -210,3 +212,4 @@ This is [FreeAndFair's most recent tag][1.1.0.3].
 [pr117]: https://github.com/democracyworks/ColoradoRLA/pull/117
 [pr126]: https://github.com/democracyworks/ColoradoRLA/pull/126
 [pr128]: https://github.com/democracyworks/ColoradoRLA/pull/128
+[pr134]: https://github.com/democracyworks/ColoradoRLA/pull/134
