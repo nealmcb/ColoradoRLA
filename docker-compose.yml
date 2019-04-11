@@ -21,3 +21,17 @@ services:
       - "server:backend"
     ports:
       - "8080:80"
+
+  test-credentials:
+    image: quay.io/democracyworks/rla-postgres:latest
+    command:
+      - /bin/sh
+      - -c
+      - |
+        until psql --single-transaction -v ON_ERROR_STOP=1 \
+          -U corla -d corla -h postgresql \
+          < /root/corla-test-credentials.psql; do
+            sleep 5
+        done
+    depends_on:
+      - postgresql
