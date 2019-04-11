@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-const projectUrl = 'https://github.com/democracyworks/ColoradoRLA';
+import { projectUrl } from 'corla/config';
 
 const License = () => {
     return (
