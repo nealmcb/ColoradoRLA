@@ -67,13 +67,7 @@ docker-compose up
 The application frontend will then be accessible at **`localhost:8080`**.
 
 Once the system is running, the server will create the PostgreSQL schema. After
-this, you most likely want to install test credentials, which are already inside
-the PostgreSQL image:
-
-```sh
-docker-compose exec postgresql \
-  /bin/bash -c 'psql -U corla -d corla < /root/corla-test-credentials.psql'
-```
+this, test credentials will be installed by the `test-credentials` service.
 
 With the test credentials loaded, you should be able to log in as a state
 administrator using `stateadmin1` as the username with any password, and as a
