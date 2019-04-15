@@ -160,16 +160,17 @@ public class ExportQueries {
 
     final StringBuilder contents = new StringBuilder();
     final ClassLoader loader = Thread.currentThread().getContextClassLoader();
-    final InputStream is = loader.getResourceAsStream(path);
-    final InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
-    final BufferedReader br = new BufferedReader(isr);
-    String line;
-    while ((line = br.readLine()) != null) {
-      contents.append(line);
-      contents.append('\n');
+    try(
+        final InputStream is = loader.getResourceAsStream(path);
+        final InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
+        final BufferedReader br = new BufferedReader(isr);
+        ) {
+      String line;
+      while ((line = br.readLine()) != null) {
+        contents.append(line);
+        contents.append('\n');
+      }
     }
-    is.close();
-    br.close();
     return contents.toString();
   }
 
