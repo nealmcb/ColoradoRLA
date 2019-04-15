@@ -130,7 +130,6 @@ public class ExportQueries {
       "batch_count_comparison.sql",
       "contest.sql",
       "contest_comparison.sql",
-      "contest_detail.sql",
       "contest_selection.sql",
       "contests_by_county.sql",
       "cvr_hash.sql",
