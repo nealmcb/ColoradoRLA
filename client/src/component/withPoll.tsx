@@ -4,13 +4,12 @@ import { connect, MapStateToProps } from 'react-redux';
 
 import action from 'corla/action';
 
-function withSync<P, SelectP, TOwnProps, BindP, BindS>(
+function withSync<P, SelectP, TOwnProps, TState, BindP, BindS>(
     Wrapped: React.ComponentType<P>,
     didMount: string,
     willUnmount: string,
-    select: MapStateToProps<SelectP, TOwnProps>,
+    select: MapStateToProps<SelectP, TOwnProps, TState>,
     bind?: Bind<BindP, BindS>,
-
 ) {
     type WrapperProps = P & SelectP & TOwnProps & BindP;
 

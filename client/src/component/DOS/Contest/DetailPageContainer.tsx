@@ -7,22 +7,16 @@ import withSync from 'corla/component/withSync';
 import ContestDetailPage from './DetailPage';
 
 interface MatchParams {
-    /* it looks like RouteComponentProps forces this type */
-    contestId: string | undefined;
+    contestId: string;
 }
 
 interface OwnProps extends RouteComponentProps<MatchParams> {}
 
 function mapStateToProps(state: DOS.AppState, ownProps: OwnProps) {
     const { contests } = state;
-    const { contestId } = ownProps.match.params;
-    let contest;
+    const contestId = parseInt(ownProps.match.params.contestId, 10);
 
-    if (contestId) {
-        contest = contests[parseInt(contestId, 10)];
-    } else {
-        return {};
-    }
+    const contest = contests[contestId];
 
     if (!contest) {
         return {};
