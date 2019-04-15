@@ -15,10 +15,12 @@ const formatContestInfo = (mark: County.ACVRContest, contestId: number): JSON.Co
 export const format = (
     acvr: County.ACVR,
     cvr: CVR,
+    auditBoardIndex: number,
     reAudit: boolean,
     comment: string,
 ): JSON.ACVR => {
     const payload: JSON.ACVR = {
+        auditBoardIndex,
         audit_cvr: {
             ballot_type: cvr.ballotType,
             batch_id: cvr.batchId,

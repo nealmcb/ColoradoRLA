@@ -31,6 +31,9 @@ public class SubmittedBallotNotFound {
   /** a comment is required to explain why a reaudit is happening **/
   private final String comment;
 
+  /** the audit board is used for reporting **/
+  private final Integer auditBoardIndex;
+
   /**
    * Constructs a new SubmittedBallotNotFound.
    * 
@@ -40,6 +43,7 @@ public class SubmittedBallotNotFound {
     my_id = the_id;
     this.reaudit = false;
     this.comment = "";
+    this.auditBoardIndex = -1;
   }
 
   /**
@@ -49,10 +53,12 @@ public class SubmittedBallotNotFound {
    */
   public SubmittedBallotNotFound(final Long the_id,
                                  final Boolean reaudit,
-                                 final String comment) {
+                                 final String comment,
+                                 final Integer auditBoardIndex) {
     my_id = the_id;
     this.comment = comment;
     this.reaudit = reaudit;
+    this.auditBoardIndex = auditBoardIndex;
   }
 
   /**
@@ -70,5 +76,10 @@ public class SubmittedBallotNotFound {
   /** get the comment **/
   public String getComment() {
     return this.comment;
+  }
+
+  /** get which audit board is submitting this **/
+  public Integer getAuditBoardIndex() {
+    return this.auditBoardIndex;
   }
 }

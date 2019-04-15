@@ -191,7 +191,8 @@ public final class ComparisonAuditController {
   /** unaudit and audit a submitted ACVR **/
   public static boolean reaudit(final CountyDashboard cdb,
                                 final CastVoteRecord cvr,
-                                final CastVoteRecord newAcvr) {
+                                final CastVoteRecord newAcvr,
+                                final String comment) {
 
     LOGGER.info("[reaudit] cvr: " + cvr.toString());
     final CVRAuditInfo cai =
@@ -206,10 +207,20 @@ public final class ComparisonAuditController {
     LOGGER.debug("[reaudit] former_count: " + former_count.toString());
 
 
-    final Long revision = CastVoteRecordQueries.maxRevision(cvr);
-    oldAcvr.setToReaudited(revision + 1L);
+    Long revision = CastVoteRecordQueries.maxRevision(cvr);
+    // sets revision to 1 if this is the original(revision is zero)
+    if (0L == revision) {
+      revision = 1L;
+      oldAcvr.setRevision(revision);
+    }
+    oldAcvr.setToReaudited();
     CastVoteRecordQueries.forceUpdate(oldAcvr);
 
+    // the original will not have a re-audit comment
+    newAcvr.setComment(comment);
+
+    // sets revision to 2 if this is the first revision(revision is zero)
+    newAcvr.setRevision(revision + 1L);
     cai.setACVR(newAcvr);
     Persistence.save(newAcvr);
     Persistence.save(cai);

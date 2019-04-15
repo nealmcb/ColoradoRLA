@@ -249,11 +249,11 @@ public class StartAuditRound extends AbstractDoSDashboardEndpoint {
    */
   public List<ContestResult> countAndSaveContests(final Set<ContestToAudit> cta) {
     LOGGER.debug(String.format("[countAndSaveContests: cta=%s]", cta));
+    final Map<String, AuditReason> tcr = targetedContestReasons(cta);
 
     return
       ContestCounter.countAllContests().stream()
-      .map(cr -> {cr.setAuditReason(targetedContestReasons(cta)
-                                    .getOrDefault(cr.getContestName(),
+      .map(cr -> {cr.setAuditReason(tcr.getOrDefault(cr.getContestName(),
                                                   AuditReason.OPPORTUNISTIC_BENEFITS));
                   return cr; })
       .map(Persistence::persist)
@@ -269,16 +269,12 @@ public class StartAuditRound extends AbstractDoSDashboardEndpoint {
                                         final BigDecimal riskLimit) {
 
     final List<Selection> selections = new ArrayList<>();
-    // maybe...
-    // comparisonAudits.stream()
-    //   .filter(ca -> ca.isTargeted())
-    //   .map(BallotSelection::randomSelection)
 
     for(final ComparisonAudit comparisonAudit: comparisonAudits) {
       final ContestResult contestResult = comparisonAudit.contestResult();
       // only make selection for targeted contests
       if (contestResult.getAuditReason().isTargeted()) {
-        final Integer startIndex = BallotSelection.auditedPrefixLength(contestResult.getContestCVRIds());
+        final Integer startIndex = BallotSelection.auditedPrefixLength(comparisonAudit.getContestCVRIds());
         final Integer endIndex = comparisonAudit.optimisticSamplesToAudit();
 
         final Selection selection =
@@ -289,11 +285,11 @@ public class StartAuditRound extends AbstractDoSDashboardEndpoint {
                                    + "contestResult.contestCVRIds=%s, selection=%s, "
                                    + "selection.contestCVRIds=%s, startIndex=%d, endIndex=%d]",
                                    contestResult.getContestName(),
-                                   contestResult.getContestCVRIds(),
+                                   comparisonAudit.getContestCVRIds(),
                                    selection, selection.contestCVRIds(),
                                    startIndex, endIndex));
 
-        contestResult.addContestCVRIds(selection.contestCVRIds());
+        comparisonAudit.addContestCVRIds(selection.contestCVRIds());
 
         selections.add(selection);
       }
