@@ -12,6 +12,7 @@ with the following tags indicating the components affected:
 
 ## 2.2.0 (UNRELEASED) - New Features
 - [UI - Upgrade to React 16 and BlueprintJS v2][pr134]
+- [API - New Reports and a full package download][pr132]
 
 ## 2.1.2 - Bugfix release
 - [API - fix end of round bug][pr128]
@@ -212,4 +213,5 @@ This is [FreeAndFair's most recent tag][1.1.0.3].
 [pr117]: https://github.com/democracyworks/ColoradoRLA/pull/117
 [pr126]: https://github.com/democracyworks/ColoradoRLA/pull/126
 [pr128]: https://github.com/democracyworks/ColoradoRLA/pull/128
+[pr132]: https://github.com/democracyworks/ColoradoRLA/pull/132
 [pr134]: https://github.com/democracyworks/ColoradoRLA/pull/134
