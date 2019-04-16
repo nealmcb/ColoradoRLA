@@ -41,7 +41,9 @@ class StartPageContainer extends React.Component<ContainerProps, ContainerState>
 
         this.state = {
             electionDate: _.get(props, 'election.date', defaultElectionDate),
-            publicMeetingDate: _.get(props, 'publicMeetingDate', defaultPublicMeetingDate),
+            /* waat? this default doesn't get pulled even though it appears that the prop value is undefined */
+            /* publicMeetingDate: _.get(props, 'publicMeetingDate', defaultPublicMeetingDate), */
+            publicMeetingDate: undefined == props.publicMeetingDate ? defaultPublicMeetingDate : props.publicMeetingDate,
             riskLimit: _.get(props, 'riskLimit', DEFAULT_RISK_LIMIT),
             type: _.get(props, 'election.type', 'general'),
         };
