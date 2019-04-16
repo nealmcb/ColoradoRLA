@@ -11,6 +11,8 @@ with the following tags indicating the components affected:
   as the RLA export.
 
 
+## 2.2.1 - unreleased
+
 ## 2.2.0 - New Features
 - [UI - Upgrade to React 16 and BlueprintJS v2][pr134]
 - [API - New Reports and a full package download][pr132]
