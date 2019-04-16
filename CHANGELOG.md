@@ -10,7 +10,8 @@ with the following tags indicating the components affected:
 - `TOOLING` refers to changes to tooling that falls outside the UI or API, such
   as the RLA export.
 
-## 2.2.0 (UNRELEASED) - New Features
+
+## 2.2.0 - New Features
 - [UI - Upgrade to React 16 and BlueprintJS v2][pr134]
 - [API - New Reports and a full package download][pr132]
 
