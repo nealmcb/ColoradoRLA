@@ -7,9 +7,7 @@ import LicenseFooter from 'corla/component/LicenseFooter';
 
 import CountyNav from '../Nav';
 
-import Info from './Info';
 import Main from './Main';
-
 
 interface PageProps {
     auditComplete: boolean;
@@ -17,7 +15,6 @@ interface PageProps {
     canAudit: boolean;
     canRenderReport: boolean;
     canSignIn: boolean;
-    contests: County.ContestDefs;
     countyInfo: CountyInfo;
     countyState: County.AppState;
     currentRoundNumber: number;
@@ -31,7 +28,6 @@ const CountyDashboardPage = (props: PageProps) => {
         canAudit,
         canRenderReport,
         canSignIn,
-        contests,
         countyInfo,
         countyState,
         currentRoundNumber,
@@ -53,16 +49,11 @@ const CountyDashboardPage = (props: PageProps) => {
                           history={ history }
                           name={ countyInfo.name }
                           auditBoardButtonDisabled={ auditBoardButtonDisabled } />
-                    <Info info={ countyInfo }
-                          contests={ contests }
-                          countyState={ countyState }
-                          currentRoundNumber={ currentRoundNumber }/>
                 </div>
             </div>
             <LicenseFooter />
         </div>
     );
 };
-
 
 export default CountyDashboardPage;

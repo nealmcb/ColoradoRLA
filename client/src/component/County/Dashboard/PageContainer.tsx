@@ -21,7 +21,6 @@ import canSignInSelector from 'corla/selector/county/canSignIn';
 import currentRoundNumberSelector from 'corla/selector/county/currentRoundNumber';
 import missedDeadlineSelector from 'corla/selector/county/missedDeadline';
 
-
 interface MatchParams {
     id: string;
 }
@@ -33,7 +32,6 @@ interface DashboardProps extends RouteComponentProps<MatchParams> {
     canAudit: boolean;
     canRenderReport: boolean;
     canSignIn: boolean;
-    contests: County.ContestDefs;
     countyState: County.AppState;
     currentRoundNumber: number;
     missedDeadline: boolean;
@@ -88,8 +86,6 @@ class CountyDashboardContainer extends React.Component<DashboardProps> {
 }
 
 function select(countyState: County.AppState) {
-    const { contestDefs } = countyState;
-
     return {
         allRoundsComplete: allRoundsCompleteSelector(countyState),
         auditComplete: auditCompleteSelector(countyState),
@@ -97,7 +93,6 @@ function select(countyState: County.AppState) {
         canAudit: canAuditSelector(countyState),
         canRenderReport: canRenderReportSelector(countyState),
         canSignIn: canSignInSelector(countyState),
-        contests: contestDefs,
         countyState,
         currentRoundNumber: currentRoundNumberSelector(countyState),
         missedDeadline: missedDeadlineSelector(countyState),

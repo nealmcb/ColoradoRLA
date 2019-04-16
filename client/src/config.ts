@@ -11,6 +11,8 @@ const endpointPrefix = DEBUG ? devEndpointPrefix : prodEndpointPrefix;
 
 export const endpoint = (path: string) => `${endpointPrefix}/${path}`;
 
+export const projectUrl = 'https://github.com/democracyworks/ColoradoRLA';
+
 export const helpEmail = 'voting.systems@sos.state.co.us';
 
 export const helpTel = '877-436-5677';
@@ -19,7 +21,6 @@ export const pollDelay
     = debug
     ? 1000 * 5
     : 1000 * 30;
-
 
 // Notification timeouts are in milliseconds.
 export const defaultOkTimeout = 10000;
