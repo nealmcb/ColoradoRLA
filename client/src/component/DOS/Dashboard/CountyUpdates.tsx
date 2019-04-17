@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import * as _ from 'lodash';
 
-import { EditableText, Icon, Tooltip } from '@blueprintjs/core';
+import { Card, EditableText, Icon, Tooltip } from '@blueprintjs/core';
 
 import counties from 'corla/data/counties';
 
@@ -160,9 +160,9 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
         });
 
         return (
-            <div className='pt-card'>
+            <Card>
                 <h3>County Updates</h3>
-                <div className='pt-card'>
+                <Card>
                     <strong>Filter by County Name:</strong>
                     <span> </span>
                     <EditableText
@@ -170,12 +170,12 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
                         minWidth={ 200 }
                         value={ this.state.filter }
                         onChange={ this.onFilterChange } />
-                </div>
-                <div className='pt-card' >
+                </Card>
+                <Card>
                     <strong>Click on a column name to sort by that column's data.
                     To reverse sort, click on the column name again.</strong>
-                </div>
-                <div className='pt-card'>
+                </Card>
+                <Card>
                     <table className='pt-html-table pt-html-table-bordered pt-small'>
                         <thead>
                             <tr>
@@ -220,8 +220,8 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
                             { ...countyStatusRows }
                         </tbody>
                     </table>
-                </div>
-            </div>
+                </Card>
+            </Card>
         );
     }
 
@@ -254,6 +254,5 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
         this.setState({order: this.state.order === 'asc' ? 'desc' : 'asc'});
     }
 }
-
 
 export default CountyUpdates;

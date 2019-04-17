@@ -1,9 +1,10 @@
 import * as React from 'react';
 
+import { Button, Card, Intent } from '@blueprintjs/core';
+
 import CountyNav from '../Nav';
 
 import auditBoardSignOut from 'corla/action/county/auditBoardSignOut';
-
 
 interface PageProps {
     auditBoardStatus: AuditBoardStatus;
@@ -27,49 +28,51 @@ const SignedInPage = (props: PageProps) => {
     const startOrContinueText = hasAuditedAnyBallot ? 'Continue Audit' : 'Start Audit';
 
     return (
-        <div>
+        <div className='l-wrapper'>
             <CountyNav />
-            <div>
-                <h2>Audit Board { auditBoardIndex + 1 }</h2>
-                <div className='pt-card'>
-                    <h5>The Audit Board members below are signed in.
-                    To sign the Audit Board out, click the "Sign Out" button below.</h5>
-                </div>
-            </div>
-            <div className='pt-card'>
-                <h4>Board Member 1:</h4>
+            <div className='l-main l-main-fill'>
                 <div>
-                    Name: { members[0].firstName } { members[0].lastName }
+                    <h2>Audit Board { auditBoardIndex + 1 }</h2>
+                    <Card>
+                        <h5>The Audit Board members below are signed in.
+                        To sign the Audit Board out, click the "Sign Out" button below.</h5>
+                    </Card>
                 </div>
+                <Card>
+                    <h4>Board Member 1:</h4>
+                    <div>
+                        Name: { members[0].firstName } { members[0].lastName }
+                    </div>
+                    <div>
+                        Political party: { members[0].party }
+                    </div>
+                </Card>
+                <Card>
+                    <h4>Board Member 2:</h4>
+                    <div>
+                        Name: { members[1].firstName } { members[1].lastName }
+                    </div>
+                    <div>
+                        Political party: { members[1].party }
+                    </div>
+                </Card>
                 <div>
-                    Political party: { members[0].party }
+                    <Button className='pt-breadcrumb'
+                            disabled={ true }
+                            intent={ Intent.PRIMARY }>
+                        Submit
+                    </Button>
+                    <Button className='pt-breadcrumb'
+                            intent={ Intent.PRIMARY }
+                            onClick={ () => auditBoardSignOut(auditBoardIndex) }>
+                        Sign Out
+                    </Button>
+                    <Button className='pt-breadcrumb'
+                            intent={ Intent.PRIMARY }
+                            onClick={ auditBoardStartOrContinue }>
+                        { startOrContinueText }
+                    </Button>
                 </div>
-            </div>
-            <div className='pt-card'>
-                <h4>Board Member 2:</h4>
-                <div>
-                    Name: { members[1].firstName } { members[1].lastName }
-                </div>
-                <div>
-                    Political party: { members[1].party }
-                </div>
-            </div>
-            <div>
-                <button
-                    disabled={ true }
-                    className='pt-button pt-intent-primary pt-breadcrumb'>
-                    Submit
-                </button>
-                <button
-                    className='pt-button pt-intent-primary pt-breadcrumb'
-                    onClick={ () => auditBoardSignOut(auditBoardIndex) }>
-                    Sign Out
-                </button>
-                <button
-                    className='pt-button pt-intent-primary pt-breadcrumb'
-                    onClick={ auditBoardStartOrContinue }>
-                    { startOrContinueText }
-                </button>
             </div>
         </div>
     );

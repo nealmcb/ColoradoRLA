@@ -1,7 +1,10 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
 
 import * as _ from 'lodash';
+
+import { Card } from '@blueprintjs/core';
+
+import { Link } from 'react-router-dom';
 
 import CountyNav from '../Nav';
 
@@ -14,11 +17,11 @@ const MissedDeadlinePage = () => {
             <CountyNav />
             <h2>Upload Deadline Missed</h2>
             <div>
-                <div className='pt-card'>
+                <Card>
                     You are unable to upload a file because the deadline has passed and the
                     audit has begun. Please contact the CDOS voting systems team at&nbsp;
                     <strong>{ config.helpEmail }</strong> or <strong>{ config.helpTel }</strong> for assistance.
-                </div>
+                </Card>
             </div>
         </div>
     );

@@ -4,6 +4,8 @@ import * as _ from 'lodash';
 
 import Nav from '../Nav';
 
+import { Card } from '@blueprintjs/core';
+
 import counties from 'corla/data/counties';
 
 import { formatLocalDate } from 'corla/date';
@@ -58,9 +60,9 @@ const SelectedContests = (props: SelectedContestsProps) => {
     });
 
     return (
-        <div className='pt-card'>
+        <Card>
             <h3>Selected Contests</h3>
-            <div className='pt-card'>
+            <Card>
                 <table className='pt-html-table pt-html-table-bordered pt-small'>
                     <thead>
                         <tr>
@@ -73,8 +75,8 @@ const SelectedContests = (props: SelectedContestsProps) => {
                         { rows }
                     </tbody>
                 </table>
-            </div>
-        </div>
+            </Card>
+        </Card>
     );
 };
 
@@ -111,7 +113,7 @@ const AuditReview = (props: AuditReviewProps) => {
                 to the counties and the previous pages will not be editable.
                 In particular, you will not be able to change which contests are under audit.
             </div>
-            <div className='pt-card'>
+            <Card>
                 <table className='pt-html-table'>
                     <tbody>
                         <tr>
@@ -138,7 +140,7 @@ const AuditReview = (props: AuditReviewProps) => {
                         </tr>
                     </tbody>
                 </table>
-            </div>
+            </Card>
             <SelectedContests auditedContests={dosState.auditedContests}
                               contests={dosState.contests} />
             <div>
@@ -154,6 +156,5 @@ const AuditReview = (props: AuditReviewProps) => {
         </div>
     );
 };
-
 
 export default AuditReview;

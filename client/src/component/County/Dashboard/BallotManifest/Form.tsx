@@ -1,7 +1,13 @@
 import * as React from 'react';
 
-import { EditableText, FileInput, FormGroup } from '@blueprintjs/core';
-
+import {
+    Button,
+    Card,
+    EditableText,
+    FileInput,
+    FormGroup,
+    Intent,
+} from '@blueprintjs/core';
 
 interface FormProps {
     disableReupload: OnClick;
@@ -32,9 +38,9 @@ const BallotManifestForm = (props: FormProps) => {
     const fileName = file ? file.name : '';
 
     const cancelButton = (
-        <button className='pt-button pt-intent-warning' onClick={ disableReupload }>
+        <Button intent={ Intent.WARNING } onClick={ disableReupload }>
             Cancel
-        </button>
+        </Button>
     );
 
     // fileDeleted allows us to not wait for a dashboard refresh to get the asm
@@ -45,8 +51,8 @@ const BallotManifestForm = (props: FormProps) => {
                                : '';
 
     return (
-        <div className='pt-card'>
-            <div className='pt-card'>
+        <Card>
+            <Card>
                 <div style={{ width: '600px' }}>
                     <FormGroup label={ <span className='pt-ui-text-large'>Ballot Manifest</span> }>
                         <FileInput fill={ true } text={ fileName } onInputChange={ onFileChange } />
@@ -59,14 +65,13 @@ const BallotManifestForm = (props: FormProps) => {
                                       onChange={ onHashChange } />
                     </FormGroup>
                 </div>
-            </div>
+            </Card>
             { renderedCancelButton }
-            <button className='pt-button pt-intent-primary' onClick={ upload }>
+            <Button intent={ Intent.PRIMARY } onClick={ upload }>
                 Upload
-            </button>
-        </div>
+            </Button>
+        </Card>
     );
 };
-
 
 export default BallotManifestForm;

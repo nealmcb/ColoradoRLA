@@ -4,7 +4,7 @@ import * as React from 'react';
 
 import { History } from 'history';
 
-import { Button, Intent } from '@blueprintjs/core';
+import { Button, Card, Intent } from '@blueprintjs/core';
 
 import action from 'corla/action';
 
@@ -17,7 +17,6 @@ import downloadCvrsToAuditCsv from 'corla/action/county/downloadCvrsToAuditCsv';
 import fetchReport from 'corla/action/county/fetchReport';
 
 import FileDownloadButtons from 'corla/component/FileDownloadButtons';
-
 
 interface AuditBoardButtonsProps {
     auditBoardCount: number;
@@ -69,10 +68,10 @@ const AuditBoardButtons = (props: AuditBoardButtonsProps) => {
     }
 
     return (
-        <div className='pt-card'>
+        <Card>
             <h5 className='pt-ui-text-large'>Sign in to an audit board</h5>
             <div className='pt-button-group pt-large corla-spaced'>{ buttons }</div>
-        </div>
+        </Card>
     );
 };
 
@@ -128,13 +127,13 @@ const Main = (props: MainProps) => {
     const downloadCsv = () => downloadCvrsToAuditCsv(currentRoundNumber);
 
     return (
-        <div className='county-main pt-card'>
+        <div>
             <h1>Hello, { name } County!</h1>
             <div>
-                <div className='pt-card'><h3>{ directions }</h3></div>
+                <Card><h3>{ directions }</h3></Card>
                 { fileUploadContainer }
                 { fileDownloadButtons }
-                <div className='pt-card'>
+                <Card>
                     <div className='pt-ui-text-large'>{ reportType } audit report (CSV)</div>
                     <button
                         className='pt-button  pt-intent-primary'
@@ -142,8 +141,8 @@ const Main = (props: MainProps) => {
                         onClick={ fetchReport }>
                         Download
                     </button>
-                </div>
-                <div className='pt-card'>
+                </Card>
+                <Card>
                     <div className='pt-ui-text-large'>List of ballots to audit (CSV)</div>
                     <button
                         className='pt-button pt-intent-primary'
@@ -151,7 +150,7 @@ const Main = (props: MainProps) => {
                         onClick={ downloadCsv }>
                         Download
                     </button>
-                </div>
+                </Card>
                 <AuditBoardNumberSelector auditBoardCount={ countyState.auditBoardCount || 1 }
                                           numberOfBallotsToAudit={ countyState.ballotsRemainingInRound }
                                           isShown={ !auditBoardButtonDisabled && !!currentRoundNumber }
@@ -165,6 +164,5 @@ const Main = (props: MainProps) => {
         </div>
     );
 };
-
 
 export default Main;

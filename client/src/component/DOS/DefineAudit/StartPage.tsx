@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import { Card } from '@blueprintjs/core';
+
 import Nav from '../Nav';
 
 import ElectionDateForm from './ElectionDateForm';
@@ -90,23 +92,23 @@ const AuditPage = (props: PageProps) => {
 
             <h2>Administer an Audit</h2>
 
-            <div className='pt-card'>
+            <Card>
                 <h3>Election Info</h3>
                 <div>Enter the date the election will take place, and the type of election.</div>
                 <ElectionDateForm onChange={ setElectionDate }
                                   initDate={ electionDate } />
                 <ElectionTypeForm onChange={ setType }
                                   initType={ type } />
-            </div>
+            </Card>
 
-            <div className='pt-card'>
+            <Card>
                 <h3>Public Meeting Date</h3>
                 <div>Enter the date of the public meeting to establish the random seed.</div>
                 <PublicMeetingDateForm onChange={ setPublicMeetingDate }
                                        initDate={ publicMeetingDate } />
-            </div>
+            </Card>
 
-            <div className='pt-card'>
+            <Card>
                 <h3>Risk Limit</h3>
                 <div>
                   <strong>Enter the risk limit for comparison audits as a percentage.</strong>
@@ -114,12 +116,12 @@ const AuditPage = (props: PageProps) => {
                 <RiskLimitForm onChange={ setRiskLimit }
                                riskLimit={ riskLimit } />
 
-            </div>
+            </Card>
 
-            <div className='pt-card'>
+            <Card>
                 <h3>Contests</h3>
                 <UploadFileButton onChange={ setUploadedFiles } />
-            </div>
+            </Card>
 
             <div className='control-buttons'>
               <SaveButton disabled={ disableButton }

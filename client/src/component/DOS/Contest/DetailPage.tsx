@@ -1,8 +1,10 @@
 import * as React from 'react';
 
-import { Link } from 'react-router-dom';
-
 import * as _ from 'lodash';
+
+import { Card } from '@blueprintjs/core';
+
+import { Link } from 'react-router-dom';
 
 import { endpoint } from 'corla/config';
 
@@ -50,10 +52,10 @@ const ContestChoices = (props: ChoicesProps) => {
     ));
 
     return (
-        <div className='pt-card'>
+        <Card>
             <h4>Choices:</h4>
             <ul>{ choiceItems }</ul>
-        </div>
+        </Card>
     );
 };
 
@@ -88,7 +90,7 @@ const ContestDetailPage = (props: PageProps) => {
         <div>
             <Nav />
             <Breadcrumb contest={ contest } />
-            <div className='pt-card'>
+            <Card>
                 <h2>Contest Report</h2>
                 <p>
                     The contest report is a contest-centric report detailing
@@ -100,8 +102,8 @@ const ContestDetailPage = (props: PageProps) => {
                    href={ activityReportUrl(contest.name) }>
                    Download Activity Report
                 </a>
-            </div>
-            <div className='pt-card'>
+            </Card>
+            <Card>
                 <h2>Contest Data</h2>
                 <h3>Contest Data</h3>
                 <table className='pt-html-table pt-html-table-bordered pt-small'>
@@ -114,7 +116,7 @@ const ContestDetailPage = (props: PageProps) => {
                         { row('CVR Export', 'Uploaded') }
                     </tbody>
                 </table>
-            </div>
+            </Card>
             <ContestChoices contest={ contest } />
         </div>
     );

@@ -37,10 +37,9 @@ const CountyDashboardPage = (props: PageProps) => {
     const auditBoardButtonDisabled = !canSignIn;
 
     return (
-        <div>
-            <div className='county-root'>
-                <CountyNav />
-                <div>
+        <div className='l-wrapper'>
+            <CountyNav />
+                <div className='l-main'>
                     <Main auditComplete={ auditComplete }
                           auditStarted={ auditStarted }
                           canRenderReport={ canRenderReport }
@@ -50,7 +49,6 @@ const CountyDashboardPage = (props: PageProps) => {
                           name={ countyInfo.name }
                           auditBoardButtonDisabled={ auditBoardButtonDisabled } />
                 </div>
-            </div>
             <LicenseFooter />
         </div>
     );

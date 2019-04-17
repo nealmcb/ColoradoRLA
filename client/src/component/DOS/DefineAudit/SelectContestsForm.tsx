@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 
 import {
     Button,
+    Card,
     Checkbox,
     Classes,
     EditableText,
@@ -244,7 +245,7 @@ class SelectContestsForm extends React.Component<FormProps, FormState> {
 
         return (
             <div>
-                <div className='pt-card'>
+                <Card>
                    <h5>According to Colorado statute, at least one statewide contest and
                     one countywide contest must be chosen for audit. The Secretary of State
                     will select other ballot contests for audit if in any particular election
@@ -252,8 +253,8 @@ class SelectContestsForm extends React.Component<FormProps, FormState> {
                     these contests for audit have been selected and published, they cannot be
                     changed. The Secretary of State can decide that a contest must witness a
                     full hand count at any time.</h5>
-                </div>
-                <div className='pt-card'>
+                </Card>
+                <Card>
                     <strong>Filter by Contest Name:</strong>
                     <span> </span>
                     <EditableText
@@ -261,12 +262,12 @@ class SelectContestsForm extends React.Component<FormProps, FormState> {
                         minWidth={ 200 }
                         value={ this.state.filter }
                         onChange={ this.onFilterChange } />
-                </div>
-                <div className='pt-card' >
+                </Card>
+                <Card>
                     Click on the "Contest" column name to sort by that
                     column's data. To reverse sort, click on the column name again.
-                </div>
-                <div className='pt-card'>
+                </Card>
+                <Card>
                     <table className='pt-html-table pt-html-table-bordered pt-small'>
                         <thead>
                             <tr>
@@ -289,7 +290,7 @@ class SelectContestsForm extends React.Component<FormProps, FormState> {
                             { contestRows }
                         </tbody>
                     </table>
-                </div>
+                </Card>
             </div>
         );
     }

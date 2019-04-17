@@ -2,6 +2,8 @@ import * as React from 'react';
 
 import { Redirect } from 'react-router-dom';
 
+import { Card } from '@blueprintjs/core';
+
 import CountyNav from 'corla/component/County/Nav';
 
 import notice from 'corla/notice';
@@ -25,14 +27,14 @@ const PreviousRoundSignedOff = (props: PreviousRoundProps) => {
         <div>
             <CountyNav />
             <h3>End of round { roundNumber }</h3>
-            <div className='pt-card'>
+            <Card>
                <h3>
                   You have finished auditing your portion of ballots to audit in
                   round { roundNumber }. Please wait for the other audit boards
                   to finish their portion of the audit, and for the Department
                   of State to begin the next round.
                </h3>
-            </div>
+            </Card>
         </div>
     );
 };
@@ -42,15 +44,15 @@ const LastRoundComplete = () => {
         <div>
             <CountyNav />
             <h3> End of All Audit Rounds</h3>
-            <div className='pt-card'>
+            <Card>
                 <h3>All audit rounds are complete. Please use the form below to
                 certify that the county has completed the audit.</h3>
-            </div>
-            <div className='pt-card'>
+            </Card>
+            <Card>
                 <button className='pt-button pt-intent-primary' onClick={ finishAudit }>
                     Submit
                 </button>
-            </div>
+            </Card>
         </div>
     );
 };
@@ -92,7 +94,7 @@ const EndOfRoundPage = (props: PageProps) => {
         <div>
             <CountyNav />
             <h3>Audit board { auditBoardIndex + 1 }: Sign off on round { roundNumber }</h3>
-            <div className='pt-card'>
+            <Card>
               <h3>
                 Congratulations! You have completed reporting the votes on all ballots
                 randomly selected for this round of the risk-limiting audit of the
@@ -101,9 +103,9 @@ const EndOfRoundPage = (props: PageProps) => {
                 round, you will be taken back to the main audit screen to await
                 further instruction.
               </h3>
-            </div>
+            </Card>
 
-            <div className='pt-card'>
+            <Card>
                 <h3>
                     Please complete this audit round by entering your names in
                     the fields below, making the following certification, and
@@ -139,10 +141,9 @@ const EndOfRoundPage = (props: PageProps) => {
                     </li>
                 </ul>
                 <SignOffFormContainer auditBoardIndex={ auditBoardIndex } />
-            </div>
+            </Card>
         </div>
     );
 };
-
 
 export default EndOfRoundPage;

@@ -1,7 +1,8 @@
 import * as React from 'react';
 
-import startNextRound from 'corla/action/dos/startNextRound';
+import { Card } from '@blueprintjs/core';
 
+import startNextRound from 'corla/action/dos/startNextRound';
 
 interface  ControlProps {
     canStartNextRound: boolean;
@@ -14,12 +15,12 @@ const Control = (props: ControlProps) => {
     const buttonDisabled = !canStartNextRound;
 
     return (
-        <div className='pt-card'>
+        <Card>
             <h4>Start next round</h4>
-            <div className='pt-card'>
+            <Card>
                 Round { currentRound } completed.
-            </div>
-            <div className='pt-card'>
+            </Card>
+            <Card>
                 <div>
                     Start Round { currentRound + 1 }?
                 </div>
@@ -31,10 +32,9 @@ const Control = (props: ControlProps) => {
                         Start Round
                     </button>
                 </div>
-            </div>
-        </div>
+            </Card>
+        </Card>
     );
 };
-
 
 export default Control;

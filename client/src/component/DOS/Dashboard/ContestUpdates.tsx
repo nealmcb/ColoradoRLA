@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import * as _ from 'lodash';
 
-import { Button, EditableText, Icon, Intent, Tooltip } from '@blueprintjs/core';
+import { Button, Card, EditableText, Icon, Intent, Tooltip } from '@blueprintjs/core';
 
 import setHandCount from 'corla/action/dos/setHandCount';
 
@@ -143,9 +143,9 @@ class ContestUpdates extends React.Component<UpdatesProps, UpdatesState> {
         });
 
         return (
-            <div className='pt-card'>
+            <Card>
                 <h3>Contest Updates</h3>
-                <div className='pt-card'>
+                <Card>
                     <strong>Filter by County or Contest Name:</strong>
                     <span> </span>
                     <EditableText
@@ -153,8 +153,8 @@ class ContestUpdates extends React.Component<UpdatesProps, UpdatesState> {
                         minWidth={ 200 }
                         value={ this.state.filter }
                         onChange={ this.onFilterChange } />
-                </div>
-                <div className='pt-card'>
+                </Card>
+                <Card>
                     <table className='pt-html-table'>
                         <thead>
                             <tr>
@@ -181,8 +181,8 @@ class ContestUpdates extends React.Component<UpdatesProps, UpdatesState> {
                             { ...contestStatuses }
                         </tbody>
                     </table>
-                </div>
-            </div>
+                </Card>
+            </Card>
         );
     }
 

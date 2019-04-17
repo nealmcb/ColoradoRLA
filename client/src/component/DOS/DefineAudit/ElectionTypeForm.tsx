@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Radio, RadioGroup } from '@blueprintjs/core';
+import { Card, Radio, RadioGroup } from '@blueprintjs/core';
 
 import * as format from 'corla/format';
 
@@ -31,7 +31,7 @@ class ElectionTypeForm extends React.Component<FormProps, FormState> {
         });
 
         return (
-            <div className='pt-card'>
+            <Card>
                     <RadioGroup
                         className='rla-radio-group'
                         selectedValue={ type }
@@ -39,7 +39,7 @@ class ElectionTypeForm extends React.Component<FormProps, FormState> {
                         label='Election Type'>
                         { radios }
                     </RadioGroup>
-            </div>
+            </Card>
         );
     }
 

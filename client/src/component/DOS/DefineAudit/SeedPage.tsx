@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import { Card } from '@blueprintjs/core';
+
 import Nav from '../Nav';
 
 import SeedForm from './SeedForm';
@@ -53,18 +55,18 @@ class AuditSeedPage extends React.Component<PageProps> {
             <div>
                 <Nav />
                 <Breadcrumb />
-                <div className='pt-card'>
+                <Card>
                     <h3>Audit Definition - Enter Random Seed</h3>
-                    <div className='pt-card'>
+                    <Card>
                         Enter the random seed generated from the public meeting
                         on { this.props.formattedPublicMeetingDate }.
-                    </div>
-                    <div className='pt-card'>
+                    </Card>
+                    <Card>
                         <SeedForm initSeed={ this.state.form.seed }
                                   updateForm={ (seed: string) => { this.state.form.seed = seed; } }
                                   setValid={ (v: boolean) => { this.setValid(v); } } />
-                    </div>
-                </div>
+                    </Card>
+                </Card>
                 <div>
                     <button className='pt-button pt-breadcrumb'
                             onClick={ this.props.back }>

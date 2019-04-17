@@ -1,6 +1,17 @@
 import * as React from 'react';
 
-import { Button, Intent, Popover, Position } from '@blueprintjs/core';
+import {
+    Alignment,
+    Button,
+    Intent,
+    Navbar,
+    NavbarDivider,
+    NavbarGroup,
+    NavbarHeading,
+    Popover,
+    Position,
+} from '@blueprintjs/core';
+
 import { Link } from 'react-router-dom';
 
 import * as config from 'corla/config';
@@ -10,15 +21,14 @@ import NavMenu from './NavMenu';
 import resetDatabase from 'corla/action/dos/resetDatabase';
 import logout from 'corla/action/logout';
 
-
 const MenuButton = () =>
     <Button icon='menu' minimal />;
 
 const Heading = () =>
-    <div className='pt-navbar-heading'>Colorado RLA</div>;
+    <NavbarHeading>Colorado RLA</NavbarHeading>;
 
 const Divider = () =>
-    <span className='pt-navbar-divider' />;
+    <NavbarDivider />;
 
 interface HomeButtonProps {
     path: string;
@@ -49,7 +59,6 @@ const ResetDatabaseButton = ({ reset }: ResetButtonProps) => (
     </Button>
 );
 
-
 export default function withNav(Menu: React.ComponentClass, path: string) {
     const resetSection = path === '/sos' && config.debug
                        ? <div>
@@ -59,19 +68,19 @@ export default function withNav(Menu: React.ComponentClass, path: string) {
                        : <div />;
 
     return () => (
-        <nav className='pt-navbar'>
-            <div className='pt-navbar-group pt-align-left'>
+        <Navbar className='l-nav'>
+            <NavbarGroup align={ Alignment.LEFT }>
                 <Popover content={ <Menu /> } position={ Position.RIGHT_TOP }>
                     <MenuButton />
                 </Popover>
                 <Heading />
-            </div>
-            <div className='pt-navbar-group pt-align-right'>
+            </NavbarGroup>
+            <NavbarGroup align={ Alignment.RIGHT }>
                 { resetSection }
                 <HomeButton path={ path } />
                 <Divider />
                 <LogoutButton logout={ logout }/>
-            </div>
-        </nav>
+            </NavbarGroup>
+        </Navbar>
     );
 }

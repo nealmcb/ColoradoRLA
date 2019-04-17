@@ -7,7 +7,7 @@ import { auditBoardSlice } from 'corla/selector/county/currentBallotNumber';
 
 import FinalReviewDialog from './FinalReviewDialog';
 
-import { Button, IButtonProps } from '@blueprintjs/core';
+import { Button, Card, IButtonProps } from '@blueprintjs/core';
 
 import action from 'corla/action/';
 
@@ -75,14 +75,14 @@ class FinalReviewPage extends React.Component<FinalReviewPageProps, FinalReviewP
         return (
             <div>
                 <CountyNav />
-                <div className='pt-card'>
+                <Card>
                     <FinalReviewDialog cvr={ this.state.cvr }
                                        isOpen={ this.state.dialogIsOpen }
                                        onClose={ this.closeDialog } />
 
                     <h3>Audit Board { auditBoardIndex + 1 }: Final Review</h3>
 
-                    <div className='pt-card'>
+                    <Card>
                         <p>
                             This screen allows you to re-audit ballots previously audited in
                             this round. If you choose to re-audit a ballot, you will be
@@ -126,7 +126,7 @@ class FinalReviewPage extends React.Component<FinalReviewPageProps, FinalReviewP
                         <Button onClick={ reviewCompleteHandler(auditBoardIndex) }>
                             Review Complete - Finish Round
                         </Button>
-                    </div>
+                    </Card>
 
                     <table className='pt-html-table pt-html-table-bordered pt-small pt-interactive'
                            style={{ marginLeft: 'auto', marginRight: 'auto' }}>
@@ -150,7 +150,7 @@ class FinalReviewPage extends React.Component<FinalReviewPageProps, FinalReviewP
                         }
                         </tbody>
                     </table>
-                </div>
+                </Card>
             </div>
         );
     }

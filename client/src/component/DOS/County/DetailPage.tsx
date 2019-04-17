@@ -2,12 +2,13 @@ import * as React from 'react';
 
 import * as _ from 'lodash';
 
+import { Card } from '@blueprintjs/core';
+
 import { formatCountyASMState } from 'corla/format';
 
 import FileDownloadButtons from 'corla/component/FileDownloadButtons';
 
 import Nav from '../Nav';
-
 
 interface BreadcrumbProps {
     county: CountyInfo;
@@ -47,7 +48,7 @@ const AuditBoard = (props: AuditBoardProps) => {
     const { auditBoard } = props;
 
     return (
-        <div className='pt-card'>
+        <Card>
             <h3>Audit Board</h3>
             <table className='pt-html-table pt-html-table-bordered pt-small'>
                 <tbody>
@@ -65,18 +66,16 @@ const AuditBoard = (props: AuditBoardProps) => {
                     </tr>
                 </tbody>
             </table>
-        </div>
+        </Card>
     );
 };
 
 const NoAuditBoard = () => {
     return (
-        <div className='pt-card'>
+        <Card>
             <h3>Audit Board</h3>
-            <div className='pt-card'>
-                Audit Board not signed in.
-            </div>
-        </div>
+            <Card>Audit Board not signed in.</Card>
+        </Card>
     );
 };
 
@@ -101,8 +100,8 @@ const CountyDetails = (props: DetailsProps) => {
                             : <NoAuditBoard />;
 
     return (
-        <div className='pt-card'>
-            <div className='pt-card'>
+        <Card>
+            <Card>
                 <h3>County Info</h3>
                 <table className='pt-html-table pt-html-table-bordered pt-small'>
                     <tbody>
@@ -128,10 +127,10 @@ const CountyDetails = (props: DetailsProps) => {
                         </tr>
                     </tbody>
                 </table>
-            </div>
+            </Card>
             <FileDownloadButtons status={ status } />
             { auditBoardSection }
-        </div>
+        </Card>
     );
 };
 

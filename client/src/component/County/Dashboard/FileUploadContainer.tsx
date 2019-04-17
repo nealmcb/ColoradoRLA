@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { Icon, Intent} from '@blueprintjs/core';
+import { Card, Icon, Intent } from '@blueprintjs/core';
 
 import BallotManifestFormContainer from './BallotManifest/FormContainer';
 import CVRExportFormContainer from './CVRExport/FormContainer';
@@ -21,23 +21,23 @@ const MatchStatus = (props: MatchStatusProps) => {
 
     if (ballotManifestCount === cvrExportCount) {
         return (
-            <div className='pt-card'>
+            <Card>
                 <Icon icon='tick-circle' intent={ Intent.SUCCESS } />
                 <span> </span>
                 CVR Export and Ballot Manifest record counts <strong>match.</strong>
-            </div>
+            </Card>
         );
     } else {
         return (
-            <div className='pt-card'>
+            <Card>
                 <Icon icon='error' intent={ Intent.DANGER } />
                 <span> </span>
                 CVR Export and Ballot Manifest record counts <strong>do not match.</strong>
-                <div className='pt-card'>
+                <Card>
                     <div>Ballot Manifest count: { ballotManifestCount }</div>
                     <div>CVR Export count: { cvrExportCount }</div>
-                </div>
-            </div>
+                </Card>
+            </Card>
         );
     }
 };
@@ -67,10 +67,10 @@ const FileUploadForms = (props: FileUploadFormsProps) => {
 
 const MissedDeadline = () => {
     return (
-        <div className='pt-card'>
+        <Card>
             The Risk-Limiting Audit has already begun.
             Please contact the Department of State for assistance.
-        </div>
+        </Card>
     );
 };
 

@@ -2,8 +2,9 @@ import * as React from 'react';
 
 import * as _ from 'lodash';
 
-import downloadCvrsToAuditCsv from 'corla/action/county/downloadCvrsToAuditCsv';
+import { Button, Card, Intent } from '@blueprintjs/core';
 
+import downloadCvrsToAuditCsv from 'corla/action/county/downloadCvrsToAuditCsv';
 
 interface BallotListStageProps {
     auditBoardIndex: number;
@@ -60,7 +61,7 @@ const BallotListStage = (props: BallotListStageProps) => {
     return (
         <div className='rla-page'>
             <h2>Audit Board { `${auditBoardIndex + 1 }` }: Ballot Cards to Audit</h2>
-            <div className='pt-card'>
+            <Card>
                     <div>
                         The Secretary of State has established the following risk limit(s) for
                         the following ballot contest(s) to audit:
@@ -68,32 +69,31 @@ const BallotListStage = (props: BallotListStageProps) => {
                     <ul>
                         { contestsUnderAuditListItems }
                     </ul>
-            </div>
-            <div className='pt-card'>
+            </Card>
+            <Card>
                 The Secretary of State has randomly selected { cvrsToAudit.length } ballot cards
                 for the { countyInfo.name } County Audit Board(s) to examine in Round
                 <span>{ ' ' + roundNumber }</span> to satisfy the risk limit(s) for the audited contest(s).
-            </div>
-            <div className='pt-card'>
+            </Card>
+            <Card>
                 The Audit Board(s) must locate and retrieve, or observe a county staff member
                 locate and retrieve, the following randomly selected ballot cards for the initial
                 round of this risk-limiting audit:
-            </div>
-            <div className='pt-card'>
+            </Card>
+            <Card>
                 Audit Board { `${auditBoardIndex + 1 }` }: Click Start audit to
                 begin reporting the votes you observe on each of the below
                 ballot cards that have been assigned to you.
-            </div>
-            <button
-                className='pt-button pt-intent-primary'
-                onClick={ nextStage }>
+            </Card>
+            <Button intent={ Intent.PRIMARY }
+                    onClick={ nextStage }>
                 Start audit
-            </button>
-            <div className='pt-card'>
-                <button className='pt-button pt-intent-primary' onClick={ downloadCsv } >
+            </Button>
+            <Card>
+                <Button intent={ Intent.PRIMARY } onClick={ downloadCsv } >
                    Download ballot list as CSV
-                </button>
-                <div className='pt-card'>
+                </Button>
+                <Card>
                     <table className='pt-html-table pt-html-table-bordered pt-small'>
                         <thead>
                             <tr>
@@ -110,8 +110,8 @@ const BallotListStage = (props: BallotListStageProps) => {
                             { ballotListRows }
                         </tbody>
                     </table>
-                </div>
-            </div>
+                </Card>
+            </Card>
         </div>
     );
 };

@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { Card } from '@blueprintjs/core';
 
 interface StatusProps {
     currentRound: number;
@@ -11,7 +12,7 @@ const Status = (props: StatusProps) => {
     const { currentRound, finishedCountiesCount, totalCountiesCount } = props;
 
     return (
-        <div className='pt-card'>
+        <Card>
             <h4>Round status</h4>
             <div>
                 Round { currentRound } in progress.
@@ -20,9 +21,8 @@ const Status = (props: StatusProps) => {
                 { finishedCountiesCount } of { totalCountiesCount } Counties
                 have finished this round.
             </div>
-        </div>
+        </Card>
     );
 };
-
 
 export default Status;

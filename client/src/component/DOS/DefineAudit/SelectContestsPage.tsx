@@ -2,6 +2,8 @@ import * as React from 'react';
 
 import * as _ from 'lodash';
 
+import { Button, Card, Intent } from '@blueprintjs/core';
+
 import Nav from '../Nav';
 
 import SelectContestsForm from './SelectContestsForm';
@@ -36,17 +38,18 @@ const WaitingForContestsPage = ({ back }: WaitingPageProps) => {
         <div>
             <Nav />
             <Breadcrumb />
-            <div className='pt-card'>
+            <Card>
                 Waiting for counties to upload contest data.
-            </div>
-            <div>
-                <button onClick={ back } className='pt-button pt-intent-primary pt-breadcrumb'>
-                    Back
-                </button>
-                <button disabled className='pt-button pt-intent-primary pt-breadcrumb'>
-                    Save & Next
-                </button>
-            </div>
+            </Card>
+            <Button onClick={ back }
+                    className='pt-breadcrumb'>
+                Back
+            </Button>
+            <Button disabled
+                    intent={ Intent.PRIMARY }
+                    className='pt-breadcrumb'>
+                Save & Next
+            </Button>
         </div>
     );
 };
@@ -92,14 +95,15 @@ const SelectContestsPage = (props: PageProps) => {
                                 auditedContests={auditedContests}
                                 isAuditable={ isAuditable } />
 
-            <div>
-                <button onClick={ back } className='pt-button pt-breadcrumb'>
-                    Back
-                </button>
-                <button onClick={ onSaveAndNext } className='pt-button pt-intent-primary pt-breadcrumb'>
-                    Save & Next
-                </button>
-            </div>
+            <Button onClick={ back }
+                    className='pt-breadcrumb'>
+                Back
+            </Button>
+            <Button onClick={ onSaveAndNext }
+                    intent={ Intent.PRIMARY }
+                    className='pt-breadcrumb'>
+                Save & Next
+            </Button>
         </div>
     );
 };

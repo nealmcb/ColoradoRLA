@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import { Button, Card, Intent } from '@blueprintjs/core';
+
 import RoundContainer from './RoundContainer';
 
 import fetchReport from 'corla/action/dos/fetchReport';
@@ -12,9 +14,9 @@ interface RiskLimitInfoProps {
 
 const RiskLimitInfo = ({ riskLimit }: RiskLimitInfoProps) => {
     return (
-        <div className='pt-card'>
+        <Card>
             <strong>Target Risk Limit: </strong> { riskLimit * 100 } %
-        </div>
+        </Card>
     );
 };
 
@@ -24,9 +26,9 @@ interface SeedInfoProps {
 
 const SeedInfo = ({ seed }: SeedInfoProps) => {
     return (
-        <div className='pt-card'>
+        <Card>
             <strong>Seed: </strong> { seed }
-        </div>
+        </Card>
     );
 };
 
@@ -72,38 +74,35 @@ const Main = (props: MainProps) => {
 
     if (dosState.asm === 'DOS_AUDIT_COMPLETE') {
         return (
-            <div className='sos-notifications pt-card'>
+            <Card className='sos-notifications'>
                 { auditDefinition }
-                <div className='pt-card'>
-                <div className='pt-ui-text-large'>Congratulations! The audit is complete.</div>
-                </div>
-                <div className='pt-card'>
+                <Card>
+                    <div className='pt-ui-text-large'>Congratulations! The audit is complete.</div>
+                </Card>
+                <Card>
                     <div className='pt-ui-text-large'>Download final audit report.</div>
-                    <button
-                        className='pt-button pt-intent-primary'
-                        onClick={ fetchReport }>
+                    <Button intent={ Intent.PRIMARY }
+                            onClick={ fetchReport }>
                         Audit Report
-                    </button>
-                </div>
-            </div>
+                    </Button>
+                </Card>
+            </Card>
         );
     }
 
     return (
-        <div className='sos-notifications pt-card'>
+        <Card className='sos-notifications'>
             { auditDefinition }
             <RoundContainer />
-            <div className='pt-card'>
+            <Card>
                 <div className='pt-ui-text-large'>Download intermediate reports</div>
-                <button
-                    className='pt-button pt-intent-primary'
-                    disabled={ !canRenderReport }
-                    onClick={ fetchReport }>
+                <Button intent={ Intent.PRIMARY }
+                        disabled={ !canRenderReport }
+                        onClick={ fetchReport }>
                     Audit Report
-                </button>
-            </div>
-
-        </div>
+                </Button>
+            </Card>
+        </Card>
     );
 };
 
