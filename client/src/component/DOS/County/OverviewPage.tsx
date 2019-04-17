@@ -4,12 +4,9 @@ import { Link } from 'react-router-dom';
 
 import * as _ from 'lodash';
 
+import DOSLayout from 'corla/component/DOSLayout';
 import counties from 'corla/data/counties';
-
 import { formatCountyASMState } from 'corla/format';
-
-import Nav from '../Nav';
-
 
 const Breadcrumb = () => (
     <ul className='pt-breadcrumbs'>
@@ -97,14 +94,13 @@ interface PageProps {
 const CountyOverviewPage = (props: PageProps) => {
     const { countyStatus } = props;
 
-    return (
+    const main =
         <div>
-            <Nav />
             <Breadcrumb />
             <CountyTable countyStatus={ countyStatus } />
-        </div>
-    );
-};
+        </div>;
 
+    return <DOSLayout main={ main } />;
+};
 
 export default CountyOverviewPage;

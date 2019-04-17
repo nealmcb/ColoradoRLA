@@ -6,11 +6,9 @@ import { Card } from '@blueprintjs/core';
 
 import { Link } from 'react-router-dom';
 
+import DOSLayout from 'corla/component/DOSLayout';
 import { endpoint } from 'corla/config';
-
 import counties from 'corla/data/counties';
-
-import Nav from '../Nav';
 
 interface BreadcrumbProps {
     contest: Contest;
@@ -86,9 +84,8 @@ const ContestDetailPage = (props: PageProps) => {
 
     const county = counties[contest.countyId];
 
-    return (
+    const main =
         <div>
-            <Nav />
             <Breadcrumb contest={ contest } />
             <Card>
                 <h2>Contest Report</h2>
@@ -118,8 +115,9 @@ const ContestDetailPage = (props: PageProps) => {
                 </table>
             </Card>
             <ContestChoices contest={ contest } />
-        </div>
-    );
+        </div>;
+
+    return <DOSLayout main={ main } />;
 };
 
 export default ContestDetailPage;

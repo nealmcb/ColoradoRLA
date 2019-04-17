@@ -21,6 +21,13 @@ import NavMenu from './NavMenu';
 import resetDatabase from 'corla/action/dos/resetDatabase';
 import logout from 'corla/action/logout';
 
+/**
+ * Whether or not to show the reset button.
+ */
+function showResetButton(path: string) {
+    return path === '/sos' && config.debug;
+}
+
 const MenuButton = () =>
     <Button icon='menu' minimal />;
 
@@ -60,13 +67,6 @@ const ResetDatabaseButton = ({ reset }: ResetButtonProps) => (
 );
 
 export default function withNav(Menu: React.ComponentClass, path: string) {
-    const resetSection = path === '/sos' && config.debug
-                       ? <div>
-                            <ResetDatabaseButton reset={ resetDatabase } />
-                            <Divider />
-                        </div>
-                       : <div />;
-
     return () => (
         <Navbar className='l-nav'>
             <NavbarGroup align={ Alignment.LEFT }>
@@ -76,7 +76,8 @@ export default function withNav(Menu: React.ComponentClass, path: string) {
                 <Heading />
             </NavbarGroup>
             <NavbarGroup align={ Alignment.RIGHT }>
-                { resetSection }
+                { showResetButton(path) && <ResetDatabaseButton reset={ resetDatabase } /> }
+                { showResetButton(path) && <Divider /> }
                 <HomeButton path={ path } />
                 <Divider />
                 <LogoutButton logout={ logout }/>

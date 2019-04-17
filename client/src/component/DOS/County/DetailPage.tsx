@@ -4,11 +4,9 @@ import * as _ from 'lodash';
 
 import { Card } from '@blueprintjs/core';
 
-import { formatCountyASMState } from 'corla/format';
-
+import DOSLayout from 'corla/component/DOSLayout';
 import FileDownloadButtons from 'corla/component/FileDownloadButtons';
-
-import Nav from '../Nav';
+import { formatCountyASMState } from 'corla/format';
 
 interface BreadcrumbProps {
     county: CountyInfo;
@@ -142,15 +140,14 @@ interface PageProps {
 const CountyDetailPage = (props: PageProps) => {
     const { county, status } = props;
 
-    return (
+    const main =
         <div>
-            <Nav />
             <Breadcrumb county={ county } />
             <h3>{ county.name } Name</h3>
             <CountyDetails county={ county } status={ status } />
-        </div>
-    );
-};
+        </div>;
 
+    return <DOSLayout main={ main } />;
+};
 
 export default CountyDetailPage;

@@ -4,10 +4,9 @@ import * as _ from 'lodash';
 
 import { Button, Card, Intent } from '@blueprintjs/core';
 
-import Nav from '../Nav';
+import DOSLayout from 'corla/component/DOSLayout';
 
 import SelectContestsForm from './SelectContestsForm';
-
 
 const Breadcrumb = () => (
     <ul className='pt-breadcrumbs'>
@@ -34,9 +33,8 @@ interface WaitingPageProps {
 }
 
 const WaitingForContestsPage = ({ back }: WaitingPageProps) => {
-    return (
+    const main =
         <div>
-            <Nav />
             <Breadcrumb />
             <Card>
                 Waiting for counties to upload contest data.
@@ -50,8 +48,9 @@ const WaitingForContestsPage = ({ back }: WaitingPageProps) => {
                     className='pt-breadcrumb'>
                 Save & Next
             </Button>
-        </div>
-    );
+        </div>;
+
+    return <DOSLayout main={ main } />;
 };
 
 interface PageProps {
@@ -86,9 +85,8 @@ const SelectContestsPage = (props: PageProps) => {
         nextPage();
     };
 
-    return (
+    const main =
         <div>
-            <Nav />
             <Breadcrumb />
             <SelectContestsForm forms={ forms }
                                 contests={ contests }
@@ -104,9 +102,9 @@ const SelectContestsPage = (props: PageProps) => {
                     className='pt-breadcrumb'>
                 Save & Next
             </Button>
-        </div>
-    );
-};
+        </div>;
 
+    return <DOSLayout main={ main } />;
+};
 
 export default SelectContestsPage;

@@ -5,8 +5,7 @@ import * as _ from 'lodash';
 import { Breadcrumb, Button, Card, Intent, MenuItem } from '@blueprintjs/core';
 import { Select } from '@blueprintjs/labs';
 
-import Nav from '../Nav';
-
+import DOSLayout from 'corla/component/DOSLayout';
 import counties from 'corla/data/counties';
 
 import { findBestMatch } from 'string-similarity';
@@ -182,12 +181,13 @@ class StandardizeContestsPage extends React.Component<PageProps> {
             forward,
         } = this.props;
 
+        let main = null;
+
         if (areContestsLoaded) {
             this.formData = {};
 
-            return (
+            main =
                 <div>
-                    <Nav />
                     <Breadcrumbs />
                     <h2>Standardize Contest Names</h2>
                     <Card>
@@ -213,12 +213,10 @@ class StandardizeContestsPage extends React.Component<PageProps> {
                             className='pt-button pt-intent-primary pt-breadcrumb'>
                         Save & Next
                     </button>
-                </div>
-            );
+                </div>;
         } else {
-            return (
+            main =
                 <div>
-                    <Nav />
                     <Breadcrumbs />
                     <h2>Standardize Contest Names</h2>
                     <Card>
@@ -233,9 +231,10 @@ class StandardizeContestsPage extends React.Component<PageProps> {
                             className='pt-breadcrumb'>
                         Save & Next
                     </Button>
-                </div>
-            );
+                </div>;
         }
+
+        return <DOSLayout main={ main } />;
     }
 
     private updateFormData(msg: UpdateFormMessage) {

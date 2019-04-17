@@ -4,10 +4,8 @@ import { Link } from 'react-router-dom';
 
 import * as _ from 'lodash';
 
+import DOSLayout from 'corla/component/DOSLayout';
 import counties from 'corla/data/counties';
-
-import Nav from '../Nav';
-
 
 const Breadcrumb = () => (
     <ul className='pt-breadcrumbs'>
@@ -89,14 +87,13 @@ const ContestOverviewPage = (props: PageProps) => {
         return <div />;
     }
 
-    return (
+    const main =
         <div>
-            <Nav />
             <Breadcrumb />
             <ContestTable contests={ contests } />
-        </div>
-    );
-};
+        </div>;
 
+    return <DOSLayout main={ main } />;
+};
 
 export default ContestOverviewPage;

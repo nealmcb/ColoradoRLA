@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { Card } from '@blueprintjs/core';
 
-import Nav from '../Nav';
+import DOSLayout from 'corla/component/DOSLayout';
 
 import ElectionDateForm from './ElectionDateForm';
 import ElectionTypeForm from './ElectionTypeForm';
@@ -85,9 +85,8 @@ const AuditPage = (props: PageProps) => {
 
     const disableButton = !isFormValid;
 
-    return (
+    const main =
         <div>
-            <Nav />
             <Breadcrumb />
 
             <h2>Administer an Audit</h2>
@@ -127,8 +126,9 @@ const AuditPage = (props: PageProps) => {
               <SaveButton disabled={ disableButton }
                           nextPage={ nextPage } />
             </div>
-        </div>
-    );
+        </div>;
+
+    return <DOSLayout main={ main } />;
 };
 
 export default AuditPage;

@@ -2,12 +2,10 @@ import * as React from 'react';
 
 import * as _ from 'lodash';
 
-import Nav from '../Nav';
-
 import { Card } from '@blueprintjs/core';
 
+import DOSLayout from 'corla/component/DOSLayout';
 import counties from 'corla/data/counties';
-
 import { formatLocalDate } from 'corla/date';
 
 const Breadcrumb = () => (
@@ -101,9 +99,8 @@ const AuditReview = (props: AuditReviewProps) => {
 
     const disableLaunchButton = !dosState.seed;
 
-    return (
+    const main =
         <div>
-            <Nav />
             <Breadcrumb />
             <h2>Audit</h2>
             <h3>Audit Definition Review</h3>
@@ -153,8 +150,9 @@ const AuditReview = (props: AuditReviewProps) => {
                     Launch Audit
                 </button>
             </div>
-        </div>
-    );
+        </div>;
+
+    return <DOSLayout main={ main } />;
 };
 
 export default AuditReview;

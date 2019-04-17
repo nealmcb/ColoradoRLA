@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { Card } from '@blueprintjs/core';
 
-import Nav from '../Nav';
+import DOSLayout from 'corla/component/DOSLayout';
 
 import SeedForm from './SeedForm';
 
@@ -51,9 +51,8 @@ class AuditSeedPage extends React.Component<PageProps> {
     }
 
     public render() {
-        return (
+        const main =
             <div>
-                <Nav />
                 <Breadcrumb />
                 <Card>
                     <h3>Audit Definition - Enter Random Seed</h3>
@@ -78,8 +77,9 @@ class AuditSeedPage extends React.Component<PageProps> {
                         Save & Next
                     </button>
                 </div>
-            </div>
-        );
+            </div>;
+
+        return <DOSLayout main={ main } />;
     }
 
     private onSaveAndNext = () => {
