@@ -1,14 +1,12 @@
 import * as React from 'react';
 
-import CountyNav from '../Nav';
-
-import SignInForm from './SignInForm';
-
 import { Button, Card, Intent } from '@blueprintjs/core';
 
 import auditBoardSignIn from 'corla/action/county/auditBoardSignIn';
-
+import CountyLayout from 'corla/component/CountyLayout';
 import isValidAuditBoard from 'corla/selector/county/isValidAuditBoard';
+
+import SignInForm from './SignInForm';
 
 interface PageProps {
     auditBoardIndex: number;
@@ -50,43 +48,41 @@ class AuditBoardSignInPage extends React.Component<PageProps, PageState> {
 
         const disableButton = !isValidAuditBoard(this.state.form);
 
-        return (
-            <div className='l-wrapper'>
-                <CountyNav />
-                <div className='l-main'>
-                    <div>
-                        <h2>Audit Board { auditBoardIndex + 1 }</h2>
-                        <Card>
-                            <span className='pt-ui-text-large'>
-                                Enter the full names and party affiliations of each
-                                member of the { countyName } County Audit Board
-                                { ' ' + (auditBoardIndex + 1) } who will be
-                                conducting this audit today.
-                             </span>
-                        </Card>
-                    </div>
-                    <SignInForm
-                        elector={ this.state.form[0] }
-                        onFirstNameChange={ this.onFirstNameChange(0) }
-                        onLastNameChange={ this.onLastNameChange(0) }
-                        onPartyChange={ this.onPartyChange(0) }
-                        onTextConfirm={ this.onTextConfirm }
-                    />
-                    <SignInForm
-                        elector={ this.state.form[1] }
-                        onFirstNameChange={ this.onFirstNameChange(1) }
-                        onLastNameChange={ this.onLastNameChange(1) }
-                        onPartyChange={ this.onPartyChange(1) }
-                        onTextConfirm={ this.onTextConfirm }
-                    />
-                    <Button disabled={ disableButton }
-                            intent={ Intent.PRIMARY }
-                            onClick={ submit }>
-                        Sign In
-                    </Button>
+        const main =
+            <div>
+                <div>
+                    <h2>Audit Board { auditBoardIndex + 1 }</h2>
+                    <Card>
+                        <span className='pt-ui-text-large'>
+                            Enter the full names and party affiliations of each
+                            member of the { countyName } County Audit Board
+                            { ' ' + (auditBoardIndex + 1) } who will be
+                            conducting this audit today.
+                         </span>
+                    </Card>
                 </div>
-            </div>
-        );
+                <SignInForm
+                    elector={ this.state.form[0] }
+                    onFirstNameChange={ this.onFirstNameChange(0) }
+                    onLastNameChange={ this.onLastNameChange(0) }
+                    onPartyChange={ this.onPartyChange(0) }
+                    onTextConfirm={ this.onTextConfirm }
+                />
+                <SignInForm
+                    elector={ this.state.form[1] }
+                    onFirstNameChange={ this.onFirstNameChange(1) }
+                    onLastNameChange={ this.onLastNameChange(1) }
+                    onPartyChange={ this.onPartyChange(1) }
+                    onTextConfirm={ this.onTextConfirm }
+                />
+                <Button disabled={ disableButton }
+                        intent={ Intent.PRIMARY }
+                        onClick={ submit }>
+                    Sign In
+                </Button>
+            </div>;
+
+        return <CountyLayout main={ main } />;
     }
 
     private onTextConfirm = () => {

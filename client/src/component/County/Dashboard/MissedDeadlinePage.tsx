@@ -1,20 +1,16 @@
-import * as React from 'react';
-
 import * as _ from 'lodash';
+
+import * as React from 'react';
+import { Link } from 'react-router-dom';
 
 import { Card } from '@blueprintjs/core';
 
-import { Link } from 'react-router-dom';
-
-import CountyNav from '../Nav';
-
+import CountyLayout from 'corla/component/CountyLayout';
 import * as config from 'corla/config';
 
-
 const MissedDeadlinePage = () => {
-    return (
-        <div className='county-root'>
-            <CountyNav />
+    const main =
+        <div>
             <h2>Upload Deadline Missed</h2>
             <div>
                 <Card>
@@ -23,9 +19,9 @@ const MissedDeadlinePage = () => {
                     <strong>{ config.helpEmail }</strong> or <strong>{ config.helpTel }</strong> for assistance.
                 </Card>
             </div>
-        </div>
-    );
-};
+        </div>;
 
+    return <CountyLayout main={ main } />;
+};
 
 export default MissedDeadlinePage;

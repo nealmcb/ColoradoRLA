@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import CountyNav from '../Nav';
+import CountyLayout from 'corla/component/CountyLayout';
 
 import CountyAuditWizardContainer from './Wizard/Container';
 
@@ -11,13 +11,10 @@ interface Props {
 const CountyAuditPage = (props: Props) => {
     const { reviewingBallotId } = props;
 
-    return (
-        <div>
-            <CountyNav />
-            <CountyAuditWizardContainer reviewingBallotId={ reviewingBallotId } />
-        </div>
-    );
-};
+    const main =
+        <CountyAuditWizardContainer reviewingBallotId={ reviewingBallotId } />;
 
+    return <CountyLayout main={ main } />;
+};
 
 export default CountyAuditPage;

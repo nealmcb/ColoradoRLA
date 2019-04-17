@@ -224,7 +224,7 @@ const ReviewStage = (props: ReviewStageProps) => {
                     </div>
                 </div>
 
-                <div className='col-layout row1'>
+                <div className='col-layout'>
                     <div className='col1'>
                         <AuditInstructions countyState={ countyState } currentBallot={ currentBallot } />
                     </div>
@@ -258,6 +258,5 @@ const ReviewStage = (props: ReviewStageProps) => {
         </div>
     );
 };
-
 
 export default ReviewStage;

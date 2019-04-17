@@ -4,17 +4,13 @@ import { Redirect } from 'react-router-dom';
 
 import { Card } from '@blueprintjs/core';
 
-import CountyNav from 'corla/component/County/Nav';
-
+import finishAudit from 'corla/action/county/finishAudit';
+import CountyLayout from 'corla/component/CountyLayout';
+import { formatLocalDate } from 'corla/date';
+import * as format from 'corla/format';
 import notice from 'corla/notice';
 
 import SignOffFormContainer from './SignOffFormContainer';
-
-import finishAudit from 'corla/action/county/finishAudit';
-
-import { formatLocalDate } from 'corla/date';
-import * as format from 'corla/format';
-
 
 interface PreviousRoundProps {
     roundNumber: number;
@@ -22,10 +18,8 @@ interface PreviousRoundProps {
 
 const PreviousRoundSignedOff = (props: PreviousRoundProps) => {
     const { roundNumber } = props;
-
-    return (
+    const main =
         <div>
-            <CountyNav />
             <h3>End of round { roundNumber }</h3>
             <Card>
                <h3>
@@ -35,15 +29,15 @@ const PreviousRoundSignedOff = (props: PreviousRoundProps) => {
                   of State to begin the next round.
                </h3>
             </Card>
-        </div>
-    );
+        </div>;
+
+    return <CountyLayout main={ main } />;
 };
 
 const LastRoundComplete = () => {
-    return (
+    const main =
         <div>
-            <CountyNav />
-            <h3> End of All Audit Rounds</h3>
+            <h3>End of All Audit Rounds</h3>
             <Card>
                 <h3>All audit rounds are complete. Please use the form below to
                 certify that the county has completed the audit.</h3>
@@ -53,8 +47,9 @@ const LastRoundComplete = () => {
                     Submit
                 </button>
             </Card>
-        </div>
-    );
+        </div>;
+
+    return <CountyLayout main={ main } />;
 };
 
 interface PageProps {
@@ -90,9 +85,8 @@ const EndOfRoundPage = (props: PageProps) => {
     const electionDate = formatLocalDate(election.date);
     const electionType = format.electionType(election.type);
 
-    return (
+    const main =
         <div>
-            <CountyNav />
             <h3>Audit board { auditBoardIndex + 1 }: Sign off on round { roundNumber }</h3>
             <Card>
               <h3>
@@ -142,8 +136,9 @@ const EndOfRoundPage = (props: PageProps) => {
                 </ul>
                 <SignOffFormContainer auditBoardIndex={ auditBoardIndex } />
             </Card>
-        </div>
-    );
+        </div>;
+
+    return <CountyLayout main={ main } />;
 };
 
 export default EndOfRoundPage;

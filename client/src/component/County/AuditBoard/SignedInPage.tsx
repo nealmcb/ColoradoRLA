@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { Button, Card, Intent } from '@blueprintjs/core';
 
-import CountyNav from '../Nav';
+import CountyLayout from 'corla/component/CountyLayout';
 
 import auditBoardSignOut from 'corla/action/county/auditBoardSignOut';
 
@@ -27,56 +27,53 @@ const SignedInPage = (props: PageProps) => {
 
     const startOrContinueText = hasAuditedAnyBallot ? 'Continue Audit' : 'Start Audit';
 
-    return (
-        <div className='l-wrapper'>
-            <CountyNav />
-            <div className='l-main l-main-fill'>
-                <div>
-                    <h2>Audit Board { auditBoardIndex + 1 }</h2>
-                    <Card>
-                        <h5>The Audit Board members below are signed in.
-                        To sign the Audit Board out, click the "Sign Out" button below.</h5>
-                    </Card>
-                </div>
+    const main =
+        <div>
+            <div>
+                <h2>Audit Board { auditBoardIndex + 1 }</h2>
                 <Card>
-                    <h4>Board Member 1:</h4>
-                    <div>
-                        Name: { members[0].firstName } { members[0].lastName }
-                    </div>
-                    <div>
-                        Political party: { members[0].party }
-                    </div>
+                    <h5>The Audit Board members below are signed in.
+                    To sign the Audit Board out, click the "Sign Out" button below.</h5>
                 </Card>
-                <Card>
-                    <h4>Board Member 2:</h4>
-                    <div>
-                        Name: { members[1].firstName } { members[1].lastName }
-                    </div>
-                    <div>
-                        Political party: { members[1].party }
-                    </div>
-                </Card>
-                <div>
-                    <Button className='pt-breadcrumb'
-                            disabled={ true }
-                            intent={ Intent.PRIMARY }>
-                        Submit
-                    </Button>
-                    <Button className='pt-breadcrumb'
-                            intent={ Intent.PRIMARY }
-                            onClick={ () => auditBoardSignOut(auditBoardIndex) }>
-                        Sign Out
-                    </Button>
-                    <Button className='pt-breadcrumb'
-                            intent={ Intent.PRIMARY }
-                            onClick={ auditBoardStartOrContinue }>
-                        { startOrContinueText }
-                    </Button>
-                </div>
             </div>
-        </div>
-    );
-};
+            <Card>
+                <h4>Board Member 1:</h4>
+                <div>
+                    Name: { members[0].firstName } { members[0].lastName }
+                </div>
+                <div>
+                    Political party: { members[0].party }
+                </div>
+            </Card>
+            <Card>
+                <h4>Board Member 2:</h4>
+                <div>
+                    Name: { members[1].firstName } { members[1].lastName }
+                </div>
+                <div>
+                    Political party: { members[1].party }
+                </div>
+            </Card>
+            <div>
+                <Button className='pt-breadcrumb'
+                        disabled={ true }
+                        intent={ Intent.PRIMARY }>
+                    Submit
+                </Button>
+                <Button className='pt-breadcrumb'
+                        intent={ Intent.PRIMARY }
+                        onClick={ () => auditBoardSignOut(auditBoardIndex) }>
+                    Sign Out
+                </Button>
+                <Button className='pt-breadcrumb'
+                        intent={ Intent.PRIMARY }
+                        onClick={ auditBoardStartOrContinue }>
+                    { startOrContinueText }
+                </Button>
+            </div>
+        </div>;
 
+    return <CountyLayout main={ main } />;
+};
 
 export default SignedInPage;
