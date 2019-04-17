@@ -1,22 +1,99 @@
+/*
+ * Colorado RLA CSS
+ *
+ * Uses SMACSS to organize rules: http://smacss.com/book/
+ *
+ * If you see `pt-`-prefixed rules, those are overrides for BlueprintJS.
+ */
+
+/*
+ * @dark-gray5: #394B59
+ *
+ * @light-gray1: #CED9E0
+ * @light-gray5: #F5F8FA
+ */
+
+/*
+ * Base styles
+ */
+
 body {
-    font-family: "Arial", sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
 
-div{
-  white-space: pre-wrap;
+h1, h2, h3, h4, h5, h6 {
+  color: #394B59;
 }
 
-.login-page {
-    margin: 0 auto;
-    width: 50%;
+/*
+ * Text utilities
+ */
+
+.text-right {
+  text-align: right;
 }
 
-.county-root {
+/*
+ * Layout
+ */
+
+.l-wrapper {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  align-items: center;
+}
+
+.l-nav {
+  width: 100%;
+}
+
+.l-main {
+  flex-grow: 1;
+  padding: 15px;
+}
+
+.l-main.l-main-fill {
+  width: 100%;
+}
+
+.l-footer {
+  border-top: 1px solid #CED9E0;
+  padding: 15px;
+}
+
+/*
+ * Modules
+ */
+
+/* BlueprintJS callout overrides */
+
+.rla-callout-default {
+  background-color: #F5F8FA;
+}
+
+/* Login */
+
+.login {
+  max-width: 500px;
+}
+
+.login h1 {
+  margin-bottom: 30px;
+}
+
+/* License */
+
+.license {
+  max-width: 500px;
+}
+
+.rla-county-root {
     display: flex;
     flex-direction: column;
 }
 
-.county-root .info {
+.rla-county-root .info {
     /*
      * Removed by CDOS - causes "Contest Info" to drop below "County Info"
      * rather than to the right of "County Info".
@@ -26,11 +103,11 @@ div{
     justify-content: space-evenly;
 }
 
-.county-root .contest-info {
+.rla-county-root .contest-info {
     flex: 1;
 }
 
-.county-root .county-info {
+.rla-county-root .county-info {
     flex: 1;
 }
 
@@ -69,19 +146,13 @@ div{
     font-size: 16px !important;
 }
 
-h2 {
-    padding: 10px;
-}
-
-h3 {
-    padding: 10px;
-}
-
+/*
 .pt-ui-text-large {
   line-height: 1.25;
   font-size: 16px;
   font-weight: bold;
 }
+*/
 
 .rla-page {
     margin: 0 auto;
@@ -119,17 +190,6 @@ td.rla-county-contest-info {
 
 th.rla-county-contest-info {
     width: 50%;
-}
-
-.rla-license-footer {
-    width: 100%;
-}
-
-.rla-license {
-    margin: 0 auto;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    width: 500px;
 }
 
 .rla-file-upload-progress {
