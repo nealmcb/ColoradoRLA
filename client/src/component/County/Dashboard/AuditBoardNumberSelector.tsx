@@ -57,7 +57,7 @@ class AuditBoardNumberSelector
             <Card>
                 <form onSubmit={ this.handleSubmit }>
                     <div className='pt-form-group'>
-                        <label className='pt-label pt-ui-text-large'
+                        <label className='pt-label pt-ui-text-large font-weight-bold'
                                htmlFor='number-of-audit-boards-input'>
                             How many audit boards will be auditing?
                         </label>

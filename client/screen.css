@@ -29,6 +29,10 @@ h1, h2, h3, h4, h5, h6 {
  * Text utilities
  */
 
+.font-weight-bold {
+  font-weight: bold;
+}
+
 .text-right {
   text-align: right;
 }
@@ -124,14 +128,6 @@ h1, h2, h3, h4, h5, h6 {
 .pt-html-table {
     font-size: 16px !important;
 }
-
-/*
-.pt-ui-text-large {
-  line-height: 1.25;
-  font-size: 16px;
-  font-weight: bold;
-}
-*/
 
 .rla-page {
     margin: 0 auto;

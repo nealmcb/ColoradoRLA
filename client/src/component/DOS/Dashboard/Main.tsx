@@ -77,10 +77,10 @@ const Main = (props: MainProps) => {
             <Card className='sos-notifications'>
                 { auditDefinition }
                 <Card>
-                    <div className='pt-ui-text-large'>Congratulations! The audit is complete.</div>
+                    <div className='pt-ui-text-large font-weight-bold'>Congratulations! The audit is complete.</div>
                 </Card>
                 <Card>
-                    <div className='pt-ui-text-large'>Download final audit report.</div>
+                    <div className='pt-ui-text-large font-weight-bold'>Download final audit report.</div>
                     <Button intent={ Intent.PRIMARY }
                             onClick={ fetchReport }>
                         Audit Report
@@ -95,7 +95,7 @@ const Main = (props: MainProps) => {
             { auditDefinition }
             <RoundContainer />
             <Card>
-                <div className='pt-ui-text-large'>Download intermediate reports</div>
+                <div className='pt-ui-text-large font-weight-bold'>Download intermediate reports</div>
                 <Button intent={ Intent.PRIMARY }
                         disabled={ !canRenderReport }
                         onClick={ fetchReport }>

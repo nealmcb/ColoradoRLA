@@ -54,10 +54,10 @@ const BallotManifestForm = (props: FormProps) => {
         <Card>
             <Card>
                 <div style={{ width: '600px' }}>
-                    <FormGroup label={ <span className='pt-ui-text-large'>Ballot Manifest</span> }>
+                    <FormGroup label={ <span className='pt-ui-text-large font-weight-bold'>Ballot Manifest</span> }>
                         <FileInput fill={ true } text={ fileName } onInputChange={ onFileChange } />
                     </FormGroup>
-                    <FormGroup label={ <span className='pt-ui-text-large'>SHA-256 hash for Ballot Manifest</span> }>
+                    <FormGroup label={ <span className='pt-ui-text-large font-weight-bold'>SHA-256 hash for Ballot Manifest</span> }>
                         <EditableText className='pt-input'
                                       minWidth={ 600 }
                                       maxLength={ 64 }

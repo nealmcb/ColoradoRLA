@@ -53,7 +53,7 @@ class AuditBoardSignInPage extends React.Component<PageProps, PageState> {
                 <div>
                     <h2>Audit Board { auditBoardIndex + 1 }</h2>
                     <Card>
-                        <span className='pt-ui-text-large'>
+                        <span className='pt-ui-text-large font-weight-bold'>
                             Enter the full names and party affiliations of each
                             member of the { countyName } County Audit Board
                             { ' ' + (auditBoardIndex + 1) } who will be

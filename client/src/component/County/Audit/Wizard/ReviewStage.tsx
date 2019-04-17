@@ -42,23 +42,23 @@ const AuditInstructions = (props: InstructionsProps) => {
                 <ul className='current-ballot-stats'>
                     <li>
                         Storage bin:
-                        <span className='pt-ui-text pt-ui-text-large'>{ storageBin }</span>
+                        <span className='pt-ui-text-large font-weight-bold'>{ storageBin }</span>
                     </li>
                     <li>
                         Tabulator:
-                        <span className='pt-ui-text pt-ui-text-large'>{ currentBallot.scannerId }</span>
+                        <span className='pt-ui-text-large font-weight-bold'>{ currentBallot.scannerId }</span>
                     </li>
                     <li>
                         Batch:
-                        <span className='pt-ui-text pt-ui-text-large'>{ currentBallot.batchId }</span>
+                        <span className='pt-ui-text-large font-weight-bold'>{ currentBallot.batchId }</span>
                     </li>
                     <li>
                         Ballot position:
-                        <span className='pt-ui-text pt-ui-text-large'>{ currentBallot.recordId }</span>
+                        <span className='pt-ui-text-large font-weight-bold'>{ currentBallot.recordId }</span>
                     </li>
                     <li>
                         Ballot type:
-                        <span className='pt-ui-text pt-ui-text-large'>{ currentBallot.ballotType }</span>
+                        <span className='pt-ui-text-large font-weight-bold'>{ currentBallot.ballotType }</span>
                     </li>
                 </ul>
             </div>

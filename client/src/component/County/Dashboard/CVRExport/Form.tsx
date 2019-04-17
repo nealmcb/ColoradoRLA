@@ -54,10 +54,10 @@ const CVRExportForm = (props: FormProps) => {
         <Card>
             <Card>
                 <div style={{ width: '600px' }}>
-                    <FormGroup label={ <span className='pt-ui-text-large'>CVR Export</span> }>
+                    <FormGroup label={ <span className='pt-ui-text-large font-weight-bold'>CVR Export</span> }>
                         <FileInput fill={ true } text={ fileName } onInputChange={ onFileChange } />
                     </FormGroup>
-                    <FormGroup label={ <span className='pt-ui-text-large'>SHA-256 hash for CVR Export</span> }>
+                    <FormGroup label={ <span className='pt-ui-text-large font-weight-bold'>SHA-256 hash for CVR Export</span> }>
                         <EditableText className='pt-input'
                                       minWidth={ 600 }
                                       maxLength={ 64 }

@@ -69,7 +69,7 @@ const AuditBoardButtons = (props: AuditBoardButtonsProps) => {
 
     return (
         <Card>
-            <h5 className='pt-ui-text-large'>Sign in to an audit board</h5>
+            <h5 className='pt-ui-text-large font-weight-bold'>Sign in to an audit board</h5>
             <div className='pt-button-group pt-large corla-spaced'>{ buttons }</div>
         </Card>
     );
@@ -134,7 +134,7 @@ const Main = (props: MainProps) => {
                 { fileUploadContainer }
                 { fileDownloadButtons }
                 <Card>
-                    <div className='pt-ui-text-large'>{ reportType } audit report (CSV)</div>
+                    <div className='pt-ui-text-large font-weight-bold'>{ reportType } audit report (CSV)</div>
                     <button
                         className='pt-button  pt-intent-primary'
                         disabled={ !canRenderReport }
@@ -143,7 +143,7 @@ const Main = (props: MainProps) => {
                     </button>
                 </Card>
                 <Card>
-                    <div className='pt-ui-text-large'>List of ballots to audit (CSV)</div>
+                    <div className='pt-ui-text-large font-weight-bold'>List of ballots to audit (CSV)</div>
                     <button
                         className='pt-button pt-intent-primary'
                         disabled={ typeof countyState.auditBoardCount !== 'number' }
