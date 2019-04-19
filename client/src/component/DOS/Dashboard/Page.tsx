@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import * as _ from 'lodash';
 
-import { Tooltip } from '@blueprintjs/core';
+import { Tab, Tabs, Tooltip } from '@blueprintjs/core';
 
 import DOSLayout from 'corla/component/DOSLayout';
 
@@ -22,15 +22,21 @@ const DOSDashboardPage = (props: PageProps) => {
     const { auditStarted, contests, countyStatus, dosState, seed } = props;
 
     const main =
-        <div className='sos-home'>
+        <div>
             <MainContainer />
-            <div className='sos-info'>
-                <CountyUpdates auditStarted={ auditStarted }
-                               countyStatus={ countyStatus } />
-                <ContestUpdates contests={ contests }
-                                seed={ seed }
-                                dosState={ dosState } />
-            </div>
+            <Tabs className='mt-default'
+                  id='updates'
+                  large>
+                <Tab id='county-updates'
+                     title='County Updates'
+                     panel={ <CountyUpdates auditStarted={ auditStarted }
+                                            countyStatus={ countyStatus } /> } />
+                <Tab id='contest-updates'
+                     title='Contest Updates'
+                     panel={ <ContestUpdates contests={ contests }
+                                             seed={ seed }
+                                             dosState={ dosState } /> } />
+            </Tabs>
         </div>;
 
     return <DOSLayout main={ main } />;

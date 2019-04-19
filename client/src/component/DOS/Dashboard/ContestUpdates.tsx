@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import * as _ from 'lodash';
 
-import { Button, Card, EditableText, Icon, Intent, Tooltip } from '@blueprintjs/core';
+import { Button, Icon, InputGroup, Intent, Tooltip } from '@blueprintjs/core';
 
 import setHandCount from 'corla/action/dos/setHandCount';
 
@@ -17,7 +17,6 @@ const RemainingToAuditHeader = () => {
 
     return (
         <Tooltip
-            className='pt-tooltip-indicator'
             content={ content }>
             <div>
                 <span>Remaining to Audit </span>
@@ -132,58 +131,61 @@ class ContestUpdates extends React.Component<UpdatesProps, UpdatesState> {
 
             return (
                 <tr key={ contest.id }>
-                    <td>
-                        <HandCountButton contest={ contest } />
-                    </td>
-                    <td>{ name }</td>
-                    <td>{ discrepancyCount }</td>
-                    <td>{ estimatedBallotsToAudit }</td>
+                    <td className={ this.sortClassForCol('name') }>{ name }</td>
+                    <td className={ this.sortClassForCol('discrepancyCount') }>{ discrepancyCount }</td>
+                    <td className={ this.sortClassForCol('estimatedBallotsToAudit') }>{ estimatedBallotsToAudit }</td>
+                    <td><HandCountButton contest={ contest } /></td>
                 </tr>
             );
         });
 
         return (
-            <Card>
-                <h3>Contest Updates</h3>
-                <Card>
-                    <strong>Filter by County or Contest Name:</strong>
-                    <span> </span>
-                    <EditableText
-                        className='pt-input'
-                        minWidth={ 200 }
-                        value={ this.state.filter }
-                        onChange={ this.onFilterChange } />
-                </Card>
-                <Card>
-                    <table className='pt-html-table'>
-                        <thead>
-                            <tr>
-                                <th>Hand Count</th>
-                                <th onClick={ this.sortBy('name') }>
-                                    Name
-                                    <span> </span>
-                                    { this.sortIconForCol('name') }
-                                </th>
-                                <th onClick={ this.sortBy('discrepancyCount') }>
-                                    Discrepancies
-                                    <span> </span>
-                                    { this.sortIconForCol('discrepancyCount') }
-                                </th>
-                                <th onClick={ this.sortBy('estimatedBallotsToAudit') }>
-                                    Est. Ballots to Audit
-                                    <span> </span>
-                                   { this.sortIconForCol('estimatedBallotsToAudit') }
-                                </th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            { ...contestStatuses }
-                        </tbody>
-                    </table>
-                </Card>
-            </Card>
+            <div>
+                <div className='state-dashboard-updates-preface'>
+                    <div className='state-dashboard-updates-preface-description'>
+                        <h3>Contest Updates</h3>
+                        <p>
+                            Click on a column name to sort by that column’s data. To
+                            reverse sort, click on the column name again.
+                        </p>
+                    </div>
+                    <div className='state-dashboard-updates-preface-search'>
+                        <InputGroup leftIcon='search'
+                                    type='search'
+                                    placeholder='Filter by contest name'
+                                    value={ this.state.filter }
+                                    onChange={ this.onFilterChange } />
+                    </div>
+                </div>
+                <table className='pt-html-table pt-html-table-striped rla-table mt-default'>
+                    <thead>
+                        <tr>
+                            <th className={ this.sortClassForCol('name') }
+                                onClick={ this.sortBy('name') }>
+                                Name
+                                { this.sortIconForCol('name') }
+                            </th>
+                            <th className={ this.sortClassForCol('discrepancyCount') }
+                                onClick={ this.sortBy('discrepancyCount') }>
+                                Discrepancies
+                                { this.sortIconForCol('discrepancyCount') }
+                            </th>
+                            <th className={ this.sortClassForCol('estimatedBallotsToAudit') }
+                                onClick={ this.sortBy('estimatedBallotsToAudit') }>
+                                Est. Ballots to Audit
+                               { this.sortIconForCol('estimatedBallotsToAudit') }
+                            </th>
+                            <th>Hand Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>{ ...contestStatuses }</tbody>
+                </table>
+            </div>
         );
+    }
+
+    private sortClassForCol = (col: string) => {
+        return col === this.state.sort ? 'is-sorted' : '';
     }
 
     private sortIconForCol = (col: string) => {
@@ -192,12 +194,12 @@ class ContestUpdates extends React.Component<UpdatesProps, UpdatesState> {
         }
 
         return this.state.order === 'asc'
-             ? <Icon icon='sort-asc' />
-             : <Icon icon='sort-desc' />;
+             ? <Icon icon='symbol-triangle-down' />
+             : <Icon icon='symbol-triangle-up' />;
     }
 
-    private onFilterChange = (filter: string) => {
-        this.setState({ filter });
+    private onFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({ filter: e.target.value });
     }
 
     private sortBy(sort: SortKey) {

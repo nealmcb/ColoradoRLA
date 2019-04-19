@@ -7,10 +7,12 @@
  */
 
 /*
- * @dark-gray5: #394B59
- *
  * @light-gray1: #CED9E0
  * @light-gray5: #F5F8FA
+ *
+ * @gray1: #5C7080
+ *
+ * @dark-gray5: #394B59
  */
 
 /*
@@ -54,21 +56,52 @@ h1, h2, h3, h4, h5, h6 {
 
 .l-main {
   flex-grow: 1;
-  padding: 15px;
+
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 20px;
+  padding-right: 15px;
+  padding-left: 15px;
+  width: 100%;
 }
 
-.l-main.l-main-fill {
-  width: 100%;
+@media (min-width: 1020px) {
+  .l-main {
+    max-width: 1020px;
+  }
 }
 
 .l-footer {
   border-top: 1px solid #CED9E0;
+  margin-top: 20px;
   padding: 15px;
 }
 
 /*
  * Modules
  */
+
+/* Custom table */
+
+.pt-html-table.rla-table {
+  width: 100%;
+}
+
+.pt-html-table.rla-table thead th {
+  color: #5C7080;
+  font-size: 10px;
+  text-transform: uppercase;
+  line-height: 16px;
+}
+
+.pt-html-table.rla-table thead th.is-sorted,
+.pt-html-table.rla-table tbody td.is-sorted {
+  font-weight: bold;
+}
+
+.pt-html-table.pt-html-table-striped.rla-table tbody tr:nth-child(odd) td {
+  background-color: #F5F8FA;
+}
 
 /* BlueprintJS callout overrides */
 
@@ -80,6 +113,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .login {
   max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .login h1 {
@@ -92,26 +127,72 @@ h1, h2, h3, h4, h5, h6 {
   max-width: 500px;
 }
 
-/* DOS Dashboard */
+/** DOS Dashboard **/
 
-.sos-home {
-    display: flex;
-    flex-direction: column;
+/* Audit definition */
+
+.state-dashboard-audit-definition {
+  display: flex;
+  padding: 20px;
 }
 
-.sos-home .sos-info {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
+.state-dashboard-audit-definition dl {
+  color: #5C7080;
+  margin: 0 0 0 auto;
 }
 
-.sos-home .sos-info .contest-info {
-    flex: 1;
+.state-dashboard-audit-definition dt {
+  font-weight: bold;
+  display: inline-block;
+  margin-left: 20px;
 }
 
-.sos-home .sos-info .county-info {
-    flex: 1;
+.state-dashboard-audit-definition dt:after {
+  content: ":";
 }
+
+.state-dashboard-audit-definition dd {
+  display: inline-block;
+  margin-left: 5px;
+}
+
+/* Round information */
+
+.state-dashboard-round {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background-color: #F5F8FA;
+  padding: 20px;
+}
+
+.state-dashboard-round-summary {
+  color: #5C7080;
+}
+
+/* Update tables */
+
+.state-dashboard-updates-preface {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.state-dashboard-updates-preface-description{
+  color: #5C7080;
+  flex-basis: 50%;
+}
+
+.state-dashboard-updates-preface-search {
+  flex-basis: 250px;
+}
+
+.state-dashboard-updates .pt-html-table {
+  margin-top: 20px;
+}
+
+/*******/
 
 .audit {
     margin-top: 10px;
@@ -393,7 +474,7 @@ th.rla-county-contest-info {
 .current-ballot-stats .current-ballot-stats-value {
   font-size: 16px;
   font-weight: bold;
-  margin-left: 0.25rem;
+  margin-left: 5px;
 }
 
 .main-col-instructions {
