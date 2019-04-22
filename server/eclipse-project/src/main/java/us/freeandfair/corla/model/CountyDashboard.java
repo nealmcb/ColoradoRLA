@@ -584,8 +584,23 @@ public class CountyDashboard implements PersistentEntity {
     } else {
 
       final Round round = currentRound();
+      final List<Round> rounds = rounds();
 
-      result = round.ballotSequence().size() - round.actualCount();
+      // the deduplication process, that sets ballotSequence, does not consider
+      // previous rounds, unfortunately.
+      // Since cvrs are not audited twice, those
+      // from previous rounds are not considered "remaining"
+      final Set<Long> previouslyAudited = rounds.stream()
+        .filter(r -> r.number() < round.number())
+        .map(r -> r.ballotSequence())
+        .flatMap(List::stream)
+        .collect(Collectors.toSet());
+      final List<Long> cvrIds = round.ballotSequence().stream()
+        .filter(cvrId -> !previouslyAudited.contains(cvrId))
+        .collect(Collectors.toList());
+
+
+      result = cvrIds.size() - round.actualCount();
 
       LOGGER.debug(String.format("[ballotsRemainingInCurrentRound:"
                                  + " index=%d, result=%d,"

@@ -25,6 +25,7 @@ import spark.Request;
 import spark.Response;
 
 import us.freeandfair.corla.Main;
+import us.freeandfair.corla.controller.ComparisonAuditController;
 import us.freeandfair.corla.model.County;
 import us.freeandfair.corla.model.CountyDashboard;
 import us.freeandfair.corla.model.Round;
@@ -100,7 +101,10 @@ public class SetAuditBoardCount extends AbstractCountyDashboardEndpoint {
         badDataContents(response, "round not started");
       }
 
-      final Integer ballotCount = round.expectedCount();
+
+      final Integer ballotCount = ComparisonAuditController
+        .cvrIdsToAudit(countyDashboard, round.number())
+        .size();
 
       if (ballotCount == null) {
         Main.LOGGER.error(String.format(
