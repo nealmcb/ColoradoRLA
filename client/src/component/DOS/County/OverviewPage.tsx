@@ -1,25 +1,18 @@
 import * as React from 'react';
-
 import { Link } from 'react-router-dom';
 
 import * as _ from 'lodash';
+
+import { Breadcrumb } from '@blueprintjs/core';
 
 import DOSLayout from 'corla/component/DOSLayout';
 import counties from 'corla/data/counties';
 import { formatCountyASMState } from 'corla/format';
 
-const Breadcrumb = () => (
+const Breadcrumbs = () => (
     <ul className='pt-breadcrumbs'>
-        <li>
-            <a className='pt-breadcrumb' href='/sos'>
-                SoS
-            </a>
-        </li>
-        <li>
-            <a className='pt-breadcrumb pt-breadcrumb-current'>
-                Counties
-            </a>
-        </li>
+        <li><Breadcrumb text={ <Link to='/sos'>SoS</Link> } /></li>
+        <li><Breadcrumb className='pt-breadcrumb-current' text='Counties' /></li>
     </ul>
 );
 
@@ -70,7 +63,7 @@ const CountyTable = (props: TableProps) => {
     });
 
     return (
-        <table className='pt-html-table pt-html-table-bordered pt-small'>
+        <table className='pt-html-table pt-html-table-striped rla-table mt-default'>
             <thead>
                 <tr>
                     <th>Name</th>
@@ -80,9 +73,7 @@ const CountyTable = (props: TableProps) => {
                     <th>Non-audited Contest Discrepancies</th>
                 </tr>
             </thead>
-            <tbody>
-                { countyRows }
-            </tbody>
+            <tbody>{ countyRows }</tbody>
         </table>
     );
 };
@@ -96,7 +87,7 @@ const CountyOverviewPage = (props: PageProps) => {
 
     const main =
         <div>
-            <Breadcrumb />
+            <Breadcrumbs />
             <CountyTable countyStatus={ countyStatus } />
         </div>;
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, Card, Intent } from '@blueprintjs/core';
+import { Button, Intent } from '@blueprintjs/core';
 
 import downloadFile from 'corla/action/downloadFile';
 
@@ -13,7 +13,7 @@ const UploadedFile = ({ description, file }: UploadedFileProps) => {
     const onClick = () => downloadFile(file.id);
 
     return (
-        <Card>
+        <div className='mt-default'>
             <h4>{ description }</h4>
             <div><strong>File name:</strong> "{ file.name }"</div>
             <div><strong>SHA-256 hash:</strong> { file.hash }</div>
@@ -21,7 +21,7 @@ const UploadedFile = ({ description, file }: UploadedFileProps) => {
                     onClick={ onClick }>
                 Download
             </Button>
-        </Card>
+        </div>
     );
 };
 
@@ -43,10 +43,10 @@ const FileDownloadButtons = (props: DownloadButtonsProps) => {
     }
 
     return (
-        <Card>
+        <div className='mt-default'>
             <UploadedFile description='Ballot Manifest' file={ ballotManifest } />
             <UploadedFile description='CVR Export' file={ cvrExport } />
-        </Card>
+        </div>
     );
 };
 

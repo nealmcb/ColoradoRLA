@@ -40,6 +40,20 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /*
+ * Layout utilities
+ */
+
+/* margin-top, default spacing */
+.mt-default {
+  margin-top: 20px;
+}
+
+/* margin-bottom, default spacing */
+.mb-default {
+  margin-bottom: 20px;
+}
+
+/*
  * Layout
  */
 
@@ -196,10 +210,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .audit {
     margin-top: 10px;
-}
-
-.pt-breadcrumb {
-    margin: 10px;
 }
 
 .pt-button-group.corla-spaced > .pt-button:not(:last-child) {

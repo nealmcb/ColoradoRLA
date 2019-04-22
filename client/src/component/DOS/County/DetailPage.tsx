@@ -1,8 +1,9 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 
 import * as _ from 'lodash';
 
-import { Card } from '@blueprintjs/core';
+import { Breadcrumb } from '@blueprintjs/core';
 
 import DOSLayout from 'corla/component/DOSLayout';
 import FileDownloadButtons from 'corla/component/FileDownloadButtons';
@@ -12,23 +13,11 @@ interface BreadcrumbProps {
     county: CountyInfo;
 }
 
-const Breadcrumb = ({ county }: BreadcrumbProps) => (
+const Breadcrumbs = ({ county }: BreadcrumbProps) => (
     <ul className='pt-breadcrumbs'>
-        <li>
-            <a className='pt-breadcrumb pt-disabled' href='/sos'>
-                SoS
-            </a>
-        </li>
-        <li>
-            <a className='pt-breadcrumb' href='/sos/county'>
-                County
-            </a>
-        </li>
-        <li>
-            <a className='pt-breadcrumb pt-breadcrumb-current'>
-                { county.name }
-            </a>
-        </li>
+        <li><Breadcrumb text={ <Link to='/sos'>SoS</Link> } /></li>
+        <li><Breadcrumb text={ <Link to='/sos/county'>County</Link> } /></li>
+        <li><Breadcrumb className='pt-breadcrumb-current' text={ county.name } /></li>
     </ul>
 );
 
@@ -46,9 +35,9 @@ const AuditBoard = (props: AuditBoardProps) => {
     const { auditBoard } = props;
 
     return (
-        <Card>
+        <div className='mt-default'>
             <h3>Audit Board</h3>
-            <table className='pt-html-table pt-html-table-bordered pt-small'>
+            <table className='pt-html-table pt-html-table-striped rla-table'>
                 <tbody>
                     <tr>
                         <td><strong>Board Member #1:</strong></td>
@@ -64,16 +53,16 @@ const AuditBoard = (props: AuditBoardProps) => {
                     </tr>
                 </tbody>
             </table>
-        </Card>
+        </div>
     );
 };
 
 const NoAuditBoard = () => {
     return (
-        <Card>
+        <div className='mt-default'>
             <h3>Audit Board</h3>
-            <Card>Audit Board not signed in.</Card>
-        </Card>
+            <p>Audit Board not signed in.</p>
+        </div>
     );
 };
 
@@ -98,37 +87,30 @@ const CountyDetails = (props: DetailsProps) => {
                             : <NoAuditBoard />;
 
     return (
-        <Card>
-            <Card>
-                <h3>County Info</h3>
-                <table className='pt-html-table pt-html-table-bordered pt-small'>
-                    <tbody>
-                        <tr>
-                            <td><strong>Name:</strong></td>
-                            <td>{ county.name }</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Status:</strong></td>
-                            <td>{ countyState }</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Ballots Submitted:</strong></td>
-                            <td>{ submitted }</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Audited Contest Discrepancies:</strong></td>
-                            <td>{ auditedCount }</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Non-audited Contest Discrepancies:</strong></td>
-                            <td>{ unauditedCount }</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </Card>
+        <div>
+            <table className='pt-html-table pt-html-table-striped rla-table'>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th>Audited discrepancies</th>
+                        <th>Non-audited discrepancies</th>
+                        <th>Submitted</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{ county.name }</td>
+                        <td>{ countyState }</td>
+                        <td>{ auditedCount }</td>
+                        <td>{ unauditedCount }</td>
+                        <td>{ submitted }</td>
+                    </tr>
+                </tbody>
+            </table>
             <FileDownloadButtons status={ status } />
             { auditBoardSection }
-        </Card>
+        </div>
     );
 };
 
@@ -142,8 +124,8 @@ const CountyDetailPage = (props: PageProps) => {
 
     const main =
         <div>
-            <Breadcrumb county={ county } />
-            <h3>{ county.name } Name</h3>
+            <Breadcrumbs county={ county } />
+            <h3 className='mt-default'>{ county.name } County Info</h3>
             <CountyDetails county={ county } status={ status } />
         </div>;
 
