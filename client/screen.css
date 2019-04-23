@@ -98,6 +98,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Custom table */
 
 .pt-html-table.rla-table {
+  table-layout: fixed;
   width: 100%;
 }
 
@@ -108,9 +109,29 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 16px;
 }
 
+.pt-html-table.rla-table tbody td.ellipsize {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.pt-html-table.rla-table tbody td.ellipsize:hover {
+  overflow: visible;
+}
+
+.pt-html-table.rla-table tbody td.ellipsize:hover > * {
+  background-color: inherit;
+  position: relative;
+  z-index: 1;
+}
+
 .pt-html-table.rla-table thead th.is-sorted,
 .pt-html-table.rla-table tbody td.is-sorted {
   font-weight: bold;
+}
+
+.pt-html-table.pt-html-table-striped.rla-table tbody tr:nth-child(even) td {
+  background-color: white;
 }
 
 .pt-html-table.pt-html-table-striped.rla-table tbody tr:nth-child(odd) td {

@@ -131,7 +131,7 @@ class ContestUpdates extends React.Component<UpdatesProps, UpdatesState> {
 
             return (
                 <tr key={ contest.id }>
-                    <td className={ this.sortClassForCol('name') }>{ name }</td>
+                    <td className={ this.sortClassForCol('name') + ' ellipsize' }><span>{ name }</span></td>
                     <td className={ this.sortClassForCol('discrepancyCount') }>{ discrepancyCount }</td>
                     <td className={ this.sortClassForCol('estimatedBallotsToAudit') }>{ estimatedBallotsToAudit }</td>
                     <td><HandCountButton contest={ contest } /></td>

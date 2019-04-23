@@ -46,7 +46,9 @@ interface UpdatesState {
 }
 
 const linkToCountyDetail = (row: RowData) => {
-    return <Link to={ `/sos/county/${row.id}` }>{ row.name }</Link>;
+    return (
+        <Link to={ `/sos/county/${row.id}` }>{ row.name }</Link>
+    );
 };
 
 class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
@@ -136,8 +138,8 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
         const countyStatusRows = _.map(filteredCountyData, (row: RowData) => {
             return (
                 <tr key={ row.id }>
-                    <td className={ this.sortClassForCol('name') }>{ linkToCountyDetail(row) }</td>
-                    <td className={ this.sortClassForCol('status') }>{ row.status }</td>
+                    <td className={ this.sortClassForCol('name')  + ' ellipsize' }>{ linkToCountyDetail(row) }</td>
+                    <td className={ this.sortClassForCol('status') + ' ellipsize' }><span>{ row.status }</span></td>
                     <td className={ this.sortClassForCol('auditedDisc') }>{ row.auditedDisc }</td>
                     <td className={ this.sortClassForCol('oppDisc') }>{ row.oppDisc }</td>
                     <td className={ this.sortClassForCol('disagreements') }>{ row.disagreements }</td>
@@ -174,7 +176,8 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
                                 { this.sortIconForCol('name') }
                             </th>
                             <th className={ this.sortClassForCol('status') }
-                                onClick={ this.sortBy('status') }>
+                                onClick={ this.sortBy('status') }
+                                style={ { width: '25%' } }>
                                 Status
                                 { this.sortIconForCol('status') }
                             </th>
