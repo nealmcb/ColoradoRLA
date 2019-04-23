@@ -179,7 +179,7 @@ public class CVRToAuditList extends AbstractEndpoint {
 
       if (round.isPresent()) {
         cvr_to_audit_list =
-            ComparisonAuditController.ballotsToAudit(cdb, round.getAsInt(), audited);
+          ComparisonAuditController.ballotsToAudit(cdb, round.getAsInt(), audited);
         response_list.addAll(BallotSelection.toResponseList(cvr_to_audit_list));
         response_list.sort(null);
 
@@ -188,7 +188,9 @@ public class CVRToAuditList extends AbstractEndpoint {
         final List<Map<String, Integer>> bsa =
           roundObject.ballotSequenceAssignment();
 
-        if (bsa != null) {
+        // The ballot sequence assignments won't line up if audited cvrs are filtered out.
+        // The audited param is never false and should probably be removed.
+        if (bsa != null && audited) {
           // Walk the sequence assignments getting the audit boards' index and
           // count values. Use that information to set the audit board index for
           // each response row.
@@ -200,8 +202,15 @@ public class CVRToAuditList extends AbstractEndpoint {
 
             for (int j = boardIndex; j < boardIndex + boardCount; j++) {
               // TODO: Will this always agree with the round information?
-              final CVRToAuditResponse row = response_list.get(j);
-              row.setAuditBoardIndex(i);
+              try {
+                final CVRToAuditResponse row = response_list.get(j);
+                row.setAuditBoardIndex(i);
+              } catch (final IndexOutOfBoundsException e) {
+                // the ballotsToAudit may or may not equal the total number of
+                // ballots selected for this round because of duplicates. The
+                // ballotSequenceAssignment is set from round.expectedCount and
+                // duplicates are taken out of ballotsToAudit after that is set.
+              }
             }
           }
         }

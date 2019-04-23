@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.OptionalInt;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -117,36 +118,55 @@ public final class ComparisonAuditController {
    *         any ballot cards, for instance when the round number is invalid,
    *         the returned list is empty.
    */
-  // TODO: includeAudited is unused
   public static List<CastVoteRecord>
       ballotsToAudit(final CountyDashboard countyDashboard,
                      final int roundNumber,
-                     final boolean includeAudited) {
+                     final boolean audited) {
+
+    final List<Long> cvrIds = cvrIdsToAudit(countyDashboard, roundNumber);
+
+    LOGGER.debug(String.format("Ballot cards to audit: "
+                               + "[round=%d, n = %d,"
+                               + " cvrIds = %s]",
+                               roundNumber, cvrIds.size(),
+                               cvrIds));
+
+    final List<CastVoteRecord> cvrs = CastVoteRecordQueries.get(cvrIds);
+
+    return cvrs.stream()
+      .map(c -> {c.setAuditFlag(audited(countyDashboard, c)); return c;})
+      // remove if audited is false and auditFlag is true
+      .filter(c -> audited || !c.auditFlag())
+      .collect(Collectors.toList());
+  }
+
+  /**
+   * access the list of cvrIds stored on the round, and subtract those from previous
+   * rounds
+   **/
+  public static List<Long> cvrIdsToAudit(final CountyDashboard countyDashboard,
+                                         final int roundNumber) {
     final Round round;
+    final List<Round> rounds;
 
     try {
       // roundNumber is 1-based
       round = countyDashboard.rounds().get(roundNumber - 1);
+      rounds = countyDashboard.rounds();
     } catch (IndexOutOfBoundsException e) {
-      return new ArrayList<CastVoteRecord>();
+      return new ArrayList<Long>();
     }
 
-    LOGGER.info(String.format("Ballot cards to audit: "
-                              + "[round=%s, round.ballotSequence.size() = %d,"
-                              + " round.ballotSequence() = %s]",
-                              round, round.ballotSequence().size(),
-                              round.ballotSequence()));
-
-    // we already have the list of CVR IDs for the round
-    final List<CastVoteRecord> cvrs = CastVoteRecordQueries.get(round.ballotSequence());
-
-    // PERF: Is this a hotspot? We can figure out the audit flag using a single
-    // query.
-    for (final CastVoteRecord cvr : cvrs) {
-      cvr.setAuditFlag(audited(countyDashboard, cvr));
-    }
-
-    return cvrs;
+    // we can't filter on "auditFlag" because we need to fetch these for the
+    // final review page.
+    final Set<Long> previouslyAudited = rounds.stream()
+      .filter(r -> r.number() < roundNumber)
+      .map(r -> r.ballotSequence())
+      .flatMap(List::stream)
+      .collect(Collectors.toSet());
+    return round.ballotSequence().stream()
+      .filter(cvrId -> !previouslyAudited.contains(cvrId))
+      .collect(Collectors.toList());
   }
 
   /**
