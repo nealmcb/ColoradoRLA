@@ -164,7 +164,7 @@ h1, h2, h3, h4, h5, h6 {
   max-width: 500px;
 }
 
-/** DOS Dashboard **/
+/*** State Dashboard ***/
 
 /*
  * Indicators
@@ -193,7 +193,11 @@ h1, h2, h3, h4, h5, h6 {
   margin-left: 5px;
 }
 
-/* Audit definition */
+/*
+ * Audit definition display
+ *
+ * Shown after the audit is defined on the state dashboard.
+ */
 
 .state-dashboard-audit-definition {
   display: flex;
@@ -220,7 +224,11 @@ h1, h2, h3, h4, h5, h6 {
   margin-left: 5px;
 }
 
-/* Round information */
+/*
+ * Round information
+ *
+ * Styles the information for the current round on the state dashboard page.
+ */
 
 .state-dashboard-round {
   display: flex;
@@ -235,7 +243,11 @@ h1, h2, h3, h4, h5, h6 {
   color: #5C7080;
 }
 
-/* Update tables */
+/*
+ * Update tables
+ *
+ * Styles the content surrounding the county and contest update tables.
+ */
 
 .state-dashboard-updates-preface {
   display: flex;
