@@ -13,6 +13,8 @@
  * @gray1: #5C7080
  *
  * @dark-gray5: #394B59
+ *
+ * @green3: #0F9960
  */
 
 /*
@@ -163,6 +165,33 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /** DOS Dashboard **/
+
+/*
+ * Indicators
+ *
+ * Usage: Apply .status-indicator-group to the parent element. Inside that
+ * group, place a .status-indicator and a .status-indicator-text next to each
+ * other, along with the appropriate modifier class on the .status-indicator to
+ * give it a color. Placing the indicator on either side of the text will result
+ * in the appropriate spacing.
+ */
+
+.status-indicator {
+  display: inline-block;
+  flex-shrink: 0;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+}
+
+.status-indicator.status-indicator-in-progress {
+  background-color: #0F9960;
+}
+
+.status-indicator-group .status-indicator-text + .status-indicator,
+.status-indicator-group .status-indicator + .status-indicator-text {
+  margin-left: 5px;
+}
 
 /* Audit definition */
 

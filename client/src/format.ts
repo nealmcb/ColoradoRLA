@@ -74,3 +74,26 @@ export function formatCountyAndBoardASMState(
     default: return formatCountyASMState(county);
     }
 }
+
+/*
+ * Return the CSS class to display an indicator for a given status.
+ */
+export function formatCountyAndBoardASMStateIndicator(
+    county: County.ASMState,
+    board: AuditBoardASMState,
+): string {
+    switch (county) {
+    case 'COUNTY_AUDIT_UNDERWAY': {
+        switch (board) {
+        case 'ROUND_IN_PROGRESS':
+            return 'status-indicator-in-progress';
+        case 'ROUND_IN_PROGRESS_NO_AUDIT_BOARD':
+            return 'status-indicator-in-progress';
+        default:
+            return '';
+        }
+    }
+    default:
+        return '';
+    }
+}

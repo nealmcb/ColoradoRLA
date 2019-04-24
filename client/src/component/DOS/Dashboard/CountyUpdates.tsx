@@ -7,7 +7,10 @@ import { Icon, InputGroup } from '@blueprintjs/core';
 
 import counties from 'corla/data/counties';
 
-import { formatCountyAndBoardASMState } from 'corla/format';
+import {
+    formatCountyAndBoardASMState,
+    formatCountyAndBoardASMStateIndicator,
+} from 'corla/format';
 
 import { naturalSortBy } from 'corla/util';
 
@@ -26,6 +29,7 @@ interface RowData {
     id: number;
     name: string;
     status: string;
+    statusIndicator: string;
     submitted: number | string;
     auditedDisc: number | string;
     oppDisc: number | string;
@@ -65,6 +69,7 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
             const county = counties[c.id];
             const missedDeadline = c.asmState === 'DEADLINE_MISSED';
             const status = formatCountyAndBoardASMState(c.asmState, c.auditBoardASMState);
+            const statusIndicator = formatCountyAndBoardASMStateIndicator(c.asmState, c.auditBoardASMState);
 
             if (!auditStarted || (auditStarted && missedDeadline)) {
                 return {
@@ -76,6 +81,7 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
                     remRound: '—',
                     remTotal: '—',
                     status,
+                    statusIndicator: '',
                     submitted: '—',
                 };
             }
@@ -97,6 +103,7 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
                 remRound: c.ballotsRemainingInRound,
                 remTotal: Math.max(0, c.estimatedBallotsToAudit),
                 status,
+                statusIndicator,
                 submitted: c.auditedBallotCount || 0,
             };
         });
@@ -139,7 +146,12 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
             return (
                 <tr key={ row.id }>
                     <td className={ this.sortClassForCol('name')  + ' ellipsize' }>{ linkToCountyDetail(row) }</td>
-                    <td className={ this.sortClassForCol('status') + ' ellipsize' }><span>{ row.status }</span></td>
+                    <td className={ this.sortClassForCol('status') + ' ellipsize' }>
+                        <div className='status-indicator-group'>
+                            { row.statusIndicator && <span className={ `status-indicator ${row.statusIndicator}` } /> }
+                            <span className='status-indicator-text'>{ row.status }</span>
+                        </div>
+                    </td>
                     <td className={ this.sortClassForCol('auditedDisc') }>{ row.auditedDisc }</td>
                     <td className={ this.sortClassForCol('oppDisc') }>{ row.oppDisc }</td>
                     <td className={ this.sortClassForCol('disagreements') }>{ row.disagreements }</td>
