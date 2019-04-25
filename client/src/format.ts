@@ -1,3 +1,25 @@
+
+/*
+ * Enumeration of possible states that can appear on the dashboard.
+ *
+ * TODO: Needs to ensure consistency with ASM state formatters, probably use a
+ * different approach.
+ */
+export const FORMATTED_STATES: string[] = [
+    'Audit underway',
+    'Audit complete',
+    'Ballot manifest and CVRs imported',
+    'Ballot manifest imported',
+    'Ballot manifest imported, importing CVRs',
+    'CVRs imported',
+    'File upload deadline missed',
+    'Importing CVRs',
+    'Not started',
+    'Round in progress',
+    'Waiting for round sign-off',
+    'Waiting for round start',
+];
+
 function capitalize(s: string) {
     if (!s) { return ''; }
 

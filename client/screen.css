@@ -108,7 +108,12 @@ h1, h2, h3, h4, h5, h6 {
   color: #5C7080;
   font-size: 10px;
   text-transform: uppercase;
-  line-height: 16px;
+  vertical-align: middle;
+}
+
+.pt-html-table.rla-table thead th .rla-table-sortable-wrapper {
+  display: inline-flex;
+  align-items: center;
 }
 
 .pt-html-table.rla-table tbody td.ellipsize {
@@ -176,11 +181,16 @@ h1, h2, h3, h4, h5, h6 {
  * in the appropriate spacing.
  */
 
+.status-indicator-group {
+  display: flex;
+  align-items: center;
+}
+
 .status-indicator {
   display: inline-block;
   flex-shrink: 0;
-  height: 12px;
-  width: 12px;
+  height: 8px;
+  width: 8px;
   border-radius: 50%;
 }
 
@@ -190,7 +200,44 @@ h1, h2, h3, h4, h5, h6 {
 
 .status-indicator-group .status-indicator-text + .status-indicator,
 .status-indicator-group .status-indicator + .status-indicator-text {
-  margin-left: 5px;
+  margin-left: 10px;
+}
+
+/*
+ * Status filter
+ */
+
+.status-filter-content .pt-popover-content {
+  padding: 15px;
+}
+
+.status-filter-content-actions {
+  display: flex;
+  margin-top: 20px;
+  justify-content: space-between;
+}
+
+.status-filter-content-actions button {
+  background-color: inherit;
+  border: none;
+  color: #5C7080;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* TODO: Remove when the .pt-control override elsewhere is made more specific. */
+.status-filter-content .pt-popover-content .pt-control {
+  padding-left: 26px;
+}
+
+.rla-table-sortable-wrapper .status-filter-wrapper {
+  margin-left: 10px;
+}
+
+.status-filter-target button {
+  background-color: #F5F8FA;
+  border: 1px solid #CED9E0;
+  padding: 0 3px;
 }
 
 /*
@@ -297,6 +344,7 @@ h1, h2, h3, h4, h5, h6 {
     width: -webkit-fit-content;
 }
 
+/* TODO: Remove when the .pt-control override elsewhere is made more specific. */
 .rla-radio-group .pt-control {
     padding-left: 26px;
 }
@@ -451,6 +499,7 @@ th.rla-county-contest-info {
 
 /* hacking my way around blueprint's custom checkbox styles */
 
+/* TODO: Make this override more specific. */
 .pt-control {
     padding: 0;
 }

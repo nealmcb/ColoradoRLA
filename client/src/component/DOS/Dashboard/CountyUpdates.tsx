@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom';
 
 import * as _ from 'lodash';
 
-import { Icon, InputGroup } from '@blueprintjs/core';
+import { Checkbox, Icon, InputGroup, Popover, Position } from '@blueprintjs/core';
 
 import counties from 'corla/data/counties';
 
 import {
     formatCountyAndBoardASMState,
     formatCountyAndBoardASMStateIndicator,
+    FORMATTED_STATES,
 } from 'corla/format';
 
 import { naturalSortBy } from 'corla/util';
@@ -44,7 +45,8 @@ interface UpdatesProps {
 }
 
 interface UpdatesState {
-    filter: string;
+    countyFilter: string;
+    statusFilter: { [key: string]: boolean };
     order: SortOrder;
     sort: SortKey;
 }
@@ -56,11 +58,26 @@ const linkToCountyDetail = (row: RowData) => {
 };
 
 class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
-    public state: UpdatesState = {
-        filter: '',
-        order: 'asc',
-        sort: 'name',
-    };
+    public constructor(props: UpdatesProps) {
+        super(props);
+
+        this.state = {
+            countyFilter: '',
+            order: 'asc',
+            sort: 'name',
+            statusFilter: _.zipObject(FORMATTED_STATES, _.times(_.size(FORMATTED_STATES), _.stubTrue)),
+        };
+
+        this.onCountyFilterChange = this.onCountyFilterChange.bind(this);
+        this.resetStatusFilter = this.resetStatusFilter.bind(this);
+        this.reverseOrder = this.reverseOrder.bind(this);
+        this.rowFilterName = this.rowFilterName.bind(this);
+        this.rowFilterStatus = this.rowFilterStatus.bind(this);
+        this.sortBy = this.sortBy.bind(this);
+        this.sortClassForCol = this.sortClassForCol.bind(this);
+        this.sortIconForCol = this.sortIconForCol.bind(this);
+        this.statusFilterPopover = this.statusFilterPopover.bind(this);
+    }
 
     public render() {
         const { auditStarted, countyStatus } = this.props;
@@ -134,13 +151,12 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
             _.reverse(sortedCountyData);
         }
 
-        const filterName = (row: RowData) => {
-            const name = row.name.toLowerCase();
-            const s = this.state.filter.toLowerCase();
 
-            return name.includes(s);
-        };
-        const filteredCountyData = _.filter(sortedCountyData, filterName);
+        const filteredCountyData = _
+            .chain(sortedCountyData)
+            .filter(this.rowFilterName)
+            .filter(this.rowFilterStatus)
+            .value();
 
         const countyStatusRows = _.map(filteredCountyData, (row: RowData) => {
             return (
@@ -175,8 +191,8 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
                         <InputGroup leftIcon='search'
                                     type='search'
                                     placeholder='Filter by county name'
-                                    value={ this.state.filter }
-                                    onChange={ this.onFilterChange } />
+                                    value={ this.state.countyFilter }
+                                    onChange={ this.onCountyFilterChange } />
                     </div>
                 </div>
                 <table className='pt-html-table pt-html-table-striped rla-table mt-default'>
@@ -184,39 +200,54 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
                         <tr>
                             <th className={ this.sortClassForCol('name') }
                                 onClick={ this.sortBy('name') }>
-                                County Name
-                                { this.sortIconForCol('name') }
+                                <div className='rla-table-sortable-wrapper'>
+                                    County Name
+                                    { this.sortIconForCol('name') }
+                                </div>
                             </th>
                             <th className={ this.sortClassForCol('status') }
                                 onClick={ this.sortBy('status') }
                                 style={ { width: '25%' } }>
-                                Status
-                                { this.sortIconForCol('status') }
+                                <div className='rla-table-sortable-wrapper'>
+                                    Status
+                                    { this.sortIconForCol('status') }
+                                    { this.statusFilterPopover() }
+                                </div>
                             </th>
                             <th className={ this.sortClassForCol('auditedDisc') }
                                 onClick={ this.sortBy('auditedDisc') }>
-                                Audited Discrepancies
-                                { this.sortIconForCol('auditedDisc') }
+                                <div className='rla-table-sortable-wrapper'>
+                                    Audited Discrepancies
+                                    { this.sortIconForCol('auditedDisc') }
+                                </div>
                             </th>
                             <th className={ this.sortClassForCol('oppDisc') }
                                 onClick={ this.sortBy('oppDisc') }>
-                                Non-audited Discrepancies
-                                { this.sortIconForCol('oppDisc') }
+                                <div className='rla-table-sortable-wrapper'>
+                                    Non-audited Discrepancies
+                                    { this.sortIconForCol('oppDisc') }
+                                </div>
                             </th>
                             <th className={ this.sortClassForCol('disagreements') }
                                 onClick={ this.sortBy('disagreements') }>
-                                Disagreements
-                                { this.sortIconForCol('disagreements') }
+                                <div className='rla-table-sortable-wrapper'>
+                                    Disagreements
+                                    { this.sortIconForCol('disagreements') }
+                                </div>
                             </th>
                             <th className={ this.sortClassForCol('submitted') }
                                 onClick={ this.sortBy('submitted') }>
-                                Submitted
-                                { this.sortIconForCol('submitted') }
+                                <div className='rla-table-sortable-wrapper'>
+                                    Submitted
+                                    { this.sortIconForCol('submitted') }
+                                </div>
                             </th>
                             <th className={ this.sortClassForCol('remRound') }
                                 onClick={ this.sortBy('remRound') }>
-                                Remaining in Round
-                                { this.sortIconForCol('remRound') }
+                                <div className='rla-table-sortable-wrapper'>
+                                    Remaining in Round
+                                    { this.sortIconForCol('remRound') }
+                                </div>
                             </th>
                         </tr>
                     </thead>
@@ -226,13 +257,28 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
         );
     }
 
-    private sortClassForCol = (col: string) => {
+    private resetStatusFilter(e: React.MouseEvent<HTMLButtonElement>) {
+        this.setState({ statusFilter: _.mapValues(this.state.statusFilter, _.stubTrue) });
+    }
+
+    private rowFilterName(row: RowData) {
+        const name = row.name.toLowerCase();
+        const s = this.state.countyFilter.toLowerCase();
+
+        return name.includes(s);
+    }
+
+    private rowFilterStatus(row: RowData) {
+        return !!_.get(this.state.statusFilter, row.status);
+    }
+
+    private sortClassForCol(col: string) {
         return col === this.state.sort ? 'is-sorted' : '';
     }
 
-    private sortIconForCol = (col: string) => {
+    private sortIconForCol(col: string) {
         if (col !== this.state.sort) {
-            return null;
+            return <Icon icon='double-caret-vertical' />;
         }
 
         return this.state.order === 'asc'
@@ -240,8 +286,42 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
              : <Icon icon='symbol-triangle-up' />;
     }
 
-    private onFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({ filter: e.target.value });
+    private statusFilterPopover() {
+        const createChangeHandler = (k: string) => {
+            return (e: React.ChangeEvent<HTMLInputElement>) => {
+                const newFilter = this.state.statusFilter;
+                newFilter[k] = e.target.checked;
+                this.setState({ statusFilter: newFilter });
+            };
+        };
+
+        // The click handler on the wrapper div catches propagating clicks and
+        // prevents them from bubbling up to the table header which would
+        // trigger re-sorting.
+        return (
+            <div className='status-filter-wrapper'
+                 onClick={ (e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation() }>
+                <Popover popoverClassName='status-filter-content'
+                         targetClassName='status-filter-target'
+                         position={ Position.BOTTOM }>
+                    <button title='Toggle status filter controls'><Icon icon='chevron-down' /></button>
+                    <div>
+                        { _.map(this.state.statusFilter, (v, k) => {
+                            return <Checkbox onChange={ createChangeHandler(k) }
+                                             key={ k }
+                                             checked={ v }>{ k }</Checkbox>;
+                        } ) }
+                        <div className='status-filter-content-actions'>
+                            <button onClick={ this.resetStatusFilter }>Reset</button>
+                        </div>
+                    </div>
+                </Popover>
+            </div>
+        );
+    }
+
+    private onCountyFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
+        this.setState({ countyFilter: e.target.value });
     }
 
     private sortBy(sort: SortKey) {

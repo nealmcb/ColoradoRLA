@@ -84,6 +84,13 @@ class ContestUpdates extends React.Component<UpdatesProps, UpdatesState> {
             order: 'asc',
             sort: 'name',
         };
+
+        this.onFilterChange = this.onFilterChange.bind(this);
+        this.reverseOrder = this.reverseOrder.bind(this);
+        this.rowFilterName = this.rowFilterName.bind(this);
+        this.sortBy = this.sortBy.bind(this);
+        this.sortClassForCol = this.sortClassForCol.bind(this);
+        this.sortIconForCol = this.sortIconForCol.bind(this);
     }
 
     public render() {
@@ -112,14 +119,7 @@ class ContestUpdates extends React.Component<UpdatesProps, UpdatesState> {
             _.reverse(sortedData);
         }
 
-        const filterName = (row: RowData) => {
-            const contestName = row.name.toLowerCase();
-            const s = this.state.filter.toLowerCase();
-
-            return contestName.includes(s);
-        };
-
-        const filteredData = _.filter(sortedData, filterName);
+        const filteredData = _.filter(sortedData, this.rowFilterName);
 
         const contestStatuses = _.map(filteredData, row => {
             const {
@@ -162,18 +162,24 @@ class ContestUpdates extends React.Component<UpdatesProps, UpdatesState> {
                         <tr>
                             <th className={ this.sortClassForCol('name') }
                                 onClick={ this.sortBy('name') }>
-                                Name
-                                { this.sortIconForCol('name') }
+                                <div className='rla-table-sortable-wrapper'>
+                                    Name
+                                    { this.sortIconForCol('name') }
+                                </div>
                             </th>
                             <th className={ this.sortClassForCol('discrepancyCount') }
                                 onClick={ this.sortBy('discrepancyCount') }>
-                                Discrepancies
-                                { this.sortIconForCol('discrepancyCount') }
+                                <div className='rla-table-sortable-wrapper'>
+                                    Discrepancies
+                                    { this.sortIconForCol('discrepancyCount') }
+                                </div>
                             </th>
                             <th className={ this.sortClassForCol('estimatedBallotsToAudit') }
                                 onClick={ this.sortBy('estimatedBallotsToAudit') }>
-                                Est. Ballots to Audit
-                               { this.sortIconForCol('estimatedBallotsToAudit') }
+                                <div className='rla-table-sortable-wrapper'>
+                                    Est. Ballots to Audit
+                                   { this.sortIconForCol('estimatedBallotsToAudit') }
+                                </div>
                             </th>
                             <th>Hand Count</th>
                         </tr>
@@ -184,13 +190,20 @@ class ContestUpdates extends React.Component<UpdatesProps, UpdatesState> {
         );
     }
 
-    private sortClassForCol = (col: string) => {
+    private rowFilterName(row: RowData) {
+        const contestName = row.name.toLowerCase();
+        const s = this.state.filter.toLowerCase();
+
+        return contestName.includes(s);
+    }
+
+    private sortClassForCol(col: string) {
         return col === this.state.sort ? 'is-sorted' : '';
     }
 
-    private sortIconForCol = (col: string) => {
+    private sortIconForCol(col: string) {
         if (col !== this.state.sort) {
-            return null;
+            return <Icon icon='double-caret-vertical' />;
         }
 
         return this.state.order === 'asc'
@@ -198,7 +211,7 @@ class ContestUpdates extends React.Component<UpdatesProps, UpdatesState> {
              : <Icon icon='symbol-triangle-up' />;
     }
 
-    private onFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    private onFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
         this.setState({ filter: e.target.value });
     }
 
@@ -217,6 +230,5 @@ class ContestUpdates extends React.Component<UpdatesProps, UpdatesState> {
         this.setState({ order: this.state.order === 'asc' ? 'desc' : 'asc' });
     }
 }
-
 
 export default ContestUpdates;
