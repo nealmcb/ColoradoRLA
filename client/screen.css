@@ -154,7 +154,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Login */
 
 .login {
-  max-width: 500px;
+  max-width: 550px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -166,7 +166,7 @@ h1, h2, h3, h4, h5, h6 {
 /* License */
 
 .license {
-  max-width: 500px;
+  max-width: 550px;
 }
 
 /*** State Dashboard ***/

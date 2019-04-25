@@ -6,7 +6,7 @@ import LoginFormContainer from './FormContainer';
 const LoginPage = () => {
     const main = (
         <div className='login'>
-            <h1>Colorado RLA Tool Log-In</h1>
+            <h1>Colorado RLA Software Login</h1>
             <LoginFormContainer />
         </div>
     );
