@@ -208,7 +208,24 @@ h1, h2, h3, h4, h5, h6 {
  */
 
 .status-filter-content .pt-popover-content {
+  min-width: 250px;
   padding: 15px;
+}
+
+.status-filter-content hr {
+  border-bottom: 2px solid #CED9E0;
+  margin: 15px -15px 0 -15px;
+}
+
+.status-filter-content-body {
+  margin-top: 20px;
+}
+
+.status-filter-content-header h1, .status-filter-content-header h2,
+.status-filter-content-header h3, .status-filter-content-header h4,
+.status-filter-content-header h5, .status-filter-content-header h6 {
+  color: #5C7080;
+  font-size: 16px;
 }
 
 .status-filter-content-actions {
@@ -219,10 +236,11 @@ h1, h2, h3, h4, h5, h6 {
 
 .status-filter-content-actions button {
   background-color: inherit;
-  border: none;
+  border: 2px solid #CED9E0;
   color: #5C7080;
   font-size: 16px;
   font-weight: bold;
+  padding: 10px;
 }
 
 /* TODO: Remove when the .pt-control override elsewhere is made more specific. */

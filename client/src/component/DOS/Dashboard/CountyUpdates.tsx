@@ -10,7 +10,6 @@ import counties from 'corla/data/counties';
 import {
     formatCountyAndBoardASMState,
     formatCountyAndBoardASMStateIndicator,
-    FORMATTED_STATES,
 } from 'corla/format';
 
 import { naturalSortBy } from 'corla/util';
@@ -46,7 +45,7 @@ interface UpdatesProps {
 
 interface UpdatesState {
     countyFilter: string;
-    statusFilter: { [key: string]: boolean };
+    statusFilters: { [key: string]: boolean };
     order: SortOrder;
     sort: SortKey;
 }
@@ -58,6 +57,26 @@ const linkToCountyDetail = (row: RowData) => {
 };
 
 class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
+    /*
+     * When we find out about new statuses, merge them into the state, shown by
+     * default.
+     */
+    public static getDerivedStateFromProps(props: UpdatesProps, state: UpdatesState) {
+        const uniqueStatuses = _.uniq(_.map(props.countyStatus, c => {
+            return formatCountyAndBoardASMState(c.asmState, c.auditBoardASMState);
+        }));
+
+        const newFilters = _.reduce(uniqueStatuses, (acc, v) => {
+            if (!_.has(acc, v)) {
+                acc[v] = true;
+            }
+
+            return acc;
+        }, state.statusFilters);
+
+        return { statusFilters: newFilters };
+    }
+
     public constructor(props: UpdatesProps) {
         super(props);
 
@@ -65,11 +84,13 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
             countyFilter: '',
             order: 'asc',
             sort: 'name',
-            statusFilter: _.zipObject(FORMATTED_STATES, _.times(_.size(FORMATTED_STATES), _.stubTrue)),
+            statusFilters: {},
         };
 
+        this.checkStatusFilters = this.checkStatusFilters.bind(this);
+        this.uncheckStatusFilters = this.uncheckStatusFilters.bind(this);
+
         this.onCountyFilterChange = this.onCountyFilterChange.bind(this);
-        this.resetStatusFilter = this.resetStatusFilter.bind(this);
         this.reverseOrder = this.reverseOrder.bind(this);
         this.rowFilterName = this.rowFilterName.bind(this);
         this.rowFilterStatus = this.rowFilterStatus.bind(this);
@@ -145,18 +166,17 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
             }
         };
 
-        const sortedCountyData = naturalSortBy(countyData, selector);
+        const filteredCountyData = _
+            .chain(countyData)
+            .filter(this.rowFilterName)
+            .filter(this.rowFilterStatus)
+            .value();
+
+        const sortedCountyData = naturalSortBy(filteredCountyData, selector);
 
         if (this.state.order === 'desc') {
             _.reverse(sortedCountyData);
         }
-
-
-        const filteredCountyData = _
-            .chain(sortedCountyData)
-            .filter(this.rowFilterName)
-            .filter(this.rowFilterStatus)
-            .value();
 
         const countyStatusRows = _.map(filteredCountyData, (row: RowData) => {
             return (
@@ -257,8 +277,12 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
         );
     }
 
-    private resetStatusFilter(e: React.MouseEvent<HTMLButtonElement>) {
-        this.setState({ statusFilter: _.mapValues(this.state.statusFilter, _.stubTrue) });
+    private checkStatusFilters(e: React.MouseEvent<HTMLButtonElement>) {
+        this.setState({ statusFilters: _.mapValues(this.state.statusFilters, _.stubTrue) });
+    }
+
+    private uncheckStatusFilters(e: React.MouseEvent<HTMLButtonElement>) {
+        this.setState({ statusFilters: _.mapValues(this.state.statusFilters, _.stubFalse) });
     }
 
     private rowFilterName(row: RowData) {
@@ -269,7 +293,7 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
     }
 
     private rowFilterStatus(row: RowData) {
-        return !!_.get(this.state.statusFilter, row.status);
+        return !!_.get(this.state.statusFilters, row.status);
     }
 
     private sortClassForCol(col: string) {
@@ -289,9 +313,9 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
     private statusFilterPopover() {
         const createChangeHandler = (k: string) => {
             return (e: React.ChangeEvent<HTMLInputElement>) => {
-                const newFilter = this.state.statusFilter;
-                newFilter[k] = e.target.checked;
-                this.setState({ statusFilter: newFilter });
+                const newFilters = this.state.statusFilters;
+                newFilters[k] = e.target.checked;
+                this.setState({ statusFilters: newFilters });
             };
         };
 
@@ -306,13 +330,20 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
                          position={ Position.BOTTOM }>
                     <button title='Toggle status filter controls'><Icon icon='chevron-down' /></button>
                     <div>
-                        { _.map(this.state.statusFilter, (v, k) => {
-                            return <Checkbox onChange={ createChangeHandler(k) }
-                                             key={ k }
-                                             checked={ v }>{ k }</Checkbox>;
-                        } ) }
+                        <div className='status-filter-content-header'>
+                            <h3>Filter by status</h3>
+                        </div>
+                        <hr />
+                        <div className='status-filter-content-body'>
+                            { _.map(this.state.statusFilters, (v, k) => {
+                                return <Checkbox onChange={ createChangeHandler(k) }
+                                                 key={ k }
+                                                 checked={ v }>{ k }</Checkbox>;
+                            } ) }
+                        </div>
                         <div className='status-filter-content-actions'>
-                            <button onClick={ this.resetStatusFilter }>Reset</button>
+                            <button onClick={ this.checkStatusFilters }>Check all</button>
+                            <button onClick={ this.uncheckStatusFilters }>Clear all</button>
                         </div>
                     </div>
                 </Popover>
