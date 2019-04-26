@@ -47,9 +47,10 @@ export default class PasswordForm extends React.Component<{}, FormState> {
                            type='password'
                            value={ password } />
                 </Label>
-                <Callout className='rla-callout-default text-right'>
+                <Callout className='rla-callout-default'>
                     <Button className='submit'
                             disabled={ disabled }
+                            fill
                             intent={ Intent.PRIMARY }
                             large
                             type='submit'>

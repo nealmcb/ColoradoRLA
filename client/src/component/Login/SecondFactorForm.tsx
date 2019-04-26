@@ -54,9 +54,10 @@ export default class SecondFactorForm extends React.Component<FormProps, FormSta
                            type='password'
                            value={ this.state.token || '' } />
                 </Label>
-                <Callout className='text-right'>
+                <Callout className='rla-callout-default'>
                     <Button className='submit'
                             disabled={ disabled }
+                            fill
                             intent={ Intent.PRIMARY }
                             large
                             type='submit'>
