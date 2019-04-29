@@ -2,25 +2,17 @@ import * as React from 'react';
 
 import { Link } from 'react-router-dom';
 
+import { Breadcrumb } from '@blueprintjs/core';
+
 import * as _ from 'lodash';
 
 import DOSLayout from 'corla/component/DOSLayout';
 import counties from 'corla/data/counties';
 
-const Breadcrumb = () => (
+const Breadcrumbs = () => (
     <ul className='pt-breadcrumbs'>
-        <li>
-            <Link to='/sos'>
-                <div className='pt-breadcrumb'>
-                    SoS
-                </div>
-            </Link>
-        </li>
-        <li>
-            <div className='pt-breadcrumb pt-breadcrumb-current'>
-                Contest
-            </div>
-        </li>
+        <li><Breadcrumb text={ <Link to='/sos'>SoS</Link> } /></li>
+        <li><Breadcrumb className='pt-breadcrumb-current' text='Contests' /></li>
     </ul>
 );
 
@@ -60,7 +52,7 @@ const ContestTable = (props: TableProps) => {
     ));
 
     return (
-        <table className='pt-html-table pt-html-table-bordered pt-small'>
+        <table className='pt-html-table pt-html-table-striped rla-table mt-default'>
             <thead>
                 <tr>
                     <th>County</th>
@@ -89,7 +81,7 @@ const ContestOverviewPage = (props: PageProps) => {
 
     const main =
         <div>
-            <Breadcrumb />
+            <Breadcrumbs />
             <ContestTable contests={ contests } />
         </div>;
 

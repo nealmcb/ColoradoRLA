@@ -100,8 +100,8 @@ const CountyDetails = (props: DetailsProps) => {
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{ county.name }</td>
-                        <td>{ countyState }</td>
+                        <td className='ellipsize'>{ county.name }</td>
+                        <td className='ellipsize'>{ countyState }</td>
                         <td>{ auditedCount }</td>
                         <td>{ unauditedCount }</td>
                         <td>{ submitted }</td>

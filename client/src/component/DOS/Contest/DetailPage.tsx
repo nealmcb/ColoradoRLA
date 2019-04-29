@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import * as _ from 'lodash';
 
-import { Card } from '@blueprintjs/core';
+import { Breadcrumb, Card } from '@blueprintjs/core';
 
 import { Link } from 'react-router-dom';
 
@@ -14,27 +14,11 @@ interface BreadcrumbProps {
     contest: Contest;
 }
 
-const Breadcrumb = ({ contest }: BreadcrumbProps) => (
+const Breadcrumbs = ({ contest }: BreadcrumbProps) => (
     <ul className='pt-breadcrumbs'>
-        <li>
-            <Link to='/sos'>
-                <div className='pt-breadcrumb pt-disabled'>
-                    SoS
-                </div>
-            </Link>
-        </li>
-        <li>
-            <Link to='/sos/contest'>
-                <div className='pt-breadcrumb'>
-                    Contest
-                </div>
-            </Link>
-        </li>
-        <li>
-            <div className='pt-breadcrumb pt-breadcrumb-current'>
-                { contest.name }
-            </div>
-        </li>
+        <li><Breadcrumb text={ <Link to='/sos'>SoS</Link> } /></li>
+        <li><Breadcrumb text={ <Link to='/sos/contest'>Contests</Link> } /></li>
+        <li><Breadcrumb className='pt-breadcrumb-current' text={ contest.name } /></li>
     </ul>
 );
 
@@ -50,10 +34,10 @@ const ContestChoices = (props: ChoicesProps) => {
     ));
 
     return (
-        <Card>
-            <h4>Choices:</h4>
+        <div>
+            <h3 className='mt-default'>Choices</h3>
             <ul>{ choiceItems }</ul>
-        </Card>
+        </div>
     );
 };
 
@@ -86,34 +70,29 @@ const ContestDetailPage = (props: PageProps) => {
 
     const main =
         <div>
-            <Breadcrumb contest={ contest } />
-            <Card>
-                <h2>Contest Report</h2>
-                <p>
-                    The contest report is a contest-centric report detailing
-                    the ballots that have been audited
-                    for <b>{ contest.name }</b>, including the county that
-                    audited each ballot.
-                </p>
-                <a className='pt-button pt-large pt-intent-primary'
-                   href={ activityReportUrl(contest.name) }>
-                   Download Activity Report
-                </a>
-            </Card>
-            <Card>
-                <h2>Contest Data</h2>
-                <h3>Contest Data</h3>
-                <table className='pt-html-table pt-html-table-bordered pt-small'>
-                    <tbody>
-                        { row('County', county.name) }
-                        { row('Name', contest.name) }
-                        { row('Description', contest.description) }
-                        { row('Vote For', contest.votesAllowed) }
-                        { row('Ballot Manifest', 'Uploaded') }
-                        { row('CVR Export', 'Uploaded') }
-                    </tbody>
-                </table>
-            </Card>
+            <Breadcrumbs contest={ contest } />
+            <h2 className='mt-default'>Contest Report</h2>
+            <p>
+                The contest report is a contest-centric report detailing
+                the ballots that have been audited
+                for <b>{ contest.name }</b>, including the county that
+                audited each ballot.
+            </p>
+            <a className='pt-button pt-large pt-intent-primary'
+               href={ activityReportUrl(contest.name) }>
+               Download Activity Report
+            </a>
+            <h2 className='mt-default'>Contest Data</h2>
+            <table className='pt-html-table'>
+                <tbody>
+                    { row('County', county.name) }
+                    { row('Name', contest.name) }
+                    { row('Description', contest.description) }
+                    { row('Vote For', contest.votesAllowed) }
+                    { row('Ballot Manifest', 'Uploaded') }
+                    { row('CVR Export', 'Uploaded') }
+                </tbody>
+            </table>
             <ContestChoices contest={ contest } />
         </div>;
 

@@ -2,29 +2,17 @@ import * as React from 'react';
 
 import * as _ from 'lodash';
 
-import { Card } from '@blueprintjs/core';
+import { Breadcrumb, Card } from '@blueprintjs/core';
 
 import DOSLayout from 'corla/component/DOSLayout';
 import counties from 'corla/data/counties';
 import { formatLocalDate } from 'corla/date';
 
-const Breadcrumb = () => (
+const Breadcrumbs = () => (
     <ul className='pt-breadcrumbs'>
-        <li>
-            <a className='pt-breadcrumb' href='/sos'>
-                SoS
-            </a>
-        </li>
-        <li>
-            <a className='pt-breadcrumb' href='/sos/audit'>
-                Audit Admin
-            </a>
-        </li>
-        <li>
-            <a className='pt-breadcrumb pt-breadcrumb-current'>
-                Review
-            </a>
-        </li>
+        <li><Breadcrumb href='/sos' text='SoS' />></li>
+        <li><Breadcrumb href='/sos/audit' text='Audit Admin' /></li>
+        <li><Breadcrumb className='pt-breadcrumb-current' text='Review' /></li>
     </ul>
 );
 
@@ -101,7 +89,7 @@ const AuditReview = (props: AuditReviewProps) => {
 
     const main =
         <div>
-            <Breadcrumb />
+            <Breadcrumbs />
             <h2>Audit</h2>
             <h3>Audit Definition Review</h3>
             <div>

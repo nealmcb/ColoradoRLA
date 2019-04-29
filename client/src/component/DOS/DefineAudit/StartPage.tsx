@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Card } from '@blueprintjs/core';
+import { Breadcrumb, Card } from '@blueprintjs/core';
 
 import DOSLayout from 'corla/component/DOSLayout';
 
@@ -12,18 +12,10 @@ import UploadFileButton from './UploadFileButton';
 
 import * as format from 'corla/format';
 
-const Breadcrumb = () => (
+const Breadcrumbs = () => (
     <ul className='pt-breadcrumbs'>
-        <li>
-            <a className='pt-breadcrumb' href='/sos'>
-                SoS
-            </a>
-        </li>
-        <li>
-            <a className='pt-breadcrumb pt-breadcrumb-current'>
-                Audit Admin
-            </a>
-        </li>
+        <li><Breadcrumb href='/sos' text='SoS' /></li>
+        <li><Breadcrumb className='pt-breadcrumb-current' text='Audit Admin' /></li>
     </ul>
 );
 
@@ -87,7 +79,7 @@ const AuditPage = (props: PageProps) => {
 
     const main =
         <div>
-            <Breadcrumb />
+            <Breadcrumbs />
 
             <h2>Administer an Audit</h2>
 

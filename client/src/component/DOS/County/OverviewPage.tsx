@@ -32,12 +32,12 @@ const CountyTableRow = (props: RowProps) => {
 
     return (
         <tr>
-            <td>
+            <td className='ellipsize'>
                 <Link to={ `/sos/county/${county.id}` }>
                     { county.name }
                 </Link>
             </td>
-            <td>{ countyState }</td>
+            <td className='ellipsize'>{ countyState }</td>
             <td>{ submitted }</td>
             <td>{ auditedCount }</td>
             <td>{ unauditedCount }</td>
@@ -67,7 +67,7 @@ const CountyTable = (props: TableProps) => {
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Status</th>
+                    <th className='status-col'>Status</th>
                     <th># Ballots Submitted</th>
                     <th>Audited Contest Discrepancies</th>
                     <th>Non-audited Contest Discrepancies</th>

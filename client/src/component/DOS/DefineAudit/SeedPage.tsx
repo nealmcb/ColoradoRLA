@@ -1,28 +1,16 @@
 import * as React from 'react';
 
-import { Card } from '@blueprintjs/core';
+import { Breadcrumb, Card } from '@blueprintjs/core';
 
 import DOSLayout from 'corla/component/DOSLayout';
 
 import SeedForm from './SeedForm';
 
-const Breadcrumb = () => (
+const Breadcrumbs = () => (
     <ul className='pt-breadcrumbs'>
-        <li>
-            <a className='pt-breadcrumb' href='/sos'>
-                SoS
-            </a>
-        </li>
-        <li>
-            <a className='pt-breadcrumb' href='/sos/audit'>
-                Audit Admin
-            </a>
-        </li>
-        <li>
-            <a className='pt-breadcrumb pt-breadcrumb-current'>
-                Seed
-            </a>
-        </li>
+        <li><Breadcrumb href='/sos' text='SoS' />></li>
+        <li><Breadcrumb href='/sos/audit' text='Audit Admin' /></li>
+        <li><Breadcrumb className='pt-breadcrumb-current' text='Seed' /></li>
     </ul>
 );
 
@@ -53,7 +41,7 @@ class AuditSeedPage extends React.Component<PageProps> {
     public render() {
         const main =
             <div>
-                <Breadcrumb />
+                <Breadcrumbs />
                 <Card>
                     <h3>Audit Definition - Enter Random Seed</h3>
                     <Card>

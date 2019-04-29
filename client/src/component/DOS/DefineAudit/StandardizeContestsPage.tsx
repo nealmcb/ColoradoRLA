@@ -47,15 +47,9 @@ const defaultCanonicalName = (
 
 const Breadcrumbs = () => (
     <ul className='pt-breadcrumbs'>
-        <li>
-            <Breadcrumb href='/sos'>SoS</Breadcrumb>
-        </li>
-        <li>
-            <Breadcrumb href='/sos/audit'>Audit Admin</Breadcrumb>
-        </li>
-        <li>
-            <Breadcrumb className='pt-breadcrumb-current'>Standardize Contest Names</Breadcrumb>
-        </li>
+        <li><Breadcrumb href='/sos' text='SoS' />></li>
+        <li><Breadcrumb href='/sos/audit' text='Audit Admin' /></li>
+        <li><Breadcrumb className='pt-breadcrumb-current' text='Standardize Contest Names' /></li>
     </ul>
 );
 
