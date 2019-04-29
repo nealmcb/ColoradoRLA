@@ -123,19 +123,19 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
 }
 
-.pt-html-table.rla-table tbody td.ellipsize {
+.pt-html-table.rla-table tbody td.ellipsize,
+.pt-html-table.rla-table tbody td.ellipsize > *,
+.pt-html-table.rla-table tbody td.ellipsize .status-indicator-text {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
-.pt-html-table.rla-table tbody td.ellipsize:hover {
-  overflow: visible;
-}
-
-.pt-html-table.rla-table tbody td.ellipsize:hover > * {
+.pt-html-table.rla-table tbody td.ellipsize:hover,
+.pt-html-table.rla-table tbody td.ellipsize:hover > *,
+.pt-html-table.rla-table tbody td.ellipsize:hover .status-indicator-text {
   background-color: inherit;
-  position: relative;
+  overflow: visible;
   z-index: 1;
 }
 
