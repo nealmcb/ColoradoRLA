@@ -225,9 +225,8 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
                                     { this.sortIconForCol('name') }
                                 </div>
                             </th>
-                            <th className={ this.sortClassForCol('status') }
-                                onClick={ this.sortBy('status') }
-                                style={ { width: '25%' } }>
+                            <th className={ 'status-col ' + this.sortClassForCol('status') }
+                                onClick={ this.sortBy('status') }>
                                 <div className='rla-table-sortable-wrapper'>
                                     Status
                                     { this.sortIconForCol('status') }

@@ -111,6 +111,13 @@ h1, h2, h3, h4, h5, h6 {
   vertical-align: middle;
 }
 
+/* Status column larger by default when extra space is available */
+@media (min-width: 1020px) {
+  .pt-html-table.rla-table thead th.status-col {
+    width: 300px;
+  }
+}
+
 .pt-html-table.rla-table thead th .rla-table-sortable-wrapper {
   display: inline-flex;
   align-items: center;
