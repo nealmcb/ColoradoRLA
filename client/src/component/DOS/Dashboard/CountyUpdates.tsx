@@ -178,7 +178,7 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
             _.reverse(sortedCountyData);
         }
 
-        const countyStatusRows = _.map(filteredCountyData, (row: RowData) => {
+        const countyStatusRows = _.map(sortedCountyData, (row: RowData) => {
             return (
                 <tr key={ row.id }>
                     <td className={ this.sortClassForCol('name')  + ' ellipsize' }>{ linkToCountyDetail(row) }</td>

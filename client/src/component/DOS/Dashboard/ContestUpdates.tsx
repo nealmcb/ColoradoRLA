@@ -113,15 +113,15 @@ class ContestUpdates extends React.Component<UpdatesProps, UpdatesState> {
 
         const selector = (row: RowData) => row[this.state.sort];
 
-        const sortedData = naturalSortBy(rowData, selector);
+        const filteredData = _.filter(rowData, this.rowFilterName);
+
+        const sortedData = naturalSortBy(filteredData, selector);
 
         if (this.state.order === 'desc') {
             _.reverse(sortedData);
         }
 
-        const filteredData = _.filter(sortedData, this.rowFilterName);
-
-        const contestStatuses = _.map(filteredData, row => {
+        const contestStatuses = _.map(sortedData, row => {
             const {
                 name,
                 discrepancyCount,
