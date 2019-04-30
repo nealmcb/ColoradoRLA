@@ -334,11 +334,18 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
                         </div>
                         <hr />
                         <div className='status-filter-content-body'>
-                            { _.map(this.state.statusFilters, (v, k) => {
-                                return <Checkbox onChange={ createChangeHandler(k) }
-                                                 key={ k }
-                                                 checked={ v }>{ k }</Checkbox>;
-                            } ) }
+                            {
+                                _
+                                .chain(this.state.statusFilters)
+                                .toPairs()
+                                .sortBy(p => p[0])
+                                .map((p: [string, boolean]) => {
+                                    return <Checkbox onChange={ createChangeHandler(p[0]) }
+                                                     key={ p[0] }
+                                                     checked={ p[1] }>{ p[0] }</Checkbox>;
+                                })
+                                .value()
+                            }
                         </div>
                         <div className='status-filter-content-actions'>
                             <button onClick={ this.checkStatusFilters }>Check all</button>
