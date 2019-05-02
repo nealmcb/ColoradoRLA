@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Breadcrumb, Card } from '@blueprintjs/core';
+import { Breadcrumb, Button, Card, Intent } from '@blueprintjs/core';
 
 import DOSLayout from 'corla/component/DOSLayout';
 
@@ -55,15 +55,13 @@ class AuditSeedPage extends React.Component<PageProps> {
                     </Card>
                 </Card>
                 <div>
-                    <button className='pt-button pt-breadcrumb'
-                            onClick={ this.props.back }>
-                        Back
-                    </button>
-                    <button className='pt-button pt-intent-primary pt-breadcrumb'
+                    <Button onClick={ this.props.back }>Back</Button>
+                    <Button className='ml-default'
+                            intent={ Intent.PRIMARY }
                             disabled={!this.state.formValid}
                             onClick={ this.onSaveAndNext }>
                         Save & Next
-                    </button>
+                    </Button>
                 </div>
             </div>;
 

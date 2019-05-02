@@ -4,7 +4,7 @@ import * as React from 'react';
 
 import { History } from 'history';
 
-import { Button, Card, Intent } from '@blueprintjs/core';
+import { Button, Callout, Intent } from '@blueprintjs/core';
 
 import action from 'corla/action';
 
@@ -68,10 +68,10 @@ const AuditBoardButtons = (props: AuditBoardButtonsProps) => {
     }
 
     return (
-        <Card>
+        <div className='mt-default'>
             <h5 className='pt-ui-text-large font-weight-bold'>Sign in to an audit board</h5>
-            <div className='pt-button-group pt-large corla-spaced'>{ buttons }</div>
-        </Card>
+            <div className='pt-button-group pt-large rla-spaced'>{ buttons }</div>
+        </div>
     );
 };
 
@@ -129,38 +129,38 @@ const Main = (props: MainProps) => {
     return (
         <div>
             <h1>Hello, { name } County!</h1>
-            <div>
-                <Card><h3>{ directions }</h3></Card>
-                { fileUploadContainer }
-                { fileDownloadButtons }
-                <Card>
-                    <div className='pt-ui-text-large font-weight-bold'>{ reportType } audit report (CSV)</div>
-                    <button
-                        className='pt-button  pt-intent-primary'
-                        disabled={ !canRenderReport }
-                        onClick={ fetchReport }>
-                        Download
-                    </button>
-                </Card>
-                <Card>
-                    <div className='pt-ui-text-large font-weight-bold'>List of ballots to audit (CSV)</div>
-                    <button
-                        className='pt-button pt-intent-primary'
-                        disabled={ typeof countyState.auditBoardCount !== 'number' }
-                        onClick={ downloadCsv }>
-                        Download
-                    </button>
-                </Card>
-                <AuditBoardNumberSelector auditBoardCount={ countyState.auditBoardCount || 1 }
-                                          numberOfBallotsToAudit={ countyState.ballotsRemainingInRound }
-                                          isShown={ !auditBoardButtonDisabled && !!currentRoundNumber }
-                                          isEnabled={ !countyState.auditBoardCount } />
-                <AuditBoardButtons auditBoardCount={ countyState.auditBoardCount || 1 }
-                                   auditBoards={ countyState.auditBoards }
-                                   history={ history }
-                                   isShown={ typeof countyState.auditBoardCount === 'number'
-                                             && !!currentRoundNumber } />
+            <Callout icon='info-sign'>
+                <span className='font-weight-bold pt-ui-text-large'>{ directions }</span>
+            </Callout>
+            { fileUploadContainer }
+            { fileDownloadButtons }
+            <div className='mt-default'>
+                <h4>{ reportType } audit report (CSV)</h4>
+                <button
+                    className='pt-button  pt-intent-primary'
+                    disabled={ !canRenderReport }
+                    onClick={ fetchReport }>
+                    Download
+                </button>
             </div>
+            <div className='mt-default'>
+                <h4>List of ballots to audit (CSV)</h4>
+                <button
+                    className='pt-button pt-intent-primary'
+                    disabled={ typeof countyState.auditBoardCount !== 'number' }
+                    onClick={ downloadCsv }>
+                    Download
+                </button>
+            </div>
+            <AuditBoardNumberSelector auditBoardCount={ countyState.auditBoardCount || 1 }
+                                      numberOfBallotsToAudit={ countyState.ballotsRemainingInRound }
+                                      isShown={ !auditBoardButtonDisabled && !!currentRoundNumber }
+                                      isEnabled={ !countyState.auditBoardCount } />
+            <AuditBoardButtons auditBoardCount={ countyState.auditBoardCount || 1 }
+                               auditBoards={ countyState.auditBoards }
+                               history={ history }
+                               isShown={ typeof countyState.auditBoardCount === 'number'
+                                         && !!currentRoundNumber } />
         </div>
     );
 };

@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import * as _ from 'lodash';
 
-import { Breadcrumb, Card } from '@blueprintjs/core';
+import { Breadcrumb, Button, Card, Intent } from '@blueprintjs/core';
 
 import DOSLayout from 'corla/component/DOSLayout';
 import counties from 'corla/data/counties';
@@ -126,17 +126,16 @@ const AuditReview = (props: AuditReviewProps) => {
                     </tbody>
                 </table>
             </Card>
-            <SelectedContests auditedContests={dosState.auditedContests}
-                              contests={dosState.contests} />
+            <SelectedContests auditedContests={ dosState.auditedContests }
+                              contests={ dosState.contests } />
             <div>
-                <button onClick={ back } className='pt-button pt-breadcrumb'>
-                    Back
-                </button>
-                <button disabled={ disableLaunchButton }
-                        onClick={ launch }
-                        className='pt-button pt-intent-primary pt-breadcrumb'>
+                <Button onClick={ back }>Back</Button>
+                <Button className='ml-default'
+                        disabled={ disableLaunchButton }
+                        intent={ Intent.PRIMARY }
+                        onClick={ launch }>
                     Launch Audit
-                </button>
+                </Button>
             </div>
         </div>;
 

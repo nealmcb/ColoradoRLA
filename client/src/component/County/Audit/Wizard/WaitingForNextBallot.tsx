@@ -12,12 +12,6 @@ const WaitingForNextBallot = () => {
                 </Card>
                 <Spinner className='pt-large' intent={ Intent.PRIMARY } />
             </Card>
-            <button className='pt-button pt-intent-primary pt-breadcrumb' disabled>
-                Back
-            </button>
-            <button className='pt-button pt-intent-primary pt-breadcrumb' disabled>
-                Review
-            </button>
         </div>
     );
 };

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Card, Intent, Spinner } from '@blueprintjs/core';
+import { Button, Card, Intent, Spinner } from '@blueprintjs/core';
 
 const SubmittingACVR = () => {
     return (
@@ -12,12 +12,6 @@ const SubmittingACVR = () => {
                 </Card>
                 <Spinner className='pt-large' intent={ Intent.PRIMARY } />
             </Card>
-            <button className='pt-button pt-intent-primary pt-breadcrumb' disabled>
-                Back
-            </button>
-            <button className='pt-button pt-intent-primary pt-breadcrumb' disabled>
-                Review
-            </button>
         </div>
     );
 };

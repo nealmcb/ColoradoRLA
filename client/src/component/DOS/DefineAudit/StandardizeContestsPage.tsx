@@ -199,14 +199,12 @@ class StandardizeContestsPage extends React.Component<PageProps> {
                                                   contests={ contests }
                                                   updateFormData={ this.updateFormData } />
                     </Card>
-                    <button onClick={ back }
-                            className='pt-button pt-breadcrumb'>
-                        Back
-                    </button>
-                    <button onClick={ () => forward(this.formData) }
-                            className='pt-button pt-intent-primary pt-breadcrumb'>
+                    <Button onClick={ back }>Back</Button>
+                    <Button className='ml-default'
+                            intent={ Intent.PRIMARY }
+                            onClick={ () => forward(this.formData) }>
                         Save & Next
-                    </button>
+                    </Button>
                 </div>;
         } else {
             main =
@@ -216,13 +214,10 @@ class StandardizeContestsPage extends React.Component<PageProps> {
                     <Card>
                         Waiting for counties to upload contest data.
                     </Card>
-                    <Button onClick={ back }
-                            className='pt-breadcrumb'>
-                        Back
-                    </Button>
-                    <Button disabled
-                            intent={ Intent.PRIMARY }
-                            className='pt-breadcrumb'>
+                    <Button onClick={ back }>Back</Button>
+                    <Button className='ml-default'
+                            disabled
+                            intent={ Intent.PRIMARY }>
                         Save & Next
                     </Button>
                 </div>;

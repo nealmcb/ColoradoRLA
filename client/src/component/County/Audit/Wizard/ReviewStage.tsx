@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import * as _ from 'lodash';
 
-import { Icon } from '@blueprintjs/core';
+import { Button, Icon, Intent } from '@blueprintjs/core';
 
 import SubmittingACVR from './SubmittingACVR';
 
@@ -248,9 +248,9 @@ const ReviewStage = (props: ReviewStageProps) => {
                         </p>
                         <BallotReview countyState={ countyState } marks={ marks } back={ prevStage } />
                         <div className='button-container button-container-left'>
-                          <button className='pt-large pt-button pt-intent-success pt-breadcrumb' onClick={ onClick }>
+                          <Button large intent={ Intent.SUCCESS } onClick={ onClick }>
                               Submit & Next Ballot Card
-                          </button>
+                          </Button>
                         </div>
                     </div>
                 </div>

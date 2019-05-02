@@ -55,17 +55,16 @@ const SignedInPage = (props: PageProps) => {
                 </div>
             </Card>
             <div>
-                <Button className='pt-breadcrumb'
-                        disabled={ true }
+                <Button disabled
                         intent={ Intent.PRIMARY }>
                     Submit
                 </Button>
-                <Button className='pt-breadcrumb'
+                <Button className='ml-default'
                         intent={ Intent.PRIMARY }
                         onClick={ () => auditBoardSignOut(auditBoardIndex) }>
                     Sign Out
                 </Button>
-                <Button className='pt-breadcrumb'
+                <Button className='ml-default'
                         intent={ Intent.PRIMARY }
                         onClick={ auditBoardStartOrContinue }>
                     { startOrContinueText }

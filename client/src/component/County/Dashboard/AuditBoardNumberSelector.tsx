@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { Button, Card, Intent, NumericInput } from '@blueprintjs/core';
+import { Button, Intent, NumericInput } from '@blueprintjs/core';
 
 import setNumberOfAuditBoards from 'corla/action/county/setNumberOfAuditBoards';
 
@@ -54,7 +54,7 @@ class AuditBoardNumberSelector
         }
 
         return (
-            <Card>
+            <div className='mt-default'>
                 <form onSubmit={ this.handleSubmit }>
                     <div className='pt-form-group'>
                         <label className='pt-label pt-ui-text-large font-weight-bold'
@@ -67,12 +67,12 @@ class AuditBoardNumberSelector
                                           value={ this.state.auditBoardCount }
                                           onValueChange={ this.handleChangeAuditBoards }
                                           disabled={ !isEnabled } />
-                            <Button disabled={ !isEnabled } intent={ Intent.PRIMARY }>Enter</Button>
+                            <Button disabled={ !isEnabled } intent={ Intent.PRIMARY } type='submit'>Enter</Button>
                         </div>
                         { this.helperText(numberOfBallotsToAudit) }
                     </div>
                 </form>
-            </Card>
+            </div>
         );
     }
 

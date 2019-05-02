@@ -472,7 +472,7 @@ const BallotAuditStage = (props: StageProps) => {
                 <div className='button-container'>
                     <BackButton back={ prevStage } />
 
-                    <Button className='pt-breadcrumb'
+                    <Button className='ml-default'
                             intent={ Intent.SUCCESS }
                             large
                             onClick={ validatingAcvr(nextStage) }>
