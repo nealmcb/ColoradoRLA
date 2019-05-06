@@ -46,7 +46,6 @@ import us.freeandfair.corla.asm.ASMState;
 import us.freeandfair.corla.asm.ASMState.CountyDashboardState;
 import us.freeandfair.corla.asm.ASMUtilities;
 import us.freeandfair.corla.asm.CountyDashboardASM;
-import us.freeandfair.corla.controller.ImportFileController;
 import us.freeandfair.corla.csv.DominionCVRExportParser;
 import us.freeandfair.corla.csv.Result;
 import us.freeandfair.corla.model.CastVoteRecord.RecordType;
@@ -153,13 +152,6 @@ public class CVRExportImport extends AbstractCountyDashboardEndpoint {
                      "file " + file.filename() + "uploaded by county " +
                      file.county().id());
       } else if (file.getStatus() == FileStatus.HASH_VERIFIED) {
-        // make sure the old CVR file is now marked as "not imported", since the CVRs
-        // will be wiped
-        final CountyDashboard cdb = Persistence.getByID(county.id(), CountyDashboard.class);
-        if (cdb.cvrFile() != null) {
-          cdb.cvrFile().setStatus(FileStatus.NOT_IMPORTED);
-          Persistence.saveOrUpdate(cdb.cvrFile());
-        }
         file.setStatus(FileStatus.IMPORTING);
         final Map<String, Instant> result = new HashMap<>();
         result.put("import_start_time", Instant.now());
@@ -264,7 +256,6 @@ public class CVRExportImport extends AbstractCountyDashboardEndpoint {
      * The run method for this CVRImporter.
      */
     public void run() {
-      try {
         // this outer try block is the "last resort" cleanup block
         Persistence.beginTransaction();
         try {
@@ -279,16 +270,6 @@ public class CVRExportImport extends AbstractCountyDashboardEndpoint {
           cleanup(my_file.county(), true, "import failed because of database problem");
           updateStateMachine(false);
           Persistence.commitTransaction();
-      } catch (final PersistenceException | CVRImportException e) {
-        // at this point, either a cleanup failed or a state machine update failed,
-        // so log it and say there's nothing we can do
-        
-        LOGGER.error("Critical CVR import error for county " +
-                          my_file.county().id() +
-                          ", system may be in unstable state: " + e);
-        if (Persistence.canTransactionRollback()) {
-          Persistence.rollbackTransaction();
-        }
       } finally {
         // release the lock on CVR imports for this county
         final Set<Long> counties_running = countiesRunning();
@@ -305,8 +286,7 @@ public class CVRExportImport extends AbstractCountyDashboardEndpoint {
      * @param the_description The error description.
      * @exception CVRImportException always, to cancel execution
      */
-    private void error(final String errorMessage, final UploadedFile uploadedFile)
-    {
+    private void error(final String errorMessage, final UploadedFile uploadedFile) {
       Result result = new Result();
       result.success = false;
       result.errorMessage = errorMessage;
@@ -316,7 +296,6 @@ public class CVRExportImport extends AbstractCountyDashboardEndpoint {
       private void error(final Result result, final UploadedFile uploadedFile)
     {
       uploadedFile.setStatus(FileStatus.FAILED);
-      uploadedFile.setErrorMessage(result.errorMessage);
       uploadedFile.setResult(result);
       Persistence.saveOrUpdate(uploadedFile);
       cleanup(uploadedFile.county());

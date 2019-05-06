@@ -62,7 +62,7 @@ public final class HashChecker {
    * or null if the file cannot be hashed.
    */
   public static String hashFile(final File a_file)
-    throws Exception {
+    throws FileNotFoundException,IOException,NoSuchAlgorithmException {
     String result = null;
     final byte[] buffer = new byte[BUFFER_SIZE];
 

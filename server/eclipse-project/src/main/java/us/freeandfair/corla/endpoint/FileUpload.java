@@ -422,7 +422,7 @@ public class FileUpload extends AbstractEndpoint {
             LOGGER.info("Upload File " + uploaded_file.toString());
             okJSON(the_response, Main.GSON.toJson(uploaded_file));
           } // else another result code has already been set
-        } catch (Exception e) {
+        } catch (final java.io.IOException | java.security.NoSuchAlgorithmException e) {
           info.my_ok = false;
           LOGGER.error("Upload Failed " + e.getMessage());
           badDataContents(the_response, "Upload Failed");

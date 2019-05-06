@@ -35,7 +35,6 @@ import javax.persistence.Version;
 
 import com.google.gson.annotations.JsonAdapter;
 
-import us.freeandfair.corla.json.UploadedFileJsonAdapter;
 import us.freeandfair.corla.persistence.PersistentEntity;
 import us.freeandfair.corla.persistence.ResultConverter;
 import us.freeandfair.corla.csv.Result;
@@ -54,7 +53,6 @@ import us.freeandfair.corla.csv.Result;
 // this class has many fields that would normally be declared final, but
 // cannot be for compatibility with Hibernate and JPA.
 @SuppressWarnings("PMD.ImmutableField")
-@JsonAdapter(UploadedFileJsonAdapter.class)
 public class UploadedFile implements PersistentEntity {
   /**
    * The database ID.

@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 import java.util.OptionalInt;
 import java.util.Set;
 
@@ -28,10 +27,9 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.LogManager;
 
 
-import us.freeandfair.corla.Main;
-import us.freeandfair.corla.csv.Result;
 import us.freeandfair.corla.model.BallotManifestInfo;
 import us.freeandfair.corla.persistence.Persistence;
+import us.freeandfair.corla.util.SuppressFBWarnings;
 
 /**
  * The parser for Colorado ballot manifests.
@@ -40,6 +38,7 @@ import us.freeandfair.corla.persistence.Persistence;
  * @version 1.0.0
  */
 public class ColoradoBallotManifestParser {
+
   /**
    * Class-wide logger
    */
@@ -181,8 +180,9 @@ public class ColoradoBallotManifestParser {
    *
    * @return true if the parse was successful, false otherwise
    */
+  @SuppressWarnings({"PMD.AvoidCatchingGenericException"})
   public synchronized Result parse() {
-    Result result = new Result();
+    final Result result = new Result();
     final Iterator<CSVRecord> records = my_parser.iterator();
 
     int my_record_count = 0;
@@ -202,15 +202,19 @@ public class ColoradoBallotManifestParser {
         my_ballot_count = Math.toIntExact(bmi.sequenceEnd());
       }
     } catch (final Exception e) {
-      LOGGER.error(e.getClass().toString() +" "+ e.getMessage());
       result.success = false;
       result.errorMessage = e.getClass().toString() +" "+ e.getMessage();
       result.errorRowNum = my_record_count;
       if (null != bmi_line) {
-        List<String> values = new ArrayList<>();
+        final List<String> values = new ArrayList<>();
         bmi_line.iterator().forEachRemaining(values::add);
         result.errorRowContent = String.join(",", values);
       }
+      // this log message is partially here to make findbugs happy. For some
+      // reason URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD would not be suppressed.
+      LOGGER.error(e.getClass().toString() +" "+ e.getMessage()
+                   +"\n line number: "+ result.errorRowNum
+                   +"\n content:"+ result.errorRowContent);
     }
 
     result.success = true;

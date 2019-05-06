@@ -74,6 +74,7 @@
 							<rulesets>
 								<ruleset>${project.basedir}/project_configuration/freeandfair_pmd_ruleset.xml</ruleset>
 							</rulesets>
+              <minimumPriority>2</minimumPriority>
 						</configuration>
 						<goals>
 							<goal>check</goal>

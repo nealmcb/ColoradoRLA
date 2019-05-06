@@ -22,11 +22,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.OptionalInt;
 import java.util.Properties;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.persistence.PersistenceException;
 
@@ -37,7 +34,6 @@ import org.apache.commons.text.WordUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.LogManager;
 
-import us.freeandfair.corla.csv.Result;
 import us.freeandfair.corla.model.CVRContestInfo;
 import us.freeandfair.corla.model.CastVoteRecord;
 import us.freeandfair.corla.model.CastVoteRecord.RecordType;
@@ -153,21 +149,6 @@ public class DominionCVRExportParser {
       CVR_NUMBER_HEADER, TABULATOR_NUMBER_HEADER, BATCH_ID_HEADER,
       RECORD_ID_HEADER, IMPRINTED_ID_HEADER, BALLOT_TYPE_HEADER
       };
-
-  /**
-   * A flag indicating whether parse() has been run or not.
-   */
-  private boolean my_parse_status;
-
-  /**
-   * A flag indicating whether or not a parse was successful.
-   */
-  private boolean my_parse_success;
-
-  /**
-   * The error message.
-   */
-  private String my_error_message;
 
   /**
    * The parser to be used.
@@ -561,7 +542,7 @@ public class DominionCVRExportParser {
       "PMD.ModifiedCyclomaticComplexity", "PMD.CyclomaticComplexity",
       "PMD.StdCyclomaticComplexity", "PMD.NPathComplexity"})
   private Result processHeaders(final CSVRecord the_line) {
-    Result result = new Result();
+    final Result result = new Result();
 
     // the explanations line includes the column names for the non-contest/choice
     // columns, so let's get those
@@ -683,7 +664,8 @@ public class DominionCVRExportParser {
     int lineNum = 1;
 
     try {
-      electionName = records.next();
+      // electionName
+      records.next();
       lineNum++;
       contest_line = records.next();
       lineNum++;

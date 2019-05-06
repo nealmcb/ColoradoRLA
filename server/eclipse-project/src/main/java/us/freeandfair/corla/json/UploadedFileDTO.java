@@ -4,7 +4,9 @@ package us.freeandfair.corla.json;
 import us.freeandfair.corla.model.UploadedFile;
 import us.freeandfair.corla.csv.DominionCVRExportParser;
 import us.freeandfair.corla.csv.Result;
+import us.freeandfair.corla.util.SuppressFBWarnings;
 
+@SuppressFBWarnings(value = {"URF_UNREAD_FIELD"}, justification = "Field is read by Gson.")
 public class UploadedFileDTO {
   private Long fileId;
   private String timestamp;
@@ -12,7 +14,6 @@ public class UploadedFileDTO {
   private String fileName; // todo choose one
   private String name; // todo choose one
   private String status;
-  private String errorMessage;
   private Result result;
   private String hash;
   private Long size;
@@ -25,7 +26,6 @@ public class UploadedFileDTO {
     this.fileName = uploadedFile.filename();
     this.name = uploadedFile.filename();
     this.status = uploadedFile.getStatus().toString();
-    this.errorMessage = uploadedFile.getErrorMessage();
     this.result = uploadedFile.getResult();
     this.hash = uploadedFile.getHash();
     this.size = uploadedFile.size();
