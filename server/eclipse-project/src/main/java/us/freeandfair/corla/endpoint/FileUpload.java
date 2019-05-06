@@ -44,15 +44,18 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
 import org.apache.commons.lang3.StringUtils;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.LogManager;
+
 import spark.Request;
 import spark.Response;
 
 import us.freeandfair.corla.Main;
 import us.freeandfair.corla.crypto.HashChecker;
+import us.freeandfair.corla.csv.Result;
 import us.freeandfair.corla.model.County;
 import us.freeandfair.corla.model.UploadedFile;
 import us.freeandfair.corla.model.UploadedFile.FileStatus;
-import us.freeandfair.corla.model.UploadedFile.HashStatus;
 import us.freeandfair.corla.persistence.Persistence;
 import us.freeandfair.corla.util.FileHelper;
 import us.freeandfair.corla.util.SparkHelper;
@@ -66,6 +69,13 @@ import us.freeandfair.corla.util.SuppressFBWarnings;
  */
 @SuppressWarnings({"PMD.AtLeastOneConstructor", "PMD.ExcessiveImports"})
 public class FileUpload extends AbstractEndpoint {
+
+  /**
+   * Class-wide logger
+   */
+  public static final Logger LOGGER =
+    LogManager.getLogger(FileUpload.class);
+
   /**
    * The "hash" form data field name.
    */
@@ -125,46 +135,51 @@ public class FileUpload extends AbstractEndpoint {
   private UploadedFile attemptFilePersistence(final Response the_response,
                                               final UploadInformation the_info,
                                               final County the_county) {
-    UploadedFile result = null;
+    UploadedFile uploadedFile = null;
+    FileStatus file_status = null;
+    Result result = new Result();
 
     try (FileInputStream is = new FileInputStream(the_info.my_file);
          LineNumberReader lnr =
              new LineNumberReader(new InputStreamReader(new FileInputStream(the_info.my_file),
                                                         "UTF-8"))) {
       final Blob blob = Persistence.blobFor(is, the_info.my_file.length());
-      final HashStatus hash_status;
 
       // first, compute the approximate number of records in the file
       lnr.skip(Integer.MAX_VALUE);
       final int approx_records = lnr.getLineNumber();
 
-      if (the_info.my_computed_hash == null) {
-        hash_status = HashStatus.NOT_CHECKED;
-      } else if (the_info.my_computed_hash.equals(the_info.my_uploaded_hash)) {
-        hash_status = HashStatus.VERIFIED;
+      if (the_info.my_computed_hash.equals(the_info.my_uploaded_hash)) {
+        file_status = FileStatus.HASH_VERIFIED;
       } else {
-        hash_status = HashStatus.MISMATCH;
+        file_status = FileStatus.HASH_MISMATCH;
+        result.success = false;
+        result.errorMessage = "Submitted hash does not equal computed hash";
       }
-      result = new UploadedFile(the_info.my_timestamp,
+      uploadedFile = new UploadedFile(the_info.my_timestamp,
                                 the_county,
                                 the_info.my_filename,
-                                FileStatus.NOT_IMPORTED,
+                                file_status,
+                                the_info.my_computed_hash,
                                 the_info.my_uploaded_hash,
-                                hash_status, blob,
+                                blob,
                                 the_info.my_file.length(),
                                 approx_records);
-      Persistence.save(result);
+      uploadedFile.setResult(result);
+      Persistence.save(uploadedFile);
       Persistence.flush();
     } catch (final PersistenceException | IOException e) {
+      LOGGER.error("could not persist file of size " + e.getMessage());
       badDataType(the_response, "could not persist file of size " +
                                 the_info.my_file.length());
       the_info.my_ok = false;
     }
-    return result;
+    return uploadedFile;
   }
 
   /**
    * Handles the upload of the file, updating the provided UploadInformation.
+   * sets the_info.my_file to a tempfile and writes to it
    *
    * @param the_request The request to use.
    * @param the_info The upload information to update.
@@ -179,7 +194,7 @@ public class FileUpload extends AbstractEndpoint {
       final HttpServletRequest raw = SparkHelper.getRaw(the_request);
       the_info.my_ok = ServletFileUpload.isMultipartContent(raw);
 
-      Main.LOGGER.info("handling file upload request from " + raw.getRemoteHost());
+      LOGGER.info("handling file upload request from " + raw.getRemoteHost());
       if (the_info.my_ok) {
         final ServletFileUpload upload = new ServletFileUpload();
         final FileItemIterator fii = upload.getItemIterator(raw);
@@ -199,12 +214,12 @@ public class FileUpload extends AbstractEndpoint {
                 FileHelper.bufferedCopy(stream, os, BUFFER_SIZE, MAX_UPLOAD_SIZE);
 
             if (total >= MAX_UPLOAD_SIZE) {
-              Main.LOGGER.info("attempt to upload file greater than max size from " +
+              LOGGER.info("attempt to upload file greater than max size from " +
                                raw.getRemoteHost());
               badDataContents(the_response, "Upload Failed");
               the_info.my_ok = false;
             } else {
-              Main.LOGGER.info("successfully saved file of size " + total + " from " +
+              LOGGER.info("successfully saved file of size " + total + " from " +
                                raw.getRemoteHost());
             }
             os.close();
@@ -312,12 +327,12 @@ public class FileUpload extends AbstractEndpoint {
                                    Paths.get(the_file_path_and_name));
 
       if (path == null) {
-        Main.LOGGER.info("Error archiving file (" + the_file_path_and_name + ").");
+        LOGGER.info("Error archiving file (" + the_file_path_and_name + ").");
       } else {
-        Main.LOGGER.info("Successfully archived file (" + the_file_path_and_name + ").");
+        LOGGER.info("Successfully archived file (" + the_file_path_and_name + ").");
       }
     } catch (final IOException e) {
-      Main.LOGGER.info("Encountered exception while archiving file (" +
+      LOGGER.info("Encountered exception while archiving file (" +
                        the_file_path_and_name +
                        ")",
                        e);
@@ -340,11 +355,11 @@ public class FileUpload extends AbstractEndpoint {
                StandardCharsets.UTF_8))) {
 
       bw.write(the_hash_value);
-      Main.LOGGER.info("Successfully archived hash file (" +
+      LOGGER.info("Successfully archived hash file (" +
                        the_archive_hash_file_name +
                        ").");
     } catch (final IOException e) {
-      Main.LOGGER.info("Encountered exception while archiving hash file (" +
+      LOGGER.info("Encountered exception while archiving hash file (" +
                        the_archive_hash_file_name +
                        ")",
                        e);
@@ -392,21 +407,27 @@ public class FileUpload extends AbstractEndpoint {
     try {
       handleUpload(the_request, the_response, info);
 
-      // now process the temp file, putting it in the database if persistence is
-      // enabled
-
+      // now process the temp file, putting it in the database
       UploadedFile uploaded_file = null;
 
       if (info.my_ok) {
-        info.my_computed_hash = HashChecker.hashFile(info.my_file);
-        info.my_uploaded_hash =
-            info.my_form_fields.get(HASH).toUpperCase(Locale.US).trim();
-        uploaded_file = attemptFilePersistence(the_response, info, county);
-      }
+        try {
 
-      if (uploaded_file != null) {
-        okJSON(the_response, Main.GSON.toJson(uploaded_file));
-      } // else another result code has already been set
+          info.my_computed_hash = HashChecker.hashFile(info.my_file);
+
+          info.my_uploaded_hash =
+            info.my_form_fields.get(HASH).toUpperCase(Locale.US).trim();
+          uploaded_file = attemptFilePersistence(the_response, info, county);
+          if (uploaded_file != null) {
+            LOGGER.info("Upload File " + uploaded_file.toString());
+            okJSON(the_response, Main.GSON.toJson(uploaded_file));
+          } // else another result code has already been set
+        } catch (Exception e) {
+          info.my_ok = false;
+          LOGGER.error("Upload Failed " + e.getMessage());
+          badDataContents(the_response, "Upload Failed");
+        }
+      }
     } finally {
       // delete the temp file, if it exists
       if (info.my_file != null) {
@@ -414,7 +435,7 @@ public class FileUpload extends AbstractEndpoint {
           // archive file before deleting
           archive(info);
           if (!info.my_file.delete()) {
-            Main.LOGGER.error("Unable to delete temp file " + info.my_file);
+            LOGGER.error("Unable to delete temp file " + info.my_file);
           }
         } catch (final SecurityException e) {
           // ignored - should never happen

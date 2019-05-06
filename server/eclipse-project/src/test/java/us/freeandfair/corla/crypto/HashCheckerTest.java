@@ -33,7 +33,8 @@ public class HashCheckerTest {
    * "ColoradoRLA".
    */
   @Test()
-  public void testHashing() {
+  public void testHashing()
+  throws Exception {
     try {
     final String test_string = "ColoradoRLA";
     final Instant now = Instant.now();

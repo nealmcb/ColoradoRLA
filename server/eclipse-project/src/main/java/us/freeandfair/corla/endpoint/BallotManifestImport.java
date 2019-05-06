@@ -23,19 +23,21 @@ import java.util.Map;
 import javax.persistence.PersistenceException;
 
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import spark.Request;
 import spark.Response;
 
 import us.freeandfair.corla.Main;
 import us.freeandfair.corla.asm.ASMEvent;
-import us.freeandfair.corla.csv.BallotManifestParser;
 import us.freeandfair.corla.csv.ColoradoBallotManifestParser;
+import us.freeandfair.corla.csv.Result;
 import us.freeandfair.corla.model.County;
 import us.freeandfair.corla.model.CountyDashboard;
 import us.freeandfair.corla.model.UploadedFile;
 import us.freeandfair.corla.model.UploadedFile.FileStatus;
-import us.freeandfair.corla.model.UploadedFile.HashStatus;
 import us.freeandfair.corla.persistence.Persistence;
 import us.freeandfair.corla.query.BallotManifestInfoQueries;
 
@@ -119,18 +121,23 @@ public class BallotManifestImport extends AbstractCountyDashboardEndpoint {
   private void parseFile(final Response the_response, final UploadedFile the_file) {  
     try (InputStream bmi_is = the_file.file().getBinaryStream()) {
       final InputStreamReader bmi_isr = new InputStreamReader(bmi_is, "UTF-8");
-      final BallotManifestParser parser = 
+      final ColoradoBallotManifestParser parser =
           new ColoradoBallotManifestParser(bmi_isr, 
                                            the_file.county().id());
       final int deleted = BallotManifestInfoQueries.deleteMatching(the_file.county().id());
-      if (parser.parse()) {
-        final int imported = parser.recordCount().getAsInt();
+      Result result = parser.parse();
+      if (result.success) {
+        final int imported = result.importedCount;
+        result = new Result();
+        result.success = true;
+        result.importedCount = imported;
+        the_file.setResult(result);
         Main.LOGGER.info(imported + " ballot manifest records parsed from file " + 
                          the_file.filename() + PAREN_ID + the_file.id() + ") for county " + 
                          the_file.county().id());
         updateCountyDashboard(the_response, the_file,
                               parser.ballotCount().getAsInt());
-        the_file.setStatus(FileStatus.IMPORTED_AS_BALLOT_MANIFEST);
+        the_file.setStatus(FileStatus.IMPORTED);
         Persistence.saveOrUpdate(the_file);
         final Map<String, Integer> response = new HashMap<String, Integer>();
         response.put("records_imported", imported);
@@ -139,6 +146,8 @@ public class BallotManifestImport extends AbstractCountyDashboardEndpoint {
         }
         okJSON(the_response, Main.GSON.toJson(response));
       } else {
+        the_file.setResult(result);
+        Persistence.saveOrUpdate(the_file);
         Main.LOGGER.info("could not parse malformed ballot manifest file " + 
                          the_file.filename() + PAREN_ID + the_file.id() + ") for county " + 
                          the_file.county().id());
@@ -172,15 +181,23 @@ public class BallotManifestImport extends AbstractCountyDashboardEndpoint {
     }
     
     try {
-      final UploadedFile file =
-          Main.GSON.fromJson(the_request.body(), UploadedFile.class);
+      JsonParser parser = new JsonParser();
+      JsonElement jsonBody = parser.parse(the_request.body());
+      JsonObject jsonObject = jsonBody.getAsJsonObject();
+      JsonElement fileIdElement = jsonObject.get("file_id");
+      if (null == fileIdElement) {
+        badDataContents(the_response, "missing file_id attribute");
+        return my_endpoint_result.get();
+      }
+      Long fileId = fileIdElement.getAsLong();
+      final UploadedFile file = Persistence.getByID(fileId, UploadedFile.class);
       if (file == null) {
         badDataContents(the_response, "nonexistent file");
       } else if (!file.county().equals(county)) {
         unauthorized(the_response, "county " + county.id() + " attempted to import " + 
                                    "file " + file.filename() + " uploaded by county " + 
                                    file.county().id());
-      } else if (file.hashStatus() == HashStatus.VERIFIED) {
+      } else if (file.getStatus() == FileStatus.HASH_VERIFIED) {
         parseFile(the_response, file);
       } else {
         badDataContents(the_response, "attempt to import a file without a verified hash");

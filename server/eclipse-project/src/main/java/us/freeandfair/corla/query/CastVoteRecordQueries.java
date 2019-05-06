@@ -278,34 +278,7 @@ public final class CastVoteRecordQueries {
     return query.executeUpdate();
   }
 
-  /**
-   * Deletes the set of cast vote records for the specified county ID and
-   * record type.
-   *
-   * @param the_county_id The county ID.
-   * @param the_type The record type.
-   * @return the number of records deleted.
-   * @exception PersistenceException if the cast vote records cannot be deleted.
-   */
-  public static int deleteMatching(final Long the_county_id,
-                                    final RecordType the_type) {
-    final AtomicInteger count = new AtomicInteger();
-    final Session s = Persistence.currentSession();
-    final CriteriaBuilder cb = s.getCriteriaBuilder();
-    final CriteriaQuery<CastVoteRecord> cq = cb.createQuery(CastVoteRecord.class);
-    final Root<CastVoteRecord> root = cq.from(CastVoteRecord.class);
-    cq.where(cb.and(cb.equal(root.get(COUNTY_ID), the_county_id),
-                    cb.equal(root.get(RECORD_TYPE), the_type)));
-    final Query<CastVoteRecord> query = s.createQuery(cq);
-    final Stream<CastVoteRecord> to_delete = query.stream();
-    to_delete.forEach((the_cvr) -> {
-      Persistence.delete(the_cvr);
-      count.incrementAndGet();
-    });
-    return count.get();
-  }
-
-  /**
+   /**
    * Obtain the CastVoteRecord object with the specified county, type,
    * and sequence number.
    *
