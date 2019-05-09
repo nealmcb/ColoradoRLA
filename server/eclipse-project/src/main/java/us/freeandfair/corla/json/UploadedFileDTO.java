@@ -31,4 +31,8 @@ public class UploadedFileDTO {
     this.size = uploadedFile.size();
     this.approximate_record_count = uploadedFile.approximateRecordCount();
   }
+
+  public Long getFileId() {
+    return this.fileId;
+  }
 }

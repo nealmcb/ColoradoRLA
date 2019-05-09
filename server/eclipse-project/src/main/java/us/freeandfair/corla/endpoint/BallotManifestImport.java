@@ -30,10 +30,15 @@ import com.google.gson.JsonObject;
 import spark.Request;
 import spark.Response;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.LogManager;
+
+
 import us.freeandfair.corla.Main;
 import us.freeandfair.corla.asm.ASMEvent;
 import us.freeandfair.corla.csv.ColoradoBallotManifestParser;
 import us.freeandfair.corla.csv.Result;
+import us.freeandfair.corla.json.UploadedFileDTO;
 import us.freeandfair.corla.model.County;
 import us.freeandfair.corla.model.CountyDashboard;
 import us.freeandfair.corla.model.UploadedFile;
@@ -49,6 +54,13 @@ import us.freeandfair.corla.query.BallotManifestInfoQueries;
  */
 @SuppressWarnings({"PMD.AtLeastOneConstructor", "PMD.ExcessiveImports"})
 public class BallotManifestImport extends AbstractCountyDashboardEndpoint {
+
+  /**
+   * Class-wide logger
+   */
+  public static final Logger LOGGER =
+    LogManager.getLogger(BallotManifestImport.class);
+
   /**
    * The " (id " string.
    */
@@ -126,7 +138,7 @@ public class BallotManifestImport extends AbstractCountyDashboardEndpoint {
         result.success = true;
         result.importedCount = imported;
         the_file.setResult(result);
-        Main.LOGGER.info(imported + " ballot manifest records parsed from file " + 
+        LOGGER.info(imported + " ballot manifest records parsed from file " +
                          the_file.filename() + PAREN_ID + the_file.id() + ") for county " + 
                          the_file.county().id());
         updateCountyDashboard(the_response, the_file,
@@ -142,20 +154,20 @@ public class BallotManifestImport extends AbstractCountyDashboardEndpoint {
       } else {
         the_file.setResult(result);
         Persistence.saveOrUpdate(the_file);
-        Main.LOGGER.info("could not parse malformed ballot manifest file " + 
+        LOGGER.info("could not parse malformed ballot manifest file " +
                          the_file.filename() + PAREN_ID + the_file.id() + ") for county " + 
                          the_file.county().id());
         badDataContents(the_response, "malformed ballot manifest file " + 
                                       the_file.filename() + PAREN_ID + the_file.id() + ")");
       }
     } catch (final RuntimeException | IOException e) {
-      Main.LOGGER.info("could not parse malformed ballot manifest file " + 
+      LOGGER.info("could not parse malformed ballot manifest file " +
                        the_file.filename() + PAREN_ID + the_file.id() + ") for county " + 
                        the_file.county().id() + ": " + e);
       badDataContents(the_response, "malformed ballot manifest file " + 
                                     the_file.filename() + PAREN_ID + the_file.id() + ")");
     } catch (final SQLException e) {
-      Main.LOGGER.info("could not read file " + the_file.filename() + 
+      LOGGER.info("could not read file " + the_file.filename() +
                        PAREN_ID + the_file.id() + ") from persistent storage");
     }
   }
@@ -175,16 +187,13 @@ public class BallotManifestImport extends AbstractCountyDashboardEndpoint {
     }
     
     try {
-      JsonParser parser = new JsonParser();
-      JsonElement jsonBody = parser.parse(the_request.body());
-      JsonObject jsonObject = jsonBody.getAsJsonObject();
-      JsonElement fileIdElement = jsonObject.get("file_id");
-      if (null == fileIdElement) {
-        badDataContents(the_response, "missing file_id attribute");
+      UploadedFileDTO upF = Main.GSON.fromJson(the_request.body(), UploadedFileDTO.class);
+      if (null == upF.getFileId()) {
+        LOGGER.error(the_request.body() + " did not have a fileId attribute");
+        badDataContents(the_response, "missing fileId attribute");
         return my_endpoint_result.get();
       }
-      Long fileId = fileIdElement.getAsLong();
-      final UploadedFile file = Persistence.getByID(fileId, UploadedFile.class);
+      final UploadedFile file = Persistence.getByID(upF.getFileId(), UploadedFile.class);
       if (file == null) {
         badDataContents(the_response, "nonexistent file");
       } else if (!file.county().equals(county)) {

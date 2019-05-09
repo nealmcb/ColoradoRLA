@@ -53,6 +53,7 @@ import spark.Response;
 import us.freeandfair.corla.Main;
 import us.freeandfair.corla.crypto.HashChecker;
 import us.freeandfair.corla.csv.Result;
+import us.freeandfair.corla.json.UploadedFileDTO;
 import us.freeandfair.corla.model.County;
 import us.freeandfair.corla.model.UploadedFile;
 import us.freeandfair.corla.model.UploadedFile.FileStatus;
@@ -420,7 +421,8 @@ public class FileUpload extends AbstractEndpoint {
           uploaded_file = attemptFilePersistence(the_response, info, county);
           if (uploaded_file != null) {
             LOGGER.info("Upload File " + uploaded_file.toString());
-            okJSON(the_response, Main.GSON.toJson(uploaded_file));
+            UploadedFileDTO upF = new UploadedFileDTO(uploaded_file);
+            okJSON(the_response, Main.GSON.toJson(upF));
           } // else another result code has already been set
         } catch (final java.io.IOException | java.security.NoSuchAlgorithmException e) {
           info.my_ok = false;
