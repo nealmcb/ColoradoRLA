@@ -2,29 +2,17 @@ import * as React from 'react';
 
 import * as _ from 'lodash';
 
-import Nav from '../Nav';
+import { Breadcrumb, Button, Card, Intent } from '@blueprintjs/core';
 
+import DOSLayout from 'corla/component/DOSLayout';
 import counties from 'corla/data/counties';
-
 import { formatLocalDate } from 'corla/date';
 
-const Breadcrumb = () => (
+const Breadcrumbs = () => (
     <ul className='pt-breadcrumbs'>
-        <li>
-            <a className='pt-breadcrumb' href='/sos'>
-                SoS
-            </a>
-        </li>
-        <li>
-            <a className='pt-breadcrumb' href='/sos/audit'>
-                Audit Admin
-            </a>
-        </li>
-        <li>
-            <a className='pt-breadcrumb pt-breadcrumb-current'>
-                Review
-            </a>
-        </li>
+        <li><Breadcrumb href='/sos' text='SoS' />></li>
+        <li><Breadcrumb href='/sos/audit' text='Audit Admin' /></li>
+        <li><Breadcrumb className='pt-breadcrumb-current' text='Review' /></li>
     </ul>
 );
 
@@ -58,9 +46,9 @@ const SelectedContests = (props: SelectedContestsProps) => {
     });
 
     return (
-        <div className='pt-card'>
+        <Card>
             <h3>Selected Contests</h3>
-            <div className='pt-card'>
+            <Card>
                 <table className='pt-html-table pt-html-table-bordered pt-small'>
                     <thead>
                         <tr>
@@ -73,8 +61,8 @@ const SelectedContests = (props: SelectedContestsProps) => {
                         { rows }
                     </tbody>
                 </table>
-            </div>
-        </div>
+            </Card>
+        </Card>
     );
 };
 
@@ -99,10 +87,9 @@ const AuditReview = (props: AuditReviewProps) => {
 
     const disableLaunchButton = !dosState.seed;
 
-    return (
+    const main =
         <div>
-            <Nav />
-            <Breadcrumb />
+            <Breadcrumbs />
             <h2>Audit</h2>
             <h3>Audit Definition Review</h3>
             <div>
@@ -111,7 +98,7 @@ const AuditReview = (props: AuditReviewProps) => {
                 to the counties and the previous pages will not be editable.
                 In particular, you will not be able to change which contests are under audit.
             </div>
-            <div className='pt-card'>
+            <Card>
                 <table className='pt-html-table'>
                     <tbody>
                         <tr>
@@ -138,22 +125,21 @@ const AuditReview = (props: AuditReviewProps) => {
                         </tr>
                     </tbody>
                 </table>
-            </div>
-            <SelectedContests auditedContests={dosState.auditedContests}
-                              contests={dosState.contests} />
+            </Card>
+            <SelectedContests auditedContests={ dosState.auditedContests }
+                              contests={ dosState.contests } />
             <div>
-                <button onClick={ back } className='pt-button pt-breadcrumb'>
-                    Back
-                </button>
-                <button disabled={ disableLaunchButton }
-                        onClick={ launch }
-                        className='pt-button pt-intent-primary pt-breadcrumb'>
+                <Button onClick={ back }>Back</Button>
+                <Button className='ml-default'
+                        disabled={ disableLaunchButton }
+                        intent={ Intent.PRIMARY }
+                        onClick={ launch }>
                     Launch Audit
-                </button>
+                </Button>
             </div>
-        </div>
-    );
-};
+        </div>;
 
+    return <DOSLayout main={ main } />;
+};
 
 export default AuditReview;

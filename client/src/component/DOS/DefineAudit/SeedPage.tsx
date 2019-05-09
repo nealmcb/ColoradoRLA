@@ -1,26 +1,16 @@
 import * as React from 'react';
 
-import Nav from '../Nav';
+import { Breadcrumb, Button, Card, Intent } from '@blueprintjs/core';
+
+import DOSLayout from 'corla/component/DOSLayout';
 
 import SeedForm from './SeedForm';
 
-const Breadcrumb = () => (
+const Breadcrumbs = () => (
     <ul className='pt-breadcrumbs'>
-        <li>
-            <a className='pt-breadcrumb' href='/sos'>
-                SoS
-            </a>
-        </li>
-        <li>
-            <a className='pt-breadcrumb' href='/sos/audit'>
-                Audit Admin
-            </a>
-        </li>
-        <li>
-            <a className='pt-breadcrumb pt-breadcrumb-current'>
-                Seed
-            </a>
-        </li>
+        <li><Breadcrumb href='/sos' text='SoS' />></li>
+        <li><Breadcrumb href='/sos/audit' text='Audit Admin' /></li>
+        <li><Breadcrumb className='pt-breadcrumb-current' text='Seed' /></li>
     </ul>
 );
 
@@ -49,35 +39,33 @@ class AuditSeedPage extends React.Component<PageProps> {
     }
 
     public render() {
-        return (
+        const main =
             <div>
-                <Nav />
-                <Breadcrumb />
-                <div className='pt-card'>
+                <Breadcrumbs />
+                <Card>
                     <h3>Audit Definition - Enter Random Seed</h3>
-                    <div className='pt-card'>
+                    <Card>
                         Enter the random seed generated from the public meeting
                         on { this.props.formattedPublicMeetingDate }.
-                    </div>
-                    <div className='pt-card'>
+                    </Card>
+                    <Card>
                         <SeedForm initSeed={ this.state.form.seed }
                                   updateForm={ (seed: string) => { this.state.form.seed = seed; } }
                                   setValid={ (v: boolean) => { this.setValid(v); } } />
-                    </div>
-                </div>
+                    </Card>
+                </Card>
                 <div>
-                    <button className='pt-button pt-breadcrumb'
-                            onClick={ this.props.back }>
-                        Back
-                    </button>
-                    <button className='pt-button pt-intent-primary pt-breadcrumb'
+                    <Button onClick={ this.props.back }>Back</Button>
+                    <Button className='ml-default'
+                            intent={ Intent.PRIMARY }
                             disabled={!this.state.formValid}
                             onClick={ this.onSaveAndNext }>
                         Save & Next
-                    </button>
+                    </Button>
                 </div>
-            </div>
-        );
+            </div>;
+
+        return <DOSLayout main={ main } />;
     }
 
     private onSaveAndNext = () => {

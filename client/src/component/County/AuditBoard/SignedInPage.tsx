@@ -1,9 +1,10 @@
 import * as React from 'react';
 
-import CountyNav from '../Nav';
+import { Button, Card, Intent } from '@blueprintjs/core';
+
+import CountyLayout from 'corla/component/CountyLayout';
 
 import auditBoardSignOut from 'corla/action/county/auditBoardSignOut';
-
 
 interface PageProps {
     auditBoardStatus: AuditBoardStatus;
@@ -26,17 +27,16 @@ const SignedInPage = (props: PageProps) => {
 
     const startOrContinueText = hasAuditedAnyBallot ? 'Continue Audit' : 'Start Audit';
 
-    return (
+    const main =
         <div>
-            <CountyNav />
             <div>
                 <h2>Audit Board { auditBoardIndex + 1 }</h2>
-                <div className='pt-card'>
+                <Card>
                     <h5>The Audit Board members below are signed in.
                     To sign the Audit Board out, click the "Sign Out" button below.</h5>
-                </div>
+                </Card>
             </div>
-            <div className='pt-card'>
+            <Card>
                 <h4>Board Member 1:</h4>
                 <div>
                     Name: { members[0].firstName } { members[0].lastName }
@@ -44,8 +44,8 @@ const SignedInPage = (props: PageProps) => {
                 <div>
                     Political party: { members[0].party }
                 </div>
-            </div>
-            <div className='pt-card'>
+            </Card>
+            <Card>
                 <h4>Board Member 2:</h4>
                 <div>
                     Name: { members[1].firstName } { members[1].lastName }
@@ -53,27 +53,26 @@ const SignedInPage = (props: PageProps) => {
                 <div>
                     Political party: { members[1].party }
                 </div>
-            </div>
+            </Card>
             <div>
-                <button
-                    disabled={ true }
-                    className='pt-button pt-intent-primary pt-breadcrumb'>
+                <Button disabled
+                        intent={ Intent.PRIMARY }>
                     Submit
-                </button>
-                <button
-                    className='pt-button pt-intent-primary pt-breadcrumb'
-                    onClick={ () => auditBoardSignOut(auditBoardIndex) }>
+                </Button>
+                <Button className='ml-default'
+                        intent={ Intent.PRIMARY }
+                        onClick={ () => auditBoardSignOut(auditBoardIndex) }>
                     Sign Out
-                </button>
-                <button
-                    className='pt-button pt-intent-primary pt-breadcrumb'
-                    onClick={ auditBoardStartOrContinue }>
+                </Button>
+                <Button className='ml-default'
+                        intent={ Intent.PRIMARY }
+                        onClick={ auditBoardStartOrContinue }>
                     { startOrContinueText }
-                </button>
+                </Button>
             </div>
-        </div>
-    );
-};
+        </div>;
 
+    return <CountyLayout main={ main } />;
+};
 
 export default SignedInPage;

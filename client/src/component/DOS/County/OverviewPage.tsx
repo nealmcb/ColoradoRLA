@@ -1,28 +1,18 @@
 import * as React from 'react';
-
 import { Link } from 'react-router-dom';
 
 import * as _ from 'lodash';
 
-import counties from 'corla/data/counties';
+import { Breadcrumb } from '@blueprintjs/core';
 
+import DOSLayout from 'corla/component/DOSLayout';
+import counties from 'corla/data/counties';
 import { formatCountyASMState } from 'corla/format';
 
-import Nav from '../Nav';
-
-
-const Breadcrumb = () => (
+const Breadcrumbs = () => (
     <ul className='pt-breadcrumbs'>
-        <li>
-            <a className='pt-breadcrumb' href='/sos'>
-                SoS
-            </a>
-        </li>
-        <li>
-            <a className='pt-breadcrumb pt-breadcrumb-current'>
-                Counties
-            </a>
-        </li>
+        <li><Breadcrumb text={ <Link to='/sos'>SoS</Link> } /></li>
+        <li><Breadcrumb className='pt-breadcrumb-current' text='Counties' /></li>
     </ul>
 );
 
@@ -42,12 +32,12 @@ const CountyTableRow = (props: RowProps) => {
 
     return (
         <tr>
-            <td>
+            <td className='ellipsize'>
                 <Link to={ `/sos/county/${county.id}` }>
                     { county.name }
                 </Link>
             </td>
-            <td>{ countyState }</td>
+            <td className='ellipsize'>{ countyState }</td>
             <td>{ submitted }</td>
             <td>{ auditedCount }</td>
             <td>{ unauditedCount }</td>
@@ -73,19 +63,17 @@ const CountyTable = (props: TableProps) => {
     });
 
     return (
-        <table className='pt-html-table pt-html-table-bordered pt-small'>
+        <table className='pt-html-table pt-html-table-striped rla-table mt-default'>
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Status</th>
+                    <th className='status-col'>Status</th>
                     <th># Ballots Submitted</th>
                     <th>Audited Contest Discrepancies</th>
                     <th>Non-audited Contest Discrepancies</th>
                 </tr>
             </thead>
-            <tbody>
-                { countyRows }
-            </tbody>
+            <tbody>{ countyRows }</tbody>
         </table>
     );
 };
@@ -97,14 +85,13 @@ interface PageProps {
 const CountyOverviewPage = (props: PageProps) => {
     const { countyStatus } = props;
 
-    return (
+    const main =
         <div>
-            <Nav />
-            <Breadcrumb />
+            <Breadcrumbs />
             <CountyTable countyStatus={ countyStatus } />
-        </div>
-    );
-};
+        </div>;
 
+    return <DOSLayout main={ main } />;
+};
 
 export default CountyOverviewPage;

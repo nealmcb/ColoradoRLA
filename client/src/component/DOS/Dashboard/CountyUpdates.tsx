@@ -1,31 +1,18 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 
 import * as _ from 'lodash';
 
-import { EditableText, Icon, Tooltip } from '@blueprintjs/core';
+import { Checkbox, Icon, InputGroup, Popover, Position } from '@blueprintjs/core';
 
 import counties from 'corla/data/counties';
 
-import { formatCountyAndBoardASMState } from 'corla/format';
+import {
+    formatCountyAndBoardASMState,
+    formatCountyAndBoardASMStateIndicator,
+} from 'corla/format';
 
 import { naturalSortBy } from 'corla/util';
-
-const RemainingInRoundHeader = () => {
-    const content =
-        'Number of ballots remaining to audit in the current round.';
-
-    return (
-        <Tooltip
-            className='pt-tooltip-indicator'
-            content={ content }>
-            <div>
-                <span>Remaining in Round</span>
-                <span> </span>
-                <Icon icon='help' />
-            </div>
-        </Tooltip>
-    );
-};
 
 type SortKey = 'name'
              | 'status'
@@ -42,6 +29,7 @@ interface RowData {
     id: number;
     name: string;
     status: string;
+    statusIndicator: string;
     submitted: number | string;
     auditedDisc: number | string;
     oppDisc: number | string;
@@ -56,17 +44,61 @@ interface UpdatesProps {
 }
 
 interface UpdatesState {
-    filter: string;
+    countyFilter: string;
+    statusFilters: { [key: string]: boolean };
     order: SortOrder;
     sort: SortKey;
 }
 
+const linkToCountyDetail = (row: RowData) => {
+    return (
+        <Link to={ `/sos/county/${row.id}` }>{ row.name }</Link>
+    );
+};
+
 class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
-    public state: UpdatesState = {
-        filter: '',
-        order: 'asc',
-        sort: 'name',
-    };
+    /*
+     * When we find out about new statuses, merge them into the state, shown by
+     * default.
+     */
+    public static getDerivedStateFromProps(props: UpdatesProps, state: UpdatesState) {
+        const uniqueStatuses = _.uniq(_.map(props.countyStatus, c => {
+            return formatCountyAndBoardASMState(c.asmState, c.auditBoardASMState);
+        }));
+
+        const newFilters = _.reduce(uniqueStatuses, (acc, v) => {
+            if (!_.has(acc, v)) {
+                acc[v] = true;
+            }
+
+            return acc;
+        }, state.statusFilters);
+
+        return { statusFilters: newFilters };
+    }
+
+    public constructor(props: UpdatesProps) {
+        super(props);
+
+        this.state = {
+            countyFilter: '',
+            order: 'asc',
+            sort: 'name',
+            statusFilters: {},
+        };
+
+        this.checkStatusFilters = this.checkStatusFilters.bind(this);
+        this.uncheckStatusFilters = this.uncheckStatusFilters.bind(this);
+
+        this.onCountyFilterChange = this.onCountyFilterChange.bind(this);
+        this.reverseOrder = this.reverseOrder.bind(this);
+        this.rowFilterName = this.rowFilterName.bind(this);
+        this.rowFilterStatus = this.rowFilterStatus.bind(this);
+        this.sortBy = this.sortBy.bind(this);
+        this.sortClassForCol = this.sortClassForCol.bind(this);
+        this.sortIconForCol = this.sortIconForCol.bind(this);
+        this.statusFilterPopover = this.statusFilterPopover.bind(this);
+    }
 
     public render() {
         const { auditStarted, countyStatus } = this.props;
@@ -75,6 +107,7 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
             const county = counties[c.id];
             const missedDeadline = c.asmState === 'DEADLINE_MISSED';
             const status = formatCountyAndBoardASMState(c.asmState, c.auditBoardASMState);
+            const statusIndicator = formatCountyAndBoardASMStateIndicator(c.asmState, c.auditBoardASMState);
 
             if (!auditStarted || (auditStarted && missedDeadline)) {
                 return {
@@ -86,6 +119,7 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
                     remRound: '—',
                     remTotal: '—',
                     status,
+                    statusIndicator: '',
                     submitted: '—',
                 };
             }
@@ -107,6 +141,7 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
                 remRound: c.ballotsRemainingInRound,
                 remTotal: Math.max(0, c.estimatedBallotsToAudit),
                 status,
+                statusIndicator,
                 submitted: c.auditedBallotCount || 0,
             };
         });
@@ -131,112 +166,199 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
             }
         };
 
-        const sortedCountyData = naturalSortBy(countyData, selector);
+        const filteredCountyData = _
+            .chain(countyData)
+            .filter(this.rowFilterName)
+            .filter(this.rowFilterStatus)
+            .value();
+
+        const sortedCountyData = naturalSortBy(filteredCountyData, selector);
 
         if (this.state.order === 'desc') {
             _.reverse(sortedCountyData);
         }
 
-        const filterName = (row: RowData) => {
-            const name = row.name.toLowerCase();
-            const s = this.state.filter.toLowerCase();
-
-            return name.includes(s);
-        };
-        const filteredCountyData = _.filter(sortedCountyData, filterName);
-
-        const countyStatusRows = _.map(filteredCountyData, (row: RowData) => {
+        const countyStatusRows = _.map(sortedCountyData, (row: RowData) => {
             return (
                 <tr key={ row.id }>
-                    <td>{ row.name }</td>
-                    <td>{ row.status }</td>
-                    <td>{ row.submitted }</td>
-                    <td>{ row.auditedDisc }</td>
-                    <td>{ row.oppDisc }</td>
-                    <td>{ row.disagreements }</td>
-                    <td>{ row.remRound }</td>
+                    <td className={ this.sortClassForCol('name')  + ' ellipsize' }>{ linkToCountyDetail(row) }</td>
+                    <td className={ this.sortClassForCol('status') + ' ellipsize' }>
+                        <div className='status-indicator-group'>
+                            { row.statusIndicator && <span className={ `status-indicator ${row.statusIndicator}` } /> }
+                            <span className='status-indicator-text'>{ row.status }</span>
+                        </div>
+                    </td>
+                    <td className={ this.sortClassForCol('auditedDisc') }>{ row.auditedDisc }</td>
+                    <td className={ this.sortClassForCol('oppDisc') }>{ row.oppDisc }</td>
+                    <td className={ this.sortClassForCol('disagreements') }>{ row.disagreements }</td>
+                    <td className={ this.sortClassForCol('submitted') }>{ row.submitted }</td>
+                    <td className={ this.sortClassForCol('remRound') }>{ row.remRound }</td>
                 </tr>
             );
         });
 
         return (
-            <div className='pt-card'>
-                <h3>County Updates</h3>
-                <div className='pt-card'>
-                    <strong>Filter by County Name:</strong>
-                    <span> </span>
-                    <EditableText
-                        className='pt-input'
-                        minWidth={ 200 }
-                        value={ this.state.filter }
-                        onChange={ this.onFilterChange } />
+            <div>
+                <div className='state-dashboard-updates-preface'>
+                    <div className='state-dashboard-updates-preface-description'>
+                        <h3>County Updates</h3>
+                        <p>
+                            Click on a column name to sort by that column’s data. To
+                            reverse sort, click on the column name again.
+                        </p>
+                    </div>
+                    <div className='state-dashboard-updates-preface-search'>
+                        <InputGroup leftIcon='search'
+                                    type='search'
+                                    placeholder='Filter by county name'
+                                    value={ this.state.countyFilter }
+                                    onChange={ this.onCountyFilterChange } />
+                    </div>
                 </div>
-                <div className='pt-card' >
-                    <strong>Click on a column name to sort by that column's data.
-                    To reverse sort, click on the column name again.</strong>
-                </div>
-                <div className='pt-card'>
-                    <table className='pt-html-table pt-html-table-bordered pt-small'>
-                        <thead>
-                            <tr>
-                                <th onClick={ this.sortBy('name') }>
-                                    Name
-                                    <span> </span>
+                <table className='pt-html-table pt-html-table-striped rla-table mt-default'>
+                    <thead>
+                        <tr>
+                            <th className={ this.sortClassForCol('name') }
+                                onClick={ this.sortBy('name') }>
+                                <div className='rla-table-sortable-wrapper'>
+                                    County Name
                                     { this.sortIconForCol('name') }
-                                </th>
-                                <th onClick={ this.sortBy('status') }>
+                                </div>
+                            </th>
+                            <th className={ 'status-col ' + this.sortClassForCol('status') }
+                                onClick={ this.sortBy('status') }>
+                                <div className='rla-table-sortable-wrapper'>
                                     Status
-                                    <span> </span>
                                     { this.sortIconForCol('status') }
-                                </th>
-                                <th onClick={ this.sortBy('submitted') }>
-                                    Submitted
-                                    <span> </span>
-                                    { this.sortIconForCol('submitted') }
-                                </th>
-                                <th onClick={ this.sortBy('auditedDisc') }>
-                                    Audited Contest Discrepancies
-                                    <span> </span>
+                                    { this.statusFilterPopover() }
+                                </div>
+                            </th>
+                            <th className={ this.sortClassForCol('auditedDisc') }
+                                onClick={ this.sortBy('auditedDisc') }>
+                                <div className='rla-table-sortable-wrapper'>
+                                    Audited Discrepancies
                                     { this.sortIconForCol('auditedDisc') }
-                                </th>
-                                <th onClick={ this.sortBy('oppDisc') }>
-                                    Non-audited Contest Discrepancies
-                                    <span> </span>
+                                </div>
+                            </th>
+                            <th className={ this.sortClassForCol('oppDisc') }
+                                onClick={ this.sortBy('oppDisc') }>
+                                <div className='rla-table-sortable-wrapper'>
+                                    Non-audited Discrepancies
                                     { this.sortIconForCol('oppDisc') }
-                                </th>
-                                <th onClick={ this.sortBy('disagreements') }>
+                                </div>
+                            </th>
+                            <th className={ this.sortClassForCol('disagreements') }
+                                onClick={ this.sortBy('disagreements') }>
+                                <div className='rla-table-sortable-wrapper'>
                                     Disagreements
-                                    <span> </span>
                                     { this.sortIconForCol('disagreements') }
-                                </th>
-                                <th onClick={ this.sortBy('remRound') }>
-                                    <RemainingInRoundHeader />
-                                    <span> </span>
+                                </div>
+                            </th>
+                            <th className={ this.sortClassForCol('submitted') }
+                                onClick={ this.sortBy('submitted') }>
+                                <div className='rla-table-sortable-wrapper'>
+                                    Submitted
+                                    { this.sortIconForCol('submitted') }
+                                </div>
+                            </th>
+                            <th className={ this.sortClassForCol('remRound') }
+                                onClick={ this.sortBy('remRound') }>
+                                <div className='rla-table-sortable-wrapper'>
+                                    Remaining in Round
                                     { this.sortIconForCol('remRound') }
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            { ...countyStatusRows }
-                        </tbody>
-                    </table>
-                </div>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>{ ...countyStatusRows }</tbody>
+                </table>
             </div>
         );
     }
 
-    private sortIconForCol = (col: string) => {
+    private checkStatusFilters(e: React.MouseEvent<HTMLButtonElement>) {
+        this.setState({ statusFilters: _.mapValues(this.state.statusFilters, _.stubTrue) });
+    }
+
+    private uncheckStatusFilters(e: React.MouseEvent<HTMLButtonElement>) {
+        this.setState({ statusFilters: _.mapValues(this.state.statusFilters, _.stubFalse) });
+    }
+
+    private rowFilterName(row: RowData) {
+        const name = row.name.toLowerCase();
+        const s = this.state.countyFilter.toLowerCase();
+
+        return name.includes(s);
+    }
+
+    private rowFilterStatus(row: RowData) {
+        return !!_.get(this.state.statusFilters, row.status);
+    }
+
+    private sortClassForCol(col: string) {
+        return col === this.state.sort ? 'is-sorted' : '';
+    }
+
+    private sortIconForCol(col: string) {
         if (col !== this.state.sort) {
-            return null;
+            return <Icon icon='double-caret-vertical' />;
         }
 
         return this.state.order === 'asc'
-             ? <Icon icon='sort-asc' />
-             : <Icon icon='sort-desc' />;
+             ? <Icon icon='symbol-triangle-down' />
+             : <Icon icon='symbol-triangle-up' />;
     }
 
-    private onFilterChange = (filter: string) => {
-        this.setState({ filter });
+    private statusFilterPopover() {
+        const createChangeHandler = (k: string) => {
+            return (e: React.ChangeEvent<HTMLInputElement>) => {
+                const newFilters = this.state.statusFilters;
+                newFilters[k] = e.target.checked;
+                this.setState({ statusFilters: newFilters });
+            };
+        };
+
+        // The click handler on the wrapper div catches propagating clicks and
+        // prevents them from bubbling up to the table header which would
+        // trigger re-sorting.
+        return (
+            <div className='status-filter-wrapper'
+                 onClick={ (e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation() }>
+                <Popover popoverClassName='status-filter-content'
+                         targetClassName='status-filter-target'
+                         position={ Position.BOTTOM }>
+                    <button title='Toggle status filter controls'><Icon icon='chevron-down' /></button>
+                    <div>
+                        <div className='status-filter-content-header'>
+                            <h3>Filter by status</h3>
+                        </div>
+                        <hr />
+                        <div className='status-filter-content-body'>
+                            {
+                                _
+                                .chain(this.state.statusFilters)
+                                .toPairs()
+                                .sortBy(p => p[0])
+                                .map((p: [string, boolean]) => {
+                                    return <Checkbox onChange={ createChangeHandler(p[0]) }
+                                                     key={ p[0] }
+                                                     checked={ p[1] }>{ p[0] }</Checkbox>;
+                                })
+                                .value()
+                            }
+                        </div>
+                        <div className='status-filter-content-actions'>
+                            <button onClick={ this.checkStatusFilters }>Check all</button>
+                            <button onClick={ this.uncheckStatusFilters }>Clear all</button>
+                        </div>
+                    </div>
+                </Popover>
+            </div>
+        );
+    }
+
+    private onCountyFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
+        this.setState({ countyFilter: e.target.value });
     }
 
     private sortBy(sort: SortKey) {
@@ -254,6 +376,5 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
         this.setState({order: this.state.order === 'asc' ? 'desc' : 'asc'});
     }
 }
-
 
 export default CountyUpdates;

@@ -10,9 +10,10 @@ import canStartNextRoundSelector from 'corla/selector/dos/canStartNextRound';
 import countiesWithRoundSelector from 'corla/selector/dos/countiesWithRound';
 import currentRoundSelector from 'corla/selector/dos/currentRound';
 
-
 interface ContainerProps {
+    auditIsComplete: boolean;
     auditStarted: boolean;
+    canRenderReport: boolean;
     canStartNextRound: boolean;
     countiesWithRound: DOS.CountyStatus[];
     currentRound: number;
@@ -24,14 +25,18 @@ interface ContainerProps {
 class RoundContainer extends React.Component<ContainerProps> {
     public render() {
         if (this.props.canStartNextRound) {
-            return <Control { ...this.props } />;
+            return (
+                <Control { ...this.props } />
+            );
         }
 
         if (!this.props.auditStarted) {
             return <div />;
         }
 
-        return <Status { ...this.props } />;
+        return (
+            <Status { ...this.props } />
+        );
     }
 }
 
@@ -57,6 +62,5 @@ function select(dosState: DOS.AppState) {
         totalCountiesCount,
     };
 }
-
 
 export default connect(select)(RoundContainer);

@@ -1,13 +1,12 @@
 import * as React from 'react';
 
-import CountyNav from '../Nav';
-
-import SignInForm from './SignInForm';
+import { Button, Card, Intent } from '@blueprintjs/core';
 
 import auditBoardSignIn from 'corla/action/county/auditBoardSignIn';
-
+import CountyLayout from 'corla/component/CountyLayout';
 import isValidAuditBoard from 'corla/selector/county/isValidAuditBoard';
 
+import SignInForm from './SignInForm';
 
 interface PageProps {
     auditBoardIndex: number;
@@ -49,19 +48,18 @@ class AuditBoardSignInPage extends React.Component<PageProps, PageState> {
 
         const disableButton = !isValidAuditBoard(this.state.form);
 
-        return (
+        const main =
             <div>
-                <CountyNav />
                 <div>
                     <h2>Audit Board { auditBoardIndex + 1 }</h2>
-                    <div className='pt-card'>
-                        <span className='pt-ui-text-large'>
+                    <Card>
+                        <span className='pt-ui-text-large font-weight-bold'>
                             Enter the full names and party affiliations of each
                             member of the { countyName } County Audit Board
                             { ' ' + (auditBoardIndex + 1) } who will be
                             conducting this audit today.
                          </span>
-                    </div>
+                    </Card>
                 </div>
                 <SignInForm
                     elector={ this.state.form[0] }
@@ -77,14 +75,14 @@ class AuditBoardSignInPage extends React.Component<PageProps, PageState> {
                     onPartyChange={ this.onPartyChange(1) }
                     onTextConfirm={ this.onTextConfirm }
                 />
-                <button
-                    className='pt-button pt-intent-primary'
-                    disabled={ disableButton }
-                    onClick={ submit }>
+                <Button disabled={ disableButton }
+                        intent={ Intent.PRIMARY }
+                        onClick={ submit }>
                     Sign In
-                </button>
-            </div>
-        );
+                </Button>
+            </div>;
+
+        return <CountyLayout main={ main } />;
     }
 
     private onTextConfirm = () => {
@@ -124,6 +122,5 @@ class AuditBoardSignInPage extends React.Component<PageProps, PageState> {
         this.setState(s);
     }
 }
-
 
 export default AuditBoardSignInPage;

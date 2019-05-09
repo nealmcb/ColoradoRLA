@@ -2,11 +2,10 @@ import * as React from 'react';
 
 import * as _ from 'lodash';
 
-import { MenuItem } from '@blueprintjs/core';
+import { Breadcrumb, Button, Card, Intent, MenuItem } from '@blueprintjs/core';
 import { Select } from '@blueprintjs/labs';
 
-import Nav from '../Nav';
-
+import DOSLayout from 'corla/component/DOSLayout';
 import counties from 'corla/data/counties';
 
 import { findBestMatch } from 'string-similarity';
@@ -46,17 +45,11 @@ const defaultCanonicalName = (
     return canonicalNames[bestMatchIndex];
 };
 
-const Breadcrumb = () => (
+const Breadcrumbs = () => (
     <ul className='pt-breadcrumbs'>
-        <li>
-            <a className='pt-breadcrumb' href='/sos'>SoS</a>
-        </li>
-        <li>
-            <a className='pt-breadcrumb' href='/sos/audit'>Audit Admin</a>
-        </li>
-        <li>
-            <a className='pt-breadcrumb pt-breadcrumb-current'>Standardize Contest Names</a>
-        </li>
+        <li><Breadcrumb href='/sos' text='SoS' />></li>
+        <li><Breadcrumb href='/sos/audit' text='Audit Admin' /></li>
+        <li><Breadcrumb className='pt-breadcrumb-current' text='Standardize Contest Names' /></li>
     </ul>
 );
 
@@ -182,15 +175,16 @@ class StandardizeContestsPage extends React.Component<PageProps> {
             forward,
         } = this.props;
 
+        let main = null;
+
         if (areContestsLoaded) {
             this.formData = {};
 
-            return (
+            main =
                 <div>
-                    <Nav />
-                    <Breadcrumb />
+                    <Breadcrumbs />
                     <h2>Standardize Contest Names</h2>
-                    <div className='pt-card'>
+                    <Card>
                         <p>
                             Contest names must be standardized to group records
                             correctly across jurisdictions. Below is a list of
@@ -204,41 +198,32 @@ class StandardizeContestsPage extends React.Component<PageProps> {
                         <StandardizeContestsTable canonicalContests={ canonicalContests }
                                                   contests={ contests }
                                                   updateFormData={ this.updateFormData } />
-                    </div>
-                    <div>
-                        <button onClick={ back }
-                                className='pt-button pt-breadcrumb'>
-                            Back
-                        </button>
-                        <button onClick={ () => forward(this.formData) }
-                                className='pt-button pt-intent-primary pt-breadcrumb'>
-                            Save & Next
-                        </button>
-                    </div>
-                </div>
-            );
+                    </Card>
+                    <Button onClick={ back }>Back</Button>
+                    <Button className='ml-default'
+                            intent={ Intent.PRIMARY }
+                            onClick={ () => forward(this.formData) }>
+                        Save & Next
+                    </Button>
+                </div>;
         } else {
-            return (
+            main =
                 <div>
-                    <Nav />
-                    <Breadcrumb />
+                    <Breadcrumbs />
                     <h2>Standardize Contest Names</h2>
-                    <div className='pt-card'>
+                    <Card>
                         Waiting for counties to upload contest data.
-                    </div>
-                    <div>
-                        <button onClick={ back }
-                                className='pt-button pt-breadcrumb'>
-                            Back
-                        </button>
-                        <button disabled
-                                className='pt-button pt-intent-primary pt-breadcrumb'>
-                            Save & Next
-                        </button>
-                    </div>
-                </div>
-            );
+                    </Card>
+                    <Button onClick={ back }>Back</Button>
+                    <Button className='ml-default'
+                            disabled
+                            intent={ Intent.PRIMARY }>
+                        Save & Next
+                    </Button>
+                </div>;
         }
+
+        return <DOSLayout main={ main } />;
     }
 
     private updateFormData(msg: UpdateFormMessage) {

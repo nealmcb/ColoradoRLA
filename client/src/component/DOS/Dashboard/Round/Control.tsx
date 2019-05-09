@@ -1,40 +1,41 @@
 import * as React from 'react';
 
+import { Button, Card, Intent } from '@blueprintjs/core';
+
+import fetchReport from 'corla/action/dos/fetchReport';
 import startNextRound from 'corla/action/dos/startNextRound';
 
-
-interface  ControlProps {
-    canStartNextRound: boolean;
+interface ControlProps {
+    canRenderReport: boolean;
     currentRound: number;
 }
 
 const Control = (props: ControlProps) => {
-    const { canStartNextRound, currentRound } = props;
-
-    const buttonDisabled = !canStartNextRound;
+    const {
+        canRenderReport,
+        currentRound,
+    } = props;
 
     return (
-        <div className='pt-card'>
-            <h4>Start next round</h4>
-            <div className='pt-card'>
-                Round { currentRound } completed.
-            </div>
-            <div className='pt-card'>
-                <div>
-                    Start Round { currentRound + 1 }?
-                </div>
-                <div>
-                    <button
-                        className='pt-button pt-intent-primary'
-                        disabled={ buttonDisabled }
+        <div className='state-dashboard-round'>
+            <div>
+                <h4>Round { currentRound } completed</h4>
+                <Button intent={ Intent.PRIMARY }
                         onClick={ startNextRound }>
-                        Start Round
-                    </button>
-                </div>
+                    Start round { currentRound + 1 }
+                </Button>
+            </div>
+            <div>
+                <Button large
+                        disabled={ !canRenderReport }
+                        intent={ Intent.PRIMARY }
+                        icon='import'
+                        onClick={ fetchReport }>
+                    Download audit report
+                </Button>
             </div>
         </div>
     );
 };
-
 
 export default Control;

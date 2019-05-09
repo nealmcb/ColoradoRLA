@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import * as _ from 'lodash';
 
-import { Icon } from '@blueprintjs/core';
+import { Button, Icon, Intent } from '@blueprintjs/core';
 
 import SubmittingACVR from './SubmittingACVR';
 
@@ -39,26 +39,26 @@ const AuditInstructions = (props: InstructionsProps) => {
         <div>
             <div className='current-ballot-info'>
                 <h3 className='sidebar-heading'>Current ballot:</h3>
-                <ul className='current-ballot-stats'>
+                <ul className='current-ballot-stats pt-list-unstyled'>
                     <li>
-                        Storage bin:
-                        <span className='pt-ui-text pt-ui-text-large'>{ storageBin }</span>
+                        <span className='current-ballot-stats-label'>Storage bin</span>
+                        <span className='current-ballot-stats-value'>{ storageBin }</span>
                     </li>
                     <li>
-                        Tabulator:
-                        <span className='pt-ui-text pt-ui-text-large'>{ currentBallot.scannerId }</span>
+                        <span className='current-ballot-stats-label'>Tabulator</span>
+                        <span className='current-ballot-stats-value'>{ currentBallot.scannerId }</span>
                     </li>
                     <li>
-                        Batch:
-                        <span className='pt-ui-text pt-ui-text-large'>{ currentBallot.batchId }</span>
+                        <span className='current-ballot-stats-label'>Batch</span>
+                        <span className='current-ballot-stats-value'>{ currentBallot.batchId }</span>
                     </li>
                     <li>
-                        Ballot position:
-                        <span className='pt-ui-text pt-ui-text-large'>{ currentBallot.recordId }</span>
+                        <span className='current-ballot-stats-label'>Ballot position</span>
+                        <span className='current-ballot-stats-value'>{ currentBallot.recordId }</span>
                     </li>
                     <li>
-                        Ballot type:
-                        <span className='pt-ui-text pt-ui-text-large'>{ currentBallot.ballotType }</span>
+                        <span className='current-ballot-stats-label'>Ballot type</span>
+                        <span className='current-ballot-stats-value'>{ currentBallot.ballotType }</span>
                     </li>
                 </ul>
             </div>
@@ -224,7 +224,7 @@ const ReviewStage = (props: ReviewStageProps) => {
                     </div>
                 </div>
 
-                <div className='col-layout row1'>
+                <div className='col-layout'>
                     <div className='col1'>
                         <AuditInstructions countyState={ countyState } currentBallot={ currentBallot } />
                     </div>
@@ -248,9 +248,9 @@ const ReviewStage = (props: ReviewStageProps) => {
                         </p>
                         <BallotReview countyState={ countyState } marks={ marks } back={ prevStage } />
                         <div className='button-container button-container-left'>
-                          <button className='pt-large pt-button pt-intent-success pt-breadcrumb' onClick={ onClick }>
+                          <Button large intent={ Intent.SUCCESS } onClick={ onClick }>
                               Submit & Next Ballot Card
-                          </button>
+                          </Button>
                         </div>
                     </div>
                 </div>
@@ -258,6 +258,5 @@ const ReviewStage = (props: ReviewStageProps) => {
         </div>
     );
 };
-
 
 export default ReviewStage;

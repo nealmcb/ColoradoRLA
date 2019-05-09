@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { Card } from '@blueprintjs/core';
 import { DateInput, IDateFormatProps } from '@blueprintjs/datetime';
 
 import { formatLocalDate, parseLocalDate } from 'corla/date';
@@ -34,12 +35,12 @@ class ElectionDateForm extends React.Component<FormProps, FormState> {
 
     public render() {
         return (
-            <div className='pt-card'>
+            <Card>
                 <div>Election Date</div>
                 <DateInput { ...blueprintFormatter() }
                            onChange={ this.onDateChange }
                            value={ parseLocalDate(this.state.date) } />
-            </div>
+            </Card>
         );
     }
 

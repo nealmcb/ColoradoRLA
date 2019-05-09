@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import * as _ from 'lodash';
 
-import { Button, EditableText, Icon, Intent, Tooltip } from '@blueprintjs/core';
+import { Button, Icon, InputGroup, Intent, Tooltip } from '@blueprintjs/core';
 
 import setHandCount from 'corla/action/dos/setHandCount';
 
@@ -17,7 +17,6 @@ const RemainingToAuditHeader = () => {
 
     return (
         <Tooltip
-            className='pt-tooltip-indicator'
             content={ content }>
             <div>
                 <span>Remaining to Audit </span>
@@ -85,6 +84,13 @@ class ContestUpdates extends React.Component<UpdatesProps, UpdatesState> {
             order: 'asc',
             sort: 'name',
         };
+
+        this.onFilterChange = this.onFilterChange.bind(this);
+        this.reverseOrder = this.reverseOrder.bind(this);
+        this.rowFilterName = this.rowFilterName.bind(this);
+        this.sortBy = this.sortBy.bind(this);
+        this.sortClassForCol = this.sortClassForCol.bind(this);
+        this.sortIconForCol = this.sortIconForCol.bind(this);
     }
 
     public render() {
@@ -107,22 +113,15 @@ class ContestUpdates extends React.Component<UpdatesProps, UpdatesState> {
 
         const selector = (row: RowData) => row[this.state.sort];
 
-        const sortedData = naturalSortBy(rowData, selector);
+        const filteredData = _.filter(rowData, this.rowFilterName);
+
+        const sortedData = naturalSortBy(filteredData, selector);
 
         if (this.state.order === 'desc') {
             _.reverse(sortedData);
         }
 
-        const filterName = (row: RowData) => {
-            const contestName = row.name.toLowerCase();
-            const s = this.state.filter.toLowerCase();
-
-            return contestName.includes(s);
-        };
-
-        const filteredData = _.filter(sortedData, filterName);
-
-        const contestStatuses = _.map(filteredData, row => {
+        const contestStatuses = _.map(sortedData, row => {
             const {
                 name,
                 discrepancyCount,
@@ -132,72 +131,88 @@ class ContestUpdates extends React.Component<UpdatesProps, UpdatesState> {
 
             return (
                 <tr key={ contest.id }>
-                    <td>
-                        <HandCountButton contest={ contest } />
-                    </td>
-                    <td>{ name }</td>
-                    <td>{ discrepancyCount }</td>
-                    <td>{ estimatedBallotsToAudit }</td>
+                    <td className={ this.sortClassForCol('name') + ' ellipsize' }><span>{ name }</span></td>
+                    <td className={ this.sortClassForCol('discrepancyCount') }>{ discrepancyCount }</td>
+                    <td className={ this.sortClassForCol('estimatedBallotsToAudit') }>{ estimatedBallotsToAudit }</td>
+                    <td><HandCountButton contest={ contest } /></td>
                 </tr>
             );
         });
 
         return (
-            <div className='pt-card'>
-                <h3>Contest Updates</h3>
-                <div className='pt-card'>
-                    <strong>Filter by County or Contest Name:</strong>
-                    <span> </span>
-                    <EditableText
-                        className='pt-input'
-                        minWidth={ 200 }
-                        value={ this.state.filter }
-                        onChange={ this.onFilterChange } />
+            <div>
+                <div className='state-dashboard-updates-preface'>
+                    <div className='state-dashboard-updates-preface-description'>
+                        <h3>Contest Updates</h3>
+                        <p>
+                            Click on a column name to sort by that column’s data. To
+                            reverse sort, click on the column name again.
+                        </p>
+                    </div>
+                    <div className='state-dashboard-updates-preface-search'>
+                        <InputGroup leftIcon='search'
+                                    type='search'
+                                    placeholder='Filter by contest name'
+                                    value={ this.state.filter }
+                                    onChange={ this.onFilterChange } />
+                    </div>
                 </div>
-                <div className='pt-card'>
-                    <table className='pt-html-table'>
-                        <thead>
-                            <tr>
-                                <th>Hand Count</th>
-                                <th onClick={ this.sortBy('name') }>
+                <table className='pt-html-table pt-html-table-striped rla-table mt-default'>
+                    <thead>
+                        <tr>
+                            <th className={ this.sortClassForCol('name') }
+                                onClick={ this.sortBy('name') }>
+                                <div className='rla-table-sortable-wrapper'>
                                     Name
-                                    <span> </span>
                                     { this.sortIconForCol('name') }
-                                </th>
-                                <th onClick={ this.sortBy('discrepancyCount') }>
+                                </div>
+                            </th>
+                            <th className={ this.sortClassForCol('discrepancyCount') }
+                                onClick={ this.sortBy('discrepancyCount') }>
+                                <div className='rla-table-sortable-wrapper'>
                                     Discrepancies
-                                    <span> </span>
                                     { this.sortIconForCol('discrepancyCount') }
-                                </th>
-                                <th onClick={ this.sortBy('estimatedBallotsToAudit') }>
+                                </div>
+                            </th>
+                            <th className={ this.sortClassForCol('estimatedBallotsToAudit') }
+                                onClick={ this.sortBy('estimatedBallotsToAudit') }>
+                                <div className='rla-table-sortable-wrapper'>
                                     Est. Ballots to Audit
-                                    <span> </span>
                                    { this.sortIconForCol('estimatedBallotsToAudit') }
-                                </th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            { ...contestStatuses }
-                        </tbody>
-                    </table>
-                </div>
+                                </div>
+                            </th>
+                            <th>Hand Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>{ ...contestStatuses }</tbody>
+                </table>
             </div>
         );
     }
 
-    private sortIconForCol = (col: string) => {
+    private rowFilterName(row: RowData) {
+        const contestName = row.name.toLowerCase();
+        const s = this.state.filter.toLowerCase();
+
+        return contestName.includes(s);
+    }
+
+    private sortClassForCol(col: string) {
+        return col === this.state.sort ? 'is-sorted' : '';
+    }
+
+    private sortIconForCol(col: string) {
         if (col !== this.state.sort) {
-            return null;
+            return <Icon icon='double-caret-vertical' />;
         }
 
         return this.state.order === 'asc'
-             ? <Icon icon='sort-asc' />
-             : <Icon icon='sort-desc' />;
+             ? <Icon icon='symbol-triangle-down' />
+             : <Icon icon='symbol-triangle-up' />;
     }
 
-    private onFilterChange = (filter: string) => {
-        this.setState({ filter });
+    private onFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
+        this.setState({ filter: e.target.value });
     }
 
     private sortBy(sort: SortKey) {
@@ -215,6 +230,5 @@ class ContestUpdates extends React.Component<UpdatesProps, UpdatesState> {
         this.setState({ order: this.state.order === 'asc' ? 'desc' : 'asc' });
     }
 }
-
 
 export default ContestUpdates;

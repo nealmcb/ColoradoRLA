@@ -1,86 +1,368 @@
+/*
+ * Colorado RLA CSS
+ *
+ * Uses SMACSS to organize rules: http://smacss.com/book/
+ *
+ * If you see `pt-`-prefixed rules, those are overrides for BlueprintJS.
+ */
+
+/*
+ * @light-gray1: #CED9E0
+ * @light-gray5: #F5F8FA
+ *
+ * @gray1: #5C7080
+ *
+ * @dark-gray5: #394B59
+ *
+ * @green3: #0F9960
+ */
+
+/*
+ * Base styles
+ */
+
 body {
-    font-family: "Arial", sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
 
-div{
-  white-space: pre-wrap;
+h1, h2, h3, h4, h5, h6 {
+  color: #394B59;
 }
 
-.login-page {
-    margin: 0 auto;
-    width: 50%;
+/*
+ * Text utilities
+ */
+
+.font-weight-bold {
+  font-weight: bold;
 }
 
-.county-root {
-    display: flex;
-    flex-direction: column;
+.text-right {
+  text-align: right;
 }
 
-.county-root .info {
-    /*
-     * Removed by CDOS - causes "Contest Info" to drop below "County Info"
-     * rather than to the right of "County Info".
-     */
-    /*display: flex;*/
-    flex-direction: row;
-    justify-content: space-evenly;
+/*
+ * Layout utilities
+ */
+
+/* margin-top, default spacing */
+.mt-default {
+  margin-top: 20px;
 }
 
-.county-root .contest-info {
-    flex: 1;
+/* margin-right, default spacing */
+.mr-default {
+  margin-right: 20px;
 }
 
-.county-root .county-info {
-    flex: 1;
+/* margin-bottom, default spacing */
+.mb-default {
+  margin-bottom: 20px;
 }
 
-.sos-home {
-    display: flex;
-    flex-direction: column;
+/* margin-left, default spacing */
+.ml-default {
+  margin-left: 20px;
 }
 
-.sos-home .sos-info {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
+/*
+ * Layout
+ */
+
+.l-wrapper {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  align-items: center;
 }
 
-.sos-home .sos-info .contest-info {
-    flex: 1;
+.l-nav {
+  width: 100%;
 }
 
-.sos-home .sos-info .county-info {
-    flex: 1;
+.l-main {
+  flex-grow: 1;
+
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 20px;
+  padding-right: 15px;
+  padding-left: 15px;
+  width: 100%;
 }
 
-.audit{
-    margin-top: 10px;
+@media (min-width: 1020px) {
+  .l-main {
+    max-width: 1020px;
+  }
 }
 
-.pt-breadcrumb {
-    margin: 10px;
+.l-footer {
+  border-top: 1px solid #CED9E0;
+  margin-top: 20px;
+  padding: 15px;
 }
 
-.pt-button-group.corla-spaced > .pt-button:not(:last-child) {
+/*
+ * Modules
+ */
+
+/* Custom table */
+
+.pt-html-table.rla-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.pt-html-table.rla-table thead th {
+  color: #5C7080;
+  font-size: 10px;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
+/* Spaced-out button group */
+.pt-button-group.rla-spaced > .pt-button:not(:last-child) {
   margin-right: 10px;
+}
+
+/* Status column larger by default when extra space is available */
+@media (min-width: 1020px) {
+  .pt-html-table.rla-table thead th.status-col {
+    width: 300px;
+  }
+}
+
+.pt-html-table.rla-table thead th .rla-table-sortable-wrapper {
+  display: inline-flex;
+  align-items: center;
+}
+
+.pt-html-table.rla-table tbody td.ellipsize,
+.pt-html-table.rla-table tbody td.ellipsize > *,
+.pt-html-table.rla-table tbody td.ellipsize .status-indicator-text {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.pt-html-table.rla-table tbody td.ellipsize:hover,
+.pt-html-table.rla-table tbody td.ellipsize:hover > *,
+.pt-html-table.rla-table tbody td.ellipsize:hover .status-indicator-text {
+  background-color: inherit;
+  overflow: visible;
+  z-index: 1;
+}
+
+.pt-html-table.rla-table thead th.is-sorted,
+.pt-html-table.rla-table tbody td.is-sorted {
+  font-weight: bold;
+}
+
+.pt-html-table.pt-html-table-striped.rla-table tbody tr:nth-child(even) td {
+  background-color: white;
+}
+
+.pt-html-table.pt-html-table-striped.rla-table tbody tr:nth-child(odd) td {
+  background-color: #F5F8FA;
+}
+
+/* BlueprintJS callout overrides */
+
+.rla-callout-default {
+  background-color: #F5F8FA;
+}
+
+/* Login */
+
+.login {
+  max-width: 550px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.login h1 {
+  margin-bottom: 30px;
+}
+
+/* License */
+
+.license {
+  max-width: 550px;
+}
+
+/*** State Dashboard ***/
+
+/*
+ * Indicators
+ *
+ * Usage: Apply .status-indicator-group to the parent element. Inside that
+ * group, place a .status-indicator and a .status-indicator-text next to each
+ * other, along with the appropriate modifier class on the .status-indicator to
+ * give it a color. Placing the indicator on either side of the text will result
+ * in the appropriate spacing.
+ */
+
+.status-indicator-group {
+  display: flex;
+  align-items: center;
+}
+
+.status-indicator {
+  display: inline-block;
+  flex-shrink: 0;
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+}
+
+.status-indicator.status-indicator-in-progress {
+  background-color: #0F9960;
+}
+
+.status-indicator-group .status-indicator-text + .status-indicator,
+.status-indicator-group .status-indicator + .status-indicator-text {
+  margin-left: 10px;
+}
+
+/*
+ * Status filter
+ */
+
+.status-filter-content .pt-popover-content {
+  min-width: 250px;
+  padding: 15px;
+}
+
+.status-filter-content hr {
+  border-bottom: 2px solid #CED9E0;
+  margin: 15px -15px 0 -15px;
+}
+
+.status-filter-content-body {
+  margin-top: 20px;
+}
+
+.status-filter-content-header h1, .status-filter-content-header h2,
+.status-filter-content-header h3, .status-filter-content-header h4,
+.status-filter-content-header h5, .status-filter-content-header h6 {
+  color: #5C7080;
+  font-size: 16px;
+}
+
+.status-filter-content-actions {
+  display: flex;
+  margin-top: 20px;
+  justify-content: space-between;
+}
+
+.status-filter-content-actions button {
+  background-color: inherit;
+  border: 2px solid #CED9E0;
+  color: #5C7080;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px;
+}
+
+/* TODO: Remove when the .pt-control override elsewhere is made more specific. */
+.status-filter-content .pt-popover-content .pt-control {
+  padding-left: 26px;
+}
+
+.rla-table-sortable-wrapper .status-filter-wrapper {
+  margin-left: 10px;
+}
+
+.status-filter-target button {
+  background-color: #F5F8FA;
+  border: 1px solid #CED9E0;
+  padding: 0 3px;
+}
+
+/*
+ * Audit definition display
+ *
+ * Shown after the audit is defined on the state dashboard.
+ */
+
+.state-dashboard-audit-definition {
+  display: flex;
+  padding: 20px;
+}
+
+.state-dashboard-audit-definition dl {
+  color: #5C7080;
+  margin: 0 0 0 auto;
+}
+
+.state-dashboard-audit-definition dt {
+  font-weight: bold;
+  display: inline-block;
+  margin-left: 20px;
+}
+
+.state-dashboard-audit-definition dt:after {
+  content: ":";
+}
+
+.state-dashboard-audit-definition dd {
+  display: inline-block;
+  margin-left: 5px;
+}
+
+/*
+ * Round information
+ *
+ * Styles the information for the current round on the state dashboard page.
+ */
+
+.state-dashboard-round {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background-color: #F5F8FA;
+  padding: 20px;
+}
+
+.state-dashboard-round-summary {
+  color: #5C7080;
+}
+
+/*
+ * Update tables
+ *
+ * Styles the content surrounding the county and contest update tables.
+ */
+
+.state-dashboard-updates-preface {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.state-dashboard-updates-preface-description{
+  color: #5C7080;
+  flex-basis: 50%;
+}
+
+.state-dashboard-updates-preface-search {
+  flex-basis: 250px;
+}
+
+.state-dashboard-updates .pt-html-table {
+  margin-top: 20px;
+}
+
+/*******/
+
+.audit {
+    margin-top: 10px;
 }
 
 .pt-html-table {
     font-size: 16px !important;
-}
-
-h2 {
-    padding: 10px;
-}
-
-h3 {
-    padding: 10px;
-}
-
-.pt-ui-text-large {
-  line-height: 1.25;
-  font-size: 16px;
-  font-weight: bold;
 }
 
 .rla-page {
@@ -98,6 +380,7 @@ h3 {
     width: -webkit-fit-content;
 }
 
+/* TODO: Remove when the .pt-control override elsewhere is made more specific. */
 .rla-radio-group .pt-control {
     padding-left: 26px;
 }
@@ -119,17 +402,6 @@ td.rla-county-contest-info {
 
 th.rla-county-contest-info {
     width: 50%;
-}
-
-.rla-license-footer {
-    width: 100%;
-}
-
-.rla-license {
-    margin: 0 auto;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    width: 500px;
 }
 
 .rla-file-upload-progress {
@@ -263,6 +535,7 @@ th.rla-county-contest-info {
 
 /* hacking my way around blueprint's custom checkbox styles */
 
+/* TODO: Make this override more specific. */
 .pt-control {
     padding: 0;
 }
@@ -343,11 +616,22 @@ th.rla-county-contest-info {
     top: 20px;
 }
 
-.current-ballot-stats {
-    list-style-type: none;
-    line-height: 1.7;
-    padding: 0;
-    margin-bottom: 20px;
+/*
+ * Details of the currently-displayed ballot during auditing.
+ */
+
+.current-ballot-stats li {
+  margin-bottom: 10px;
+}
+
+.current-ballot-stats .current-ballot-stats-label:after {
+  content: ":";
+}
+
+.current-ballot-stats .current-ballot-stats-value {
+  font-size: 16px;
+  font-weight: bold;
+  margin-left: 5px;
 }
 
 .main-col-instructions {

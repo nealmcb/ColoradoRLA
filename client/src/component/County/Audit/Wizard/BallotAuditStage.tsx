@@ -60,26 +60,26 @@ const AuditInstructions = (props: AuditInstructionsProps) => {
         <div>
             <div className='current-ballot-info'>
                 <h3 className='sidebar-heading'>Current ballot:</h3>
-                <ul className='current-ballot-stats'>
+                <ul className='current-ballot-stats pt-list-unstyled'>
                     <li>
-                        Storage bin:
-                        <span className='pt-ui-text pt-ui-text-large'>{ storageBin }</span>
+                        <span className='current-ballot-stats-label'>Storage bin</span>
+                        <span className='current-ballot-stats-value'>{ storageBin }</span>
                     </li>
                     <li>
-                        Tabulator:
-                        <span className='pt-ui-text pt-ui-text-large'>{ currentBallot.scannerId }</span>
+                        <span className='current-ballot-stats-label'>Tabulator</span>
+                        <span className='current-ballot-stats-value'>{ currentBallot.scannerId }</span>
                     </li>
                     <li>
-                        Batch:
-                        <span className='pt-ui-text pt-ui-text-large'>{ currentBallot.batchId }</span>
+                        <span className='current-ballot-stats-label'>Batch</span>
+                        <span className='current-ballot-stats-value'>{ currentBallot.batchId }</span>
                     </li>
                     <li>
-                        Ballot position:
-                        <span className='pt-ui-text pt-ui-text-large'>{ currentBallot.recordId }</span>
+                        <span className='current-ballot-stats-label'>Ballot position</span>
+                        <span className='current-ballot-stats-value'>{ currentBallot.recordId }</span>
                     </li>
                     <li>
-                        Ballot type:
-                        <span className='pt-ui-text pt-ui-text-large'>{ currentBallot.ballotType }</span>
+                        <span className='current-ballot-stats-label'>Ballot type</span>
+                        <span className='current-ballot-stats-value'>{ currentBallot.ballotType }</span>
                     </li>
                 </ul>
             </div>
@@ -472,7 +472,7 @@ const BallotAuditStage = (props: StageProps) => {
                 <div className='button-container'>
                     <BackButton back={ prevStage } />
 
-                    <Button className='pt-breadcrumb'
+                    <Button className='ml-default'
                             intent={ Intent.SUCCESS }
                             large
                             onClick={ validatingAcvr(nextStage) }>

@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
+import { Button, Card, Intent } from '@blueprintjs/core';
+
 import action from 'corla/action';
 import BallotManifestForm from './Form';
 import Uploading from './Uploading';
@@ -21,18 +23,18 @@ const UploadedBallotManifest = (props: UploadedProps) => {
     const { enableReupload, handleDeleteFile, file } = props;
 
     return (
-        <div className='pt-card'>
+        <Card>
             <div><strong>Ballot Manifest</strong></div>
             <div><strong>File name: </strong>"{ file.name }"</div>
             <div><strong>SHA-256 hash: </strong> { file.hash }</div>
-            <button className='pt-button pt-intent-primary' onClick={ enableReupload }>
+            <Button intent={ Intent.PRIMARY } onClick={ enableReupload }>
                 Re-upload
-            </button>
+            </Button>
             <span>&nbsp;&nbsp; </span>
-            <button className='pt-button pt-intent-primary' onClick={ handleDeleteFile }>
+            <Button intent={ Intent.PRIMARY } onClick={ handleDeleteFile }>
                 Delete File
-            </button>
-        </div>
+            </Button>
+        </Card>
     );
 };
 

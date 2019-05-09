@@ -1,15 +1,14 @@
 import * as _ from 'lodash';
+
 import * as React from 'react';
 
-import CountyNav from 'corla/component/County/Nav';
+import { Button, Card, IButtonProps } from '@blueprintjs/core';
 
+import action from 'corla/action/';
+import CountyLayout from 'corla/component/CountyLayout';
 import { auditBoardSlice } from 'corla/selector/county/currentBallotNumber';
 
 import FinalReviewDialog from './FinalReviewDialog';
-
-import { Button, IButtonProps } from '@blueprintjs/core';
-
-import action from 'corla/action/';
 
 interface ReviewButtonProps {
     cvr: JSON.CVR;
@@ -72,87 +71,85 @@ class FinalReviewPage extends React.Component<FinalReviewPageProps, FinalReviewP
 
         const renderRow = rowRenderer(this.openDialog);
 
-        return (
-            <div>
-                <CountyNav />
-                <div className='pt-card'>
-                    <FinalReviewDialog cvr={ this.state.cvr }
-                                       isOpen={ this.state.dialogIsOpen }
-                                       onClose={ this.closeDialog } />
+        const main =
+            <Card>
+                <FinalReviewDialog cvr={ this.state.cvr }
+                                   isOpen={ this.state.dialogIsOpen }
+                                   onClose={ this.closeDialog } />
 
-                    <h3>Audit Board { auditBoardIndex + 1 }: Final Review</h3>
+                <h3>Audit Board { auditBoardIndex + 1 }: Final Review</h3>
 
-                    <div className='pt-card'>
-                        <p>
-                            This screen allows you to re-audit ballots previously audited in
-                            this round. If you choose to re-audit a ballot, you will be
-                            presented with blank data entry and review screens for that ballot -
-                            data from the previous audit will not be prefilled. Once you submit
-                            a re-audited ballot, the most recent data will replace older
-                            entries. You will be able to re-audit multiple ballots if you wish.
-                        </p>
+                <Card>
+                    <p>
+                        This screen allows you to re-audit ballots previously audited in
+                        this round. If you choose to re-audit a ballot, you will be
+                        presented with blank data entry and review screens for that ballot -
+                        data from the previous audit will not be prefilled. Once you submit
+                        a re-audited ballot, the most recent data will replace older
+                        entries. You will be able to re-audit multiple ballots if you wish.
+                    </p>
 
-                        <p>
+                    <p>
+                        <b>
+                            If you are satisfied with your initial data entry and
+                            wish to complete the round:
+                        </b>
+                    </p>
+
+                    <ul>
+                        <li><b>Click the button below labeled "Review Complete - Finish Round"</b></li>
+                    </ul>
+
+                    <p>
+                        <b>
+                            If you wish to re-audit a ballot:
+                        </b>
+                    </p>
+
+                    <ul>
+                        <li>
                             <b>
-                                If you are satisfied with your initial data entry and
-                                wish to complete the round:
+                                Click the "re-audit" button next to the
+                                appropriate ballot card in the list below
                             </b>
-                        </p>
+                        </li>
+                    </ul>
 
-                        <ul>
-                            <li><b>Click the button below labeled "Review Complete - Finish Round"</b></li>
-                        </ul>
+                    <p>
+                        When you are finished, click "Review Complete - Finish Round."
+                        Once clicked, ballot data from this round of the audit is no longer editable.
+                    </p>
 
-                        <p>
-                            <b>
-                                If you wish to re-audit a ballot:
-                            </b>
-                        </p>
+                    <Button onClick={ reviewCompleteHandler(auditBoardIndex) }>
+                        Review Complete - Finish Round
+                    </Button>
+                </Card>
 
-                        <ul>
-                            <li>
-                                <b>
-                                    Click the "re-audit" button next to the
-                                    appropriate ballot card in the list below
-                                </b>
-                            </li>
-                        </ul>
+                <table className='pt-html-table pt-html-table-bordered pt-small pt-interactive'
+                       style={{ marginLeft: 'auto', marginRight: 'auto' }}>
+                    <thead>
+                        <tr>
+                            <th>Storage bin</th>
+                            <th>Scanner</th>
+                            <th>Batch</th>
+                            <th>Ballot position</th>
+                            <th>Ballot type</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {
+                        _.map(auditBoardSlice(
+                            cvrsToAudit,
+                            ballotSequenceAssignment,
+                            auditBoardIndex,
+                        ), renderRow)
+                    }
+                    </tbody>
+                </table>
+            </Card>;
 
-                        <p>
-                            When you are finished, click "Review Complete - Finish Round."
-                            Once clicked, ballot data from this round of the audit is no longer editable.
-                        </p>
-
-                        <Button onClick={ reviewCompleteHandler(auditBoardIndex) }>
-                            Review Complete - Finish Round
-                        </Button>
-                    </div>
-
-                    <table className='pt-html-table pt-html-table-bordered pt-small pt-interactive'
-                           style={{ marginLeft: 'auto', marginRight: 'auto' }}>
-                        <thead>
-                            <tr>
-                                <th>Storage bin</th>
-                                <th>Scanner</th>
-                                <th>Batch</th>
-                                <th>Ballot position</th>
-                                <th>Ballot type</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        {
-                            _.map(auditBoardSlice(
-                                cvrsToAudit,
-                                ballotSequenceAssignment,
-                                auditBoardIndex,
-                            ), renderRow)
-                        }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        );
+        return <CountyLayout main={ main } />;
     }
 
     private closeDialog: () => void = () => {
@@ -163,6 +160,5 @@ class FinalReviewPage extends React.Component<FinalReviewPageProps, FinalReviewP
         this.setState({ dialogIsOpen: true, cvr });
     }
 }
-
 
 export default FinalReviewPage;

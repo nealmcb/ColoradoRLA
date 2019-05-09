@@ -3,9 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { History } from 'history';
 
-import LicenseFooter from 'corla/component/LicenseFooter';
-
-import CountyNav from '../Nav';
+import CountyLayout from 'corla/component/CountyLayout';
 
 import Main from './Main';
 
@@ -36,24 +34,17 @@ const CountyDashboardPage = (props: PageProps) => {
 
     const auditBoardButtonDisabled = !canSignIn;
 
-    return (
-        <div>
-            <div className='county-root'>
-                <CountyNav />
-                <div>
-                    <Main auditComplete={ auditComplete }
-                          auditStarted={ auditStarted }
-                          canRenderReport={ canRenderReport }
-                          countyState={ countyState }
-                          currentRoundNumber={ currentRoundNumber }
-                          history={ history }
-                          name={ countyInfo.name }
-                          auditBoardButtonDisabled={ auditBoardButtonDisabled } />
-                </div>
-            </div>
-            <LicenseFooter />
-        </div>
-    );
+    const main =
+        <Main auditComplete={ auditComplete }
+              auditStarted={ auditStarted }
+              canRenderReport={ canRenderReport }
+              countyState={ countyState }
+              currentRoundNumber={ currentRoundNumber }
+              history={ history }
+              name={ countyInfo.name }
+              auditBoardButtonDisabled={ auditBoardButtonDisabled } />;
+
+    return <CountyLayout main={ main } />;
 };
 
 export default CountyDashboardPage;

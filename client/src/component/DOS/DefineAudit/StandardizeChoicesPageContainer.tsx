@@ -8,7 +8,7 @@ import { Redirect } from 'react-router-dom';
 
 import { History } from 'history';
 
-import Nav from '../Nav';
+import DOSLayout from 'corla/component/DOSLayout';
 
 import standardizeChoices from 'corla/action/dos/standardizeChoices';
 

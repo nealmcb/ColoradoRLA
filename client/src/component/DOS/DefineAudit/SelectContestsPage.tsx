@@ -2,28 +2,17 @@ import * as React from 'react';
 
 import * as _ from 'lodash';
 
-import Nav from '../Nav';
+import { Breadcrumb, Button, Card, Intent } from '@blueprintjs/core';
+
+import DOSLayout from 'corla/component/DOSLayout';
 
 import SelectContestsForm from './SelectContestsForm';
 
-
-const Breadcrumb = () => (
+const Breadcrumbs = () => (
     <ul className='pt-breadcrumbs'>
-        <li>
-            <a className='pt-breadcrumb' href='/sos'>
-                SoS
-            </a>
-        </li>
-        <li>
-            <a className='pt-breadcrumb' href='/sos/audit'>
-                Audit Admin
-            </a>
-        </li>
-        <li>
-            <a className='pt-breadcrumb pt-breadcrumb-current'>
-                Select Contests
-            </a>
-        </li>
+        <li><Breadcrumb href='/sos' text='SoS' />></li>
+        <li><Breadcrumb href='/sos/audit' text='Audit Admin' /></li>
+        <li><Breadcrumb className='pt-breadcrumb-current' text='Select Contests' /></li>
     </ul>
 );
 
@@ -32,23 +21,24 @@ interface WaitingPageProps {
 }
 
 const WaitingForContestsPage = ({ back }: WaitingPageProps) => {
-    return (
+    const main =
         <div>
-            <Nav />
             <Breadcrumb />
-            <div className='pt-card'>
+            <Card>
                 Waiting for counties to upload contest data.
-            </div>
-            <div>
-                <button onClick={ back } className='pt-button pt-intent-primary pt-breadcrumb'>
-                    Back
-                </button>
-                <button disabled className='pt-button pt-intent-primary pt-breadcrumb'>
-                    Save & Next
-                </button>
-            </div>
-        </div>
-    );
+            </Card>
+            <Button onClick={ back }
+                    className='pt-breadcrumb'>
+                Back
+            </Button>
+            <Button disabled
+                    intent={ Intent.PRIMARY }
+                    className='pt-breadcrumb'>
+                Save & Next
+            </Button>
+        </div>;
+
+    return <DOSLayout main={ main } />;
 };
 
 interface PageProps {
@@ -83,26 +73,26 @@ const SelectContestsPage = (props: PageProps) => {
         nextPage();
     };
 
-    return (
+    const main =
         <div>
-            <Nav />
-            <Breadcrumb />
+            <Breadcrumbs />
             <SelectContestsForm forms={ forms }
                                 contests={ contests }
                                 auditedContests={auditedContests}
                                 isAuditable={ isAuditable } />
 
-            <div>
-                <button onClick={ back } className='pt-button pt-breadcrumb'>
-                    Back
-                </button>
-                <button onClick={ onSaveAndNext } className='pt-button pt-intent-primary pt-breadcrumb'>
-                    Save & Next
-                </button>
-            </div>
-        </div>
-    );
-};
+            <Button onClick={ back }
+                    className='pt-breadcrumb'>
+                Back
+            </Button>
+            <Button onClick={ onSaveAndNext }
+                    intent={ Intent.PRIMARY }
+                    className='pt-breadcrumb'>
+                Save & Next
+            </Button>
+        </div>;
 
+    return <DOSLayout main={ main } />;
+};
 
 export default SelectContestsPage;

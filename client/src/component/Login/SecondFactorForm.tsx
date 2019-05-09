@@ -1,10 +1,11 @@
 import * as React from 'react';
 
+import { Button, Callout, Intent, Label } from '@blueprintjs/core';
+
 import login2F from 'corla/action/login2F';
 
-
-function isFormValid(form: Form): boolean {
-    return form.token !== '';
+function isFormValid(s: FormState): boolean {
+    return s.token.length > 0;
 }
 
 function formatChallenge(challenge: Array<[string, string]>): string {
@@ -13,81 +14,71 @@ function formatChallenge(challenge: Array<[string, string]>): string {
     }).join(' ');
 }
 
-interface ChallengeFormProps {
-    loginChallenge: LoginChallenge;
-    onTokenChange: () => (e: React.ChangeEvent<any>) => void;
-    token: string;
-}
-
-const ChallengeForm = (props: ChallengeFormProps) => {
-    const { loginChallenge, onTokenChange, token } = props;
-    return (
-        <div className='pt-card'>
-            <label className='pt-label'>
-                <input className='pt-input password'
-                       type='password'
-                       onChange={ onTokenChange() }
-                       value={ token || '' } />
-            </label>
-        </div>);
-};
-
 interface FormProps {
     loginChallenge: LoginChallenge;
     username: string;
 }
 
 interface FormState {
-    form: Form;
-}
-
-interface Form {
     token: string;
-    username: string;
 }
 
 export default class SecondFactorForm extends React.Component<FormProps, FormState> {
-    public state: FormState = {
-        form: {
+    public constructor(props: FormProps) {
+        super(props);
+
+        this.state = {
             token: '',
-            username: '',
-        },
-    };
+        };
+
+        this.onTokenChange = this.onTokenChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
+    }
 
     public render() {
         const { loginChallenge, username } = this.props;
-        const { form } = this.state;
-        const disabled = !isFormValid(form);
+        const disabled = !isFormValid(this.state);
         const challenge = formatChallenge(loginChallenge);
 
         return (
-            <div>
-                <div className='pt-card'>
-                <div><strong>Grid Challenge:</strong></div>
-                Enter a response to the grid challenge {challenge} for the user: {username}
-                </div>
-                <ChallengeForm
-                    loginChallenge={ loginChallenge }
-                    onTokenChange={ this.onTokenChange }
-                    token={ form.token } />
-                <button
-                    className='pt-button pt-intent-primary submit'
-                    disabled={ disabled }
-                    onClick={ this.buttonClick }>
-                    Submit
-                </button>
-            </div>
+            <form onSubmit={ this.onSubmit }>
+                <p>
+                    Enter a response to the grid challenge
+                    {' '} <span className='pt-ui-text-large font-weight-bold'>{ challenge }</span>
+                    {' '} for the user
+                    {' '} <span className='pt-ui-text-large font-weight-bold'>{ username }</span>.
+                </p>
+                <Label text='Grid challenge response'>
+                    <input className='pt-input pt-large pt-fill'
+                           onChange={ this.onTokenChange }
+                           type='password'
+                           value={ this.state.token || '' } />
+                </Label>
+                <Callout className='rla-callout-default'>
+                    <Button className='submit'
+                            disabled={ disabled }
+                            fill
+                            intent={ Intent.PRIMARY }
+                            large
+                            type='submit'>
+                        Log in
+                    </Button>
+                </Callout>
+            </form>
         );
     }
 
-    private onTokenChange = () => (e: React.ChangeEvent<any>) => {
-        const s = { ...this.state };
-        s.form.token = e.target.value.replace(/\s*/g, '');
-        this.setState(s);
+    private onTokenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({
+            token: e.target.value.replace(/\s*/g, ''),
+        });
     }
 
-    private buttonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-        const { username, token } = this.state.form;
-        login2F(this.props.username.toLowerCase(), token.split('').join(' '));
+    private onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        const { token } = this.state;
+        const { username } = this.props;
+        e.preventDefault();
+
+        login2F(username.toLowerCase(), token.split('').join(' '));
     }
 }

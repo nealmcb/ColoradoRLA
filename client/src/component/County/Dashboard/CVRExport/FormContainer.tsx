@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
+import { Button, Card, Intent } from '@blueprintjs/core';
+
 import CVRExportForm from './Form';
 import Uploading from './Uploading';
 
@@ -9,7 +11,6 @@ import uploadCvrExport from 'corla/action/county/uploadCvrExport';
 import deleteFile from 'corla/action/county/deleteFile';
 import cvrExportUploadedSelector from 'corla/selector/county/cvrExportUploaded';
 import cvrExportUploadingSelector from 'corla/selector/county/cvrExportUploading';
-
 
 interface UploadedProps {
     enableReupload: OnClick;
@@ -20,19 +21,18 @@ interface UploadedProps {
 const UploadedCVRExport = (props: UploadedProps) => {
     const { enableReupload, handleDeleteFile, file } = props;
     return (
-        <div className='pt-card'>
+        <Card>
             <div><strong>CVR Export</strong></div>
             <div><strong>File name: </strong>"{ file.name }"</div>
             <div><strong>SHA-256 hash: </strong>{ file.hash }</div>
-            <button className='pt-button pt-intent-primary' onClick={ enableReupload }>
+            <Button intent={ Intent.PRIMARY } onClick={ enableReupload }>
                 Re-upload
-            </button>
+            </Button>
             <span> &nbsp;&nbsp; </span>
-            <button className='pt-button pt-intent-primary' onClick={ handleDeleteFile }>
+            <Button intent={ Intent.PRIMARY } onClick={ handleDeleteFile }>
                 Delete File
-            </button>
-
-        </div>
+            </Button>
+        </Card>
     );
 };
 
@@ -147,6 +147,5 @@ const select = (countyState: County.AppState) => {
         uploadingFile,
     };
 };
-
 
 export default connect(select)(CVRExportFormContainer);

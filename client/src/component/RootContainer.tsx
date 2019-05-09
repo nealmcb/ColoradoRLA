@@ -15,7 +15,7 @@ import AuditBoardPageContainer from './County/AuditBoard/PageContainer';
 import CountyAuditPageContainer from './County/Audit/PageContainer';
 import CountyDashboardPageContainer from './County/Dashboard/PageContainer';
 
-import NextLoginContainer from './Login/Container';
+import LoginContainer from './Login/Container';
 
 import DOSDefineAuditReviewPageContainer from './DOS/DefineAudit/ReviewPageContainer';
 import DOSDefineAuditSeedPageContainer from './DOS/DefineAudit/SeedPageContainer';
@@ -46,7 +46,7 @@ export class RootContainer extends React.Component<RootContainerProps> {
                     <Switch>
                         <Route exact
                                path='/login'
-                               component={ NextLoginContainer } />
+                               component={ LoginContainer } />
                         <LoginRoute exact
                                     path='/'
                                     page={ RootRedirectContainer } />

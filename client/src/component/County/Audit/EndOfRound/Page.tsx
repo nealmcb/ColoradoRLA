@@ -2,17 +2,15 @@ import * as React from 'react';
 
 import { Redirect } from 'react-router-dom';
 
-import CountyNav from 'corla/component/County/Nav';
+import { Card } from '@blueprintjs/core';
 
+import finishAudit from 'corla/action/county/finishAudit';
+import CountyLayout from 'corla/component/CountyLayout';
+import { formatLocalDate } from 'corla/date';
+import * as format from 'corla/format';
 import notice from 'corla/notice';
 
 import SignOffFormContainer from './SignOffFormContainer';
-
-import finishAudit from 'corla/action/county/finishAudit';
-
-import { formatLocalDate } from 'corla/date';
-import * as format from 'corla/format';
-
 
 interface PreviousRoundProps {
     roundNumber: number;
@@ -20,39 +18,38 @@ interface PreviousRoundProps {
 
 const PreviousRoundSignedOff = (props: PreviousRoundProps) => {
     const { roundNumber } = props;
-
-    return (
+    const main =
         <div>
-            <CountyNav />
             <h3>End of round { roundNumber }</h3>
-            <div className='pt-card'>
+            <Card>
                <h3>
                   You have finished auditing your portion of ballots to audit in
                   round { roundNumber }. Please wait for the other audit boards
                   to finish their portion of the audit, and for the Department
                   of State to begin the next round.
                </h3>
-            </div>
-        </div>
-    );
+            </Card>
+        </div>;
+
+    return <CountyLayout main={ main } />;
 };
 
 const LastRoundComplete = () => {
-    return (
+    const main =
         <div>
-            <CountyNav />
-            <h3> End of All Audit Rounds</h3>
-            <div className='pt-card'>
+            <h3>End of All Audit Rounds</h3>
+            <Card>
                 <h3>All audit rounds are complete. Please use the form below to
                 certify that the county has completed the audit.</h3>
-            </div>
-            <div className='pt-card'>
+            </Card>
+            <Card>
                 <button className='pt-button pt-intent-primary' onClick={ finishAudit }>
                     Submit
                 </button>
-            </div>
-        </div>
-    );
+            </Card>
+        </div>;
+
+    return <CountyLayout main={ main } />;
 };
 
 interface PageProps {
@@ -88,11 +85,10 @@ const EndOfRoundPage = (props: PageProps) => {
     const electionDate = formatLocalDate(election.date);
     const electionType = format.electionType(election.type);
 
-    return (
+    const main =
         <div>
-            <CountyNav />
             <h3>Audit board { auditBoardIndex + 1 }: Sign off on round { roundNumber }</h3>
-            <div className='pt-card'>
+            <Card>
               <h3>
                 Congratulations! You have completed reporting the votes on all ballots
                 randomly selected for this round of the risk-limiting audit of the
@@ -101,9 +97,9 @@ const EndOfRoundPage = (props: PageProps) => {
                 round, you will be taken back to the main audit screen to await
                 further instruction.
               </h3>
-            </div>
+            </Card>
 
-            <div className='pt-card'>
+            <Card>
                 <h3>
                     Please complete this audit round by entering your names in
                     the fields below, making the following certification, and
@@ -139,10 +135,10 @@ const EndOfRoundPage = (props: PageProps) => {
                     </li>
                 </ul>
                 <SignOffFormContainer auditBoardIndex={ auditBoardIndex } />
-            </div>
-        </div>
-    );
-};
+            </Card>
+        </div>;
 
+    return <CountyLayout main={ main } />;
+};
 
 export default EndOfRoundPage;

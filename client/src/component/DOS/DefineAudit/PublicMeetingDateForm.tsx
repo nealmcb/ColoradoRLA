@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import * as moment from 'moment';
 
+import { Card } from '@blueprintjs/core';
 import { DateInput, IDateFormatProps } from '@blueprintjs/datetime';
 
 import { formatLocalDate, parseLocalDate } from 'corla/date';
@@ -36,12 +37,12 @@ class PublicMeetingDateForm extends React.Component<FormProps, FormState> {
 
     public render() {
         return (
-            <div className='pt-card'>
+            <Card>
                 <div>Public Meeting Date</div>
                 <DateInput { ...blueprintFormatter() }
                            onChange={ this.onDateChange }
                            value={ parseLocalDate(this.state.date) } />
-            </div>
+            </Card>
         );
     }
 

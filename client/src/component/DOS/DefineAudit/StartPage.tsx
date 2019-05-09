@@ -1,6 +1,8 @@
 import * as React from 'react';
 
-import Nav from '../Nav';
+import { Breadcrumb, Card } from '@blueprintjs/core';
+
+import DOSLayout from 'corla/component/DOSLayout';
 
 import ElectionDateForm from './ElectionDateForm';
 import ElectionTypeForm from './ElectionTypeForm';
@@ -10,18 +12,10 @@ import UploadFileButton from './UploadFileButton';
 
 import * as format from 'corla/format';
 
-const Breadcrumb = () => (
+const Breadcrumbs = () => (
     <ul className='pt-breadcrumbs'>
-        <li>
-            <a className='pt-breadcrumb' href='/sos'>
-                SoS
-            </a>
-        </li>
-        <li>
-            <a className='pt-breadcrumb pt-breadcrumb-current'>
-                Audit Admin
-            </a>
-        </li>
+        <li><Breadcrumb href='/sos' text='SoS' /></li>
+        <li><Breadcrumb className='pt-breadcrumb-current' text='Audit Admin' /></li>
     </ul>
 );
 
@@ -83,30 +77,29 @@ const AuditPage = (props: PageProps) => {
 
     const disableButton = !isFormValid;
 
-    return (
+    const main =
         <div>
-            <Nav />
-            <Breadcrumb />
+            <Breadcrumbs />
 
             <h2>Administer an Audit</h2>
 
-            <div className='pt-card'>
+            <Card>
                 <h3>Election Info</h3>
                 <div>Enter the date the election will take place, and the type of election.</div>
                 <ElectionDateForm onChange={ setElectionDate }
                                   initDate={ electionDate } />
                 <ElectionTypeForm onChange={ setType }
                                   initType={ type } />
-            </div>
+            </Card>
 
-            <div className='pt-card'>
+            <Card>
                 <h3>Public Meeting Date</h3>
                 <div>Enter the date of the public meeting to establish the random seed.</div>
                 <PublicMeetingDateForm onChange={ setPublicMeetingDate }
                                        initDate={ publicMeetingDate } />
-            </div>
+            </Card>
 
-            <div className='pt-card'>
+            <Card>
                 <h3>Risk Limit</h3>
                 <div>
                   <strong>Enter the risk limit for comparison audits as a percentage.</strong>
@@ -114,19 +107,20 @@ const AuditPage = (props: PageProps) => {
                 <RiskLimitForm onChange={ setRiskLimit }
                                riskLimit={ riskLimit } />
 
-            </div>
+            </Card>
 
-            <div className='pt-card'>
+            <Card>
                 <h3>Contests</h3>
                 <UploadFileButton onChange={ setUploadedFiles } />
-            </div>
+            </Card>
 
             <div className='control-buttons'>
               <SaveButton disabled={ disableButton }
                           nextPage={ nextPage } />
             </div>
-        </div>
-    );
+        </div>;
+
+    return <DOSLayout main={ main } />;
 };
 
 export default AuditPage;
