@@ -35,4 +35,20 @@ public class UploadedFileDTO {
   public Long getFileId() {
     return this.fileId;
   }
+
+  public String getStatus() {
+    return this.status;
+  }
+
+  public void setStatus(final String status ) {
+    this.status = status;
+  }
+
+  public void setResult(final Result result) {
+    this.result = result;
+  }
+
+  public Result getResult() {
+    return this.result;
+  }
 }

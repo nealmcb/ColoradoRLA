@@ -15,6 +15,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -22,10 +23,16 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import com.google.gson.Gson;
+
 import org.hibernate.Session;
+import org.hibernate.query.Query;
+
 
 import us.freeandfair.corla.Main;
+import us.freeandfair.corla.json.UploadedFileDTO;
 import us.freeandfair.corla.model.UploadedFile;
+import us.freeandfair.corla.model.UploadedFile.FileStatus;
 import us.freeandfair.corla.persistence.Persistence;
 
 /**
@@ -128,4 +135,62 @@ public final class UploadedFileQueries {
     }
     return result;
   }
+
+  /** having to go around hibernate for cross-thread updates **/
+  public static boolean exists(final UploadedFileDTO upF) {
+    final Session s = Persistence.currentSession();
+    final Query q =
+      s.createQuery("select count(*) from UploadedFile up "
+                    + " where up.id = :id ");
+
+    q.setParameter("id", upF.getFileId());
+
+    return ((Long)q.getSingleResult() > 0L);
+  }
+
+  /** having to go around hibernate for cross-thread updates **/
+  public static boolean exists(final UploadedFileDTO upF, final FileStatus status) {
+    final Session s = Persistence.currentSession();
+    final Query q =
+      s.createQuery("select count(*) from UploadedFile up "
+                    + " where up.id = :id "
+                    + " and status = :status");
+
+    q.setParameter("id", upF.getFileId());
+    q.setParameter("status", status);
+
+    return ((Long)q.getSingleResult() > 0L);
+  }
+
+  /** having to go around hibernate for cross-thread updates **/
+  public static int updateStatus(final UploadedFileDTO upF) {
+    final Session s = Persistence.currentSession();
+    final Query q =
+      s.createNativeQuery("update uploaded_file up "
+                    + " set status = :status"
+                    + " where up.id = :id");
+
+    q.setParameter("id", upF.getFileId());
+    q.setParameter("status", upF.getStatus());
+
+    return q.executeUpdate();
+  }
+
+  /** having to go around hibernate for cross-thread updates **/
+  public static int updateStatusAndResult(final UploadedFileDTO upF) {
+    final Session s = Persistence.currentSession();
+    final Query q =
+      s.createNativeQuery("update uploaded_file up "
+                    + " set status = :status,"
+                    + " result = :result"
+                    + " where up.id = :id");
+
+    q.setParameter("id", upF.getFileId());
+    q.setParameter("status", upF.getStatus());
+    q.setParameter("result", (new Gson()).toJson(upF.getResult()));
+
+    return q.executeUpdate();
+  }
+
+
 }
