@@ -105,49 +105,30 @@ public abstract class DeleteFileController {
   /**
    * Remove all CountyContestResults and Contests for a county
    */
-  public static Boolean deleteResultsAndContests(final Long countyId)
+  public static void deleteResultsAndContests(final Long countyId)
     throws DeleteFileFail {
     // this will also delete the contests - surprise!
-    final Integer result = CountyContestResultQueries.deleteForCounty(countyId);
-    LOGGER.debug("Removed county contest results");
-
-    if (result > 0) {
-      LOGGER.debug("some contests and results deleted!");
-      return true;
-    } else {
-      throw new DeleteFileFail("No contests or results deleted!");
-    }
+    final Integer rowsDeleted = CountyContestResultQueries.deleteForCounty(countyId);
+    LOGGER.info(String.format("%d ContestResults and Contests deleted!", rowsDeleted));
   }
 
   /**
    * Remove all CastVoteRecords for a county
    */
-  public static Boolean deleteCastVoteRecords(final Long countyId)
+  public static void deleteCastVoteRecords(final Long countyId)
     throws DeleteFileFail {
     final Integer rowsDeleted = CastVoteRecordQueries.deleteAll(countyId);
-
-    if (1 <= rowsDeleted) {
-      LOGGER.info("some cvrs deleted!");
-      return true;
-    } else {
-      throw new DeleteFileFail("No CVRS deleted!");
-    }
+    LOGGER.info(String.format("%d bmis deleted!", rowsDeleted));
   }
 
   /**
    * Remove all BallotManifestInfo for a county
    * @param countyId
    */
-  public static Boolean deleteBallotManifestInfos(final Long countyId)
+  public static void deleteBallotManifestInfos(final Long countyId)
     throws DeleteFileFail {
     final Integer rowsDeleted = BallotManifestInfoQueries.deleteMatching(countyId);
-
-    if (1 <= rowsDeleted) {
-      LOGGER.debug("some bmis deleted!");
-      return true;
-    } else {
-      throw new DeleteFileFail("No bmis deleted!");
-    }
+    LOGGER.info(String.format("%d bmis deleted!", rowsDeleted));
   }
 
   /** used to abort the set of operations (transaction) **/
