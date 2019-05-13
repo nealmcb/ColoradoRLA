@@ -98,8 +98,8 @@ class FileUploadContainer extends React.Component<FileUploadContainerProps> {
 function select(countyState: County.AppState) {
     const { asm } = countyState;
 
-    const uploadedBothFiles = !!(countyState.ballotManifestHash
-                              && countyState.cvrExportHash);
+    const uploadedBothFiles = !!(countyState.ballotManifest
+        && countyState.cvrExport);
     const missedDeadline = asm.county === 'DEADLINE_MISSED';
 
     return { countyState, missedDeadline, uploadedBothFiles };

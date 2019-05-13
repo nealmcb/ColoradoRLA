@@ -101,6 +101,15 @@ interface UploadedFile {
     size: number;
     status: string;
     timestamp: Date;
+    result: Result;
+}
+
+interface Result {
+    success: boolean;
+    importedCount: number;
+    errorMessage: string;
+    errorRowNum: number;
+    errorRowContent: string;
 }
 
 type AuditBoardASMState

@@ -25,6 +25,7 @@ const UploadedCVRExport = (props: UploadedProps) => {
             <div><strong>CVR Export</strong></div>
             <div><strong>File name: </strong>"{ file.name }"</div>
             <div><strong>SHA-256 hash: </strong>{ file.hash }</div>
+            <div className='error'>{ file.result.errorMessage }</div>
             <Button intent={ Intent.PRIMARY } onClick={ enableReupload }>
                 Re-upload
             </Button>

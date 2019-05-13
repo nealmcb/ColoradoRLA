@@ -22,8 +22,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.OptionalInt;
 import java.util.Properties;
 import java.util.Set;
 
@@ -56,7 +54,7 @@ import us.freeandfair.corla.util.ExponentialBackoffHelper;
  */
 @SuppressWarnings({"PMD.GodClass", "PMD.CyclomaticComplexity", "PMD.ExcessiveImports",
     "PMD.ModifiedCyclomaticComplexity", "PMD.StdCyclomaticComplexity"})
-public class DominionCVRExportParser implements CVRExportParser {
+public class DominionCVRExportParser {
   /**
    * Class-wide logger
    */
@@ -151,21 +149,6 @@ public class DominionCVRExportParser implements CVRExportParser {
       CVR_NUMBER_HEADER, TABULATOR_NUMBER_HEADER, BATCH_ID_HEADER,
       RECORD_ID_HEADER, IMPRINTED_ID_HEADER, BALLOT_TYPE_HEADER
       };
-
-  /**
-   * A flag indicating whether parse() has been run or not.
-   */
-  private boolean my_parse_status;
-
-  /**
-   * A flag indicating whether or not a parse was successful.
-   */
-  private boolean my_parse_success;
-
-  /**
-   * The error message.
-   */
-  private String my_error_message;
 
   /**
    * The parser to be used.
@@ -487,70 +470,64 @@ public class DominionCVRExportParser implements CVRExportParser {
    */
   @SuppressWarnings("PMD.CyclomaticComplexity")
   private CastVoteRecord extractCVR(final CSVRecord the_line) {
-    try {
-      final int cvr_id =
-              Integer.parseInt(
-                      stripEqualQuotes(the_line.get(my_columns.get(CVR_NUMBER_HEADER))));
-      final int tabulator_id =
-              Integer.parseInt(
-                      stripEqualQuotes(
-                              the_line.get(my_columns.get(TABULATOR_NUMBER_HEADER))));
-      final String batch_id =
-              stripEqualQuotes(the_line.get(my_columns.get(BATCH_ID_HEADER)));
-      final int record_id =
-              Integer.parseInt(
-                      stripEqualQuotes(the_line.get(my_columns.get(RECORD_ID_HEADER))));
-      final String imprinted_id =
-              stripEqualQuotes(the_line.get(my_columns.get(IMPRINTED_ID_HEADER)));
-      final String ballot_type =
-              stripEqualQuotes(the_line.get(my_columns.get(BALLOT_TYPE_HEADER)));
-      final List<CVRContestInfo> contest_info = new ArrayList<CVRContestInfo>();
+    final int cvr_id =
+      Integer.parseInt(
+                       stripEqualQuotes(the_line.get(my_columns.get(CVR_NUMBER_HEADER))));
+    final int tabulator_id =
+      Integer.parseInt(
+                       stripEqualQuotes(
+                                        the_line.get(my_columns.get(TABULATOR_NUMBER_HEADER))));
+    final String batch_id =
+      stripEqualQuotes(the_line.get(my_columns.get(BATCH_ID_HEADER)));
+    final int record_id =
+      Integer.parseInt(
+                       stripEqualQuotes(the_line.get(my_columns.get(RECORD_ID_HEADER))));
+    final String imprinted_id =
+      stripEqualQuotes(the_line.get(my_columns.get(IMPRINTED_ID_HEADER)));
+    final String ballot_type =
+      stripEqualQuotes(the_line.get(my_columns.get(BALLOT_TYPE_HEADER)));
+    final List<CVRContestInfo> contest_info = new ArrayList<CVRContestInfo>();
 
-      // for each contest, see if choices exist on the CVR; "0" or "1" are
-      // votes or absences of votes; "" means that the contest is not in this style
-      int index = my_first_contest_column;
-      for (final Contest co : my_contests) {
-        boolean present = false;
-        final List<String> votes = new ArrayList<String>();
-        for (final Choice ch : co.choices()) {
-          final String mark_string = the_line.get(index);
-          final boolean p = !mark_string.isEmpty();
-          final boolean mark = "1".equals(mark_string);
-          present |= p;
-          if (!ch.fictitious() && p && mark) {
-            votes.add(ch.name());
-          }
-          index = index + 1;
+    // for each contest, see if choices exist on the CVR; "0" or "1" are
+    // votes or absences of votes; "" means that the contest is not in this style
+    int index = my_first_contest_column;
+    for (final Contest co : my_contests) {
+      boolean present = false;
+      final List<String> votes = new ArrayList<String>();
+      for (final Choice ch : co.choices()) {
+        final String mark_string = the_line.get(index);
+        final boolean p = !mark_string.isEmpty();
+        final boolean mark = "1".equals(mark_string);
+        present |= p;
+        if (!ch.fictitious() && p && mark) {
+          votes.add(ch.name());
         }
-        // if this contest was on the ballot, add it to the votes
-        if (present) {
-          contest_info.add(new CVRContestInfo(co, null, null, votes));
-        }
+        index = index + 1;
       }
-
-      // we don't need to look for an existing CVR with this data because,
-      // by definition, there cannot be one unless the same line appears
-      // twice in the CVR export file... and if it does, we need it to
-      // appear twice here too.
-      final CastVoteRecord new_cvr =
-          new CastVoteRecord(RecordType.UPLOADED, null, my_county.id(),
-                             cvr_id, my_record_count, tabulator_id,
-                             batch_id, record_id, imprinted_id,
-                             ballot_type, contest_info);
-      Persistence.saveOrUpdate(new_cvr);
-      my_parsed_cvrs.add(new_cvr);
-
-      // add the CVR to all of our results
-      for (final CountyContestResult r : my_results) {
-        r.addCVR(new_cvr);
+      // if this contest was on the ballot, add it to the votes
+      if (present) {
+        contest_info.add(new CVRContestInfo(co, null, null, votes));
       }
-      LOGGER.debug("parsed CVR: " + new_cvr);
-      return new_cvr;
-    } catch (final NumberFormatException e) {
-      return null;
-    } catch (final ArrayIndexOutOfBoundsException e) {
-      return null;
     }
+
+    // we don't need to look for an existing CVR with this data because,
+    // by definition, there cannot be one unless the same line appears
+    // twice in the CVR export file... and if it does, we need it to
+    // appear twice here too.
+    final CastVoteRecord new_cvr =
+      new CastVoteRecord(RecordType.UPLOADED, null, my_county.id(),
+                         cvr_id, my_record_count, tabulator_id,
+                         batch_id, record_id, imprinted_id,
+                         ballot_type, contest_info);
+    Persistence.saveOrUpdate(new_cvr);
+    my_parsed_cvrs.add(new_cvr);
+
+    // add the CVR to all of our results
+    for (final CountyContestResult r : my_results) {
+      r.addCVR(new_cvr);
+    }
+    LOGGER.debug("parsed CVR: " + new_cvr);
+    return new_cvr;
   }
 
   /**
@@ -564,8 +541,8 @@ public class DominionCVRExportParser implements CVRExportParser {
   @SuppressWarnings({"PMD.AvoidLiteralsInIfCondition", "PMD.AvoidDeeplyNestedIfStmts",
       "PMD.ModifiedCyclomaticComplexity", "PMD.CyclomaticComplexity",
       "PMD.StdCyclomaticComplexity", "PMD.NPathComplexity"})
-  private boolean processHeaders(final CSVRecord the_line) {
-    boolean result = true;
+  private Result processHeaders(final CSVRecord the_line) {
+    final Result result = new Result();
 
     // the explanations line includes the column names for the non-contest/choice
     // columns, so let's get those
@@ -577,7 +554,7 @@ public class DominionCVRExportParser implements CVRExportParser {
     final List<String> prohibited_headers = new ArrayList<>();
     for (final String h : PROHIBITED_HEADERS) {
       if (my_columns.get(h) != null) {
-        result = false;
+        result.success = false;
         prohibited_headers.add(h);
       }
     }
@@ -591,9 +568,9 @@ public class DominionCVRExportParser implements CVRExportParser {
       }
     }
 
-    result = prohibited_headers.isEmpty() && required_headers.isEmpty();
+    result.success = prohibited_headers.isEmpty() && required_headers.isEmpty();
 
-    if (!result) {
+    if (!result.success) {
       final StringBuilder sb = new StringBuilder();
       sb.append("malformed CVR file: ");
 
@@ -620,7 +597,11 @@ public class DominionCVRExportParser implements CVRExportParser {
         sb.append(" missing");
       }
 
-      my_error_message = sb.toString();
+      result.errorMessage = sb.toString();
+      result.errorRowNum = Long.valueOf( the_line.getRecordNumber()).intValue();
+      List<String> values = new ArrayList<>();
+      the_line.iterator().forEachRemaining(values::add);
+      result.errorRowContent = String.join(",", values);
     }
 
     return result;
@@ -653,121 +634,121 @@ public class DominionCVRExportParser implements CVRExportParser {
    *
    * @return true if the parse was successful, false otherwise
    */
-  @Override
-  public synchronized boolean parse() {
-    if (my_parse_status) {
-      // no need to parse if we've already parsed
-      return my_parse_success;
-    }
+  public Result parse() {
+    final Result result = new Result();
 
     LOGGER.info("parsing CVR export for county " + my_county.id() +
-                     ", batch_size=" + my_batch_size +
-                     ", transaction_size=" + my_transaction_size);
+                ", batch_size=" + my_batch_size +
+                ", transaction_size=" + my_transaction_size);
 
-    boolean result = true; // presume the parse will succeed
     final Iterator<CSVRecord> records = my_parser.iterator();
 
     my_record_count = 0;
 
+
+    // 1) we expect the first line to be the election name, which we currently discard
+    final CSVRecord electionName;
+
+    // 2) for the second line, we count the number of empty strings to find the first
+    // contest/choice column
+    final CSVRecord contest_line;
+
+    // 3) we expect the third line to be a list of contest choices
+    final CSVRecord choice_line;
+
+    // 4) a list of explanations of those choices (such as party affiliations)
+    final CSVRecord expl_line;
+
+    // the combination of line 2-5
+    final Result headerResult;
+
+    // tracker for errors
+    int lineNum = 1;
+
     try {
-      // we expect the first line to be the election name, which we currently discard
+      // electionName
       records.next();
-
-      // for the second line, we count the number of empty strings to find the first
-      // contest/choice column
-
-      final CSVRecord contest_line = records.next();
-      my_first_contest_column = 0;
-      while ("".equals(contest_line.get(my_first_contest_column))) {
-        my_first_contest_column = my_first_contest_column + 1;
-      }
-
-      // find all the contest names, how many choices each has,
-      // and how many choices can be made in each
-      final List<String> contest_names = new ArrayList<String>();
-      final Map<String, Integer> contest_votes_allowed = new HashMap<String, Integer>();
-      final Map<String, Integer> contest_choice_counts = new HashMap<String, Integer>();
-
-      // we expect the second line to be a list of contest names, each appearing once
-      // for each choice in the contest
-
-      updateContestStructures(contest_line, contest_names, contest_votes_allowed,
-                              contest_choice_counts);
-
-      // we expect the third and fourth lines to be a list of contest choices
-      // and a list of explanations of those choices (such as party affiliations)
-
-      final CSVRecord choice_line = records.next();
-      final CSVRecord expl_line = records.next();
-
-      if (processHeaders(expl_line)) {
-        addContests(choice_line, expl_line, contest_names,
-                    contest_votes_allowed, contest_choice_counts);
-
-        // subsequent lines contain cast vote records
-        while (records.hasNext()) {
-          final CSVRecord cvr_line = records.next();
-          final CastVoteRecord cvr = extractCVR(cvr_line);
-          if (cvr == null) {
-            // we don't record the CVR since it didn't parse
-            LOGGER.error("Could not parse malformed CVR record (" + cvr_line + ")");
-            my_error_message = "malformed CVR record (" + cvr_line + ")";
-            result = false;
-            break;
-          } else {
-            my_record_count = my_record_count + 1;
-            if (my_record_count % PROGRESS_INTERVAL == 0) {
-              LOGGER.info("parsed " + my_record_count +
-                               " CVRs for county " + my_county.id());
-            }
-          }
-          checkForFlush();
-        }
-
-        for (final CountyContestResult r : my_results) {
-          r.updateResults();
-          Persistence.saveOrUpdate(r);
-        }
-
-        // commit any uncommitted records
-
-        commitCVRsAndUpdateCountyDashboard();
-      } else {
-        // error message was set when validating columns
-        result = false;
-      }
-    } catch (final NoSuchElementException | StringIndexOutOfBoundsException |
-                   ArrayIndexOutOfBoundsException e) {
-      LOGGER.error("Could not parse CVR file because it was malformed");
-      my_error_message = "malformed CVR file";
-      result = false;
+      lineNum++;
+      contest_line = records.next();
+      lineNum++;
+      choice_line = records.next();
+      lineNum++;
+      expl_line = records.next();
+    } catch (final Exception e) {
+      LOGGER.error(e.getClass());
+      LOGGER.error(e.getMessage());
+      result.success = false;
+      result.errorMessage = "Not a valid CSV";
+      result.errorRowNum = lineNum;
+      result.errorRowContent = "? (could not parse)";
+      return result;
     }
 
-    // if we had any kind of parse error, we scrap the whole import
+    my_first_contest_column = 0;
+    while ("".equals(contest_line.get(my_first_contest_column))) {
+      my_first_contest_column = my_first_contest_column + 1;
+    }
+    // find all the contest names, how many choices each has,
+    // and how many choices can be made in each
+    final List<String> contest_names = new ArrayList<String>();
+    final Map<String, Integer> contest_votes_allowed = new HashMap<String, Integer>();
+    final Map<String, Integer> contest_choice_counts = new HashMap<String, Integer>();
 
-    my_parse_status = true;
-    my_parse_success = result;
+    // we expect the second line to be a list of contest names, each appearing once
+    // for each choice in the contest
+
+    updateContestStructures(contest_line, contest_names, contest_votes_allowed,
+                            contest_choice_counts);
+
+
+    headerResult = processHeaders(expl_line);
+
+    if (headerResult.success == false) {
+      return headerResult;
+    } else {
+      addContests(choice_line, expl_line, contest_names,
+                  contest_votes_allowed, contest_choice_counts);
+
+      // subsequent lines contain cast vote records
+      while (records.hasNext()) {
+        final CSVRecord cvr_line = records.next();
+        try {
+          final CastVoteRecord cvr = extractCVR(cvr_line);
+        } catch (final Exception e) {
+          LOGGER.error(e.getClass());
+          LOGGER.error(e.getMessage());
+          result.success = false;
+          // we don't know what went wrong
+          result.errorMessage = e.getClass().toString() + " - "+ e.getMessage();
+          result.errorRowNum = Long.valueOf( cvr_line.getRecordNumber()).intValue();
+          List<String> values = new ArrayList<>();
+          cvr_line.iterator().forEachRemaining(values::add);
+          result.errorRowContent = String.join(",", values);
+          // get out of here now! break and return
+          return result;
+        }
+
+        my_record_count = my_record_count + 1;
+        if (my_record_count % PROGRESS_INTERVAL == 0) {
+          LOGGER.info("parsed " + my_record_count +
+                      " CVRs for county " + my_county.id());
+        }
+        checkForFlush();
+      }
+
+      for (final CountyContestResult r : my_results) {
+        r.updateResults();
+        Persistence.saveOrUpdate(r);
+      }
+
+      // commit any uncommitted records
+
+      commitCVRsAndUpdateCountyDashboard();
+    }
+
+    result.success = true; // we made it through, yay!
+    result.importedCount = my_record_count;
 
     return result;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public synchronized OptionalInt recordCount() {
-    if (my_record_count < 0) {
-      return OptionalInt.empty();
-    } else {
-      return OptionalInt.of(my_record_count);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public synchronized String errorMessage() {
-    return my_error_message;
   }
 }

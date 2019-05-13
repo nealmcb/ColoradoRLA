@@ -124,6 +124,15 @@ declare namespace JSON {
         status: string;
         size: number;
         timestamp: string;
+        result: Result;
+    }
+
+    interface Result {
+        success: boolean;
+        importedCount: number;
+        errorMessage: string;
+        errorRowNum: number;
+        errorRowContent: string;
     }
 
     type UploadFileOk = JSON.UploadedFile;

@@ -25,6 +25,7 @@ import us.freeandfair.corla.asm.ASMState;
 import us.freeandfair.corla.asm.ASMUtilities;
 import us.freeandfair.corla.asm.AuditBoardDashboardASM;
 import us.freeandfair.corla.asm.CountyDashboardASM;
+import us.freeandfair.corla.json.UploadedFileDTO;
 import us.freeandfair.corla.model.AuditBoard;
 import us.freeandfair.corla.model.AuditInfo;
 import us.freeandfair.corla.model.AuditSelection;
@@ -87,12 +88,12 @@ public class CountyDashboardRefreshResponse {
   /**
    * The ballot manifest file.
    */
-  private final UploadedFile my_ballot_manifest_file;
+  private final UploadedFileDTO my_ballot_manifest_file;
 
   /**
    * The CVR export file.
    */
-  private final UploadedFile my_cvr_export_file;
+  private final UploadedFileDTO my_cvr_export_file;
 
   /**
    * The contests on the ballot (by ID).
@@ -261,8 +262,16 @@ public class CountyDashboardRefreshResponse {
     my_general_information = the_general_information;
     my_audit_board_count = the_audit_board_count;
     my_audit_boards = the_audit_boards;
-    my_ballot_manifest_file = the_ballot_manifest_file;
-    my_cvr_export_file = the_cvr_export_file;
+    if (null == the_ballot_manifest_file) {
+      my_ballot_manifest_file = null;
+    } else {
+      my_ballot_manifest_file = new UploadedFileDTO(the_ballot_manifest_file);
+    }
+    if (null == the_cvr_export_file) {
+      my_cvr_export_file = null;
+    } else {
+      my_cvr_export_file = new UploadedFileDTO(the_cvr_export_file);
+    }
     my_contests = the_contests;
     my_contests_under_audit = the_contests_under_audit;
     my_audit_time = the_audit_time;

@@ -135,6 +135,7 @@ function parseFile(file: JSON.UploadedFile): Option<UploadedFile> {
         hashStatus: file.hash_status,
         id: file.file_id,
         name: file.filename,
+        result: file.result,
         size: file.size,
         status: file.status,
         timestamp: new Date(file.timestamp),
