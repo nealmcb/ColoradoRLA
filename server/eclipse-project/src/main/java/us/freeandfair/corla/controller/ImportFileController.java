@@ -73,10 +73,11 @@ public class ImportFileController implements Runnable {
       // object and does not get updates across threads.
       Persistence.beginTransaction();
       cleanSlate();
-      Persistence.flush();
-      Persistence.commitTransaction();
+      commit();
 
-      Persistence.beginTransaction();
+      setCVRFile();
+      commit();
+
       runOnThread();
       Persistence.flush();
       Persistence.commitTransaction();
@@ -99,6 +100,15 @@ public class ImportFileController implements Runnable {
       error(result);
     }
   }
+
+
+  // Note: setCVRFile must come after the cdb is saved so it isn't overwritten.
+  // We want CVRFile set, whether the import succeeds or fails, for CDOS to be able
+  // to examine it
+  public void setCVRFile() {
+    UploadedFileQueries.setCVRFileOnCounty(this.uploadedFileDTO);
+  }
+
 
   /**
    * Aborts the import with the specified error description.
@@ -172,11 +182,6 @@ public class ImportFileController implements Runnable {
     commit();
     CountyContestResultQueries.deleteForCounty(this.countyId);
     commit();
-
-    // Note: setCVRFile must come after the cdb is saved so it isn't overwritten.
-    // We want CVRFile set, whether the import succeeds or fails, for CDOS to be able
-    // to examine it
-    UploadedFileQueries.setCVRFileOnCounty(this.uploadedFileDTO);
   }
 
   public void commit() {
