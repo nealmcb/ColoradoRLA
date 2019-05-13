@@ -17,9 +17,18 @@ const UploadedFile = ({ description, file }: UploadedFileProps) => {
             <h4>{ description }</h4>
             <div><strong>File name:</strong> "{ file.name }"</div>
             <div><strong>SHA-256 hash:</strong> { file.hash }</div>
-            <div className='error'>{ file.result.errorMessage }</div>
-            <div className='error rowNum'>{ file.result.errorRowNum }</div>
-            <div className='error rowContent'>{ file.result.errorRowContent }</div>
+            <div className='error'>
+                <strong>{file.result.success ? '' : 'Error Message: ' }</strong>
+                { file.result.errorMessage }
+            </div>
+            <div className='error rowNum'>
+                <strong>{file.result.success ? '' : 'Error row number: ' }</strong>
+                { file.result.errorRowNum }
+            </div>
+            <div className='error rowContent'>
+                <strong>{file.result.success ? '' : 'Error row content: ' }</strong>
+                { file.result.errorRowContent }
+            </div>
             <Button intent={ Intent.PRIMARY }
                     onClick={ onClick }>
                 Download

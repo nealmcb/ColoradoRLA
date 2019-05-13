@@ -107,7 +107,7 @@ public class UploadedFile implements PersistentEntity {
   private String submitted_hash;
 
   /** the parse result **/
-  @Column()
+  @Column(length = 65535, columnDefinition = "text")
   @Convert(converter = ResultConverter.class)
   private Result result;
 

@@ -8,7 +8,9 @@ import us.freeandfair.corla.util.SuppressFBWarnings;
 
 @SuppressFBWarnings(value = {"URF_UNREAD_FIELD"}, justification = "Field is read by Gson.")
 public class UploadedFileDTO {
-  private Long fileId;
+  private Long id;// todo choose one
+  private Long fileId;// todo choose one
+  private Long file_id;// todo choose one
   private String timestamp;
   private Long countyId;
   private String fileName; // todo choose one
@@ -20,6 +22,8 @@ public class UploadedFileDTO {
   private Integer approximate_record_count;
 
   public UploadedFileDTO(final UploadedFile uploadedFile) {
+    this.id = uploadedFile.id();
+    this.file_id = uploadedFile.id();
     this.fileId = uploadedFile.id();
     this.timestamp = uploadedFile.timestamp().toString();
     this.countyId = uploadedFile.county().id();
@@ -50,5 +54,13 @@ public class UploadedFileDTO {
 
   public Result getResult() {
     return this.result;
+  }
+
+  public Long getCountyId() {
+    return this.countyId;
+  }
+
+  public void setCountyId(final Long countyId) {
+    this.countyId = countyId;
   }
 }

@@ -599,7 +599,9 @@ public class DominionCVRExportParser {
 
       result.errorMessage = sb.toString();
       result.errorRowNum = Long.valueOf( the_line.getRecordNumber()).intValue();
-      result.errorRowContent = the_line.toString();
+      List<String> values = new ArrayList<>();
+      the_line.iterator().forEachRemaining(values::add);
+      result.errorRowContent = String.join(",", values);
     }
 
     return result;
@@ -632,7 +634,7 @@ public class DominionCVRExportParser {
    *
    * @return true if the parse was successful, false otherwise
    */
-  public synchronized Result parse() {
+  public Result parse() {
     final Result result = new Result();
 
     LOGGER.info("parsing CVR export for county " + my_county.id() +
@@ -749,5 +751,4 @@ public class DominionCVRExportParser {
 
     return result;
   }
-
 }

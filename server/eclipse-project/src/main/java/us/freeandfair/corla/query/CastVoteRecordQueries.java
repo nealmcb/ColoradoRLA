@@ -258,8 +258,8 @@ public final class CastVoteRecordQueries {
   public static int deleteCVRContestInfos(final Long countyId) {
     final Session s = Persistence.currentSession();
     final Query q = s
-      .createNativeQuery("delete from cvr_contest_info ci where ci.county_id = :county_id")
-      .setParameter("county_id", countyId);
+      .createNativeQuery("delete from cvr_contest_info ci where ci.county_id = :county_id");
+    q.setParameter("county_id", countyId);
 
     return q.executeUpdate();
 
@@ -272,7 +272,7 @@ public final class CastVoteRecordQueries {
     // be deleted first
     deleteCVRContestInfos(county_id);
 
-    final Query query = s.createQuery("delete from CastVoteRecord cvr where cvr.my_county_id = :county_id");
+    final Query query = s.createNativeQuery("delete from cast_vote_record cvr where cvr.county_id = :county_id");
     query.setParameter("county_id", county_id);
 
     return query.executeUpdate();
