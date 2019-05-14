@@ -15,8 +15,8 @@ interface BreadcrumbProps {
 
 const Breadcrumbs = ({ county }: BreadcrumbProps) => (
     <ul className='pt-breadcrumbs'>
-        <li><Breadcrumb text={ <Link to='/sos'>SoS</Link> } /></li>
-        <li><Breadcrumb text={ <Link to='/sos/county'>County</Link> } /></li>
+        <li><Breadcrumb text='SoS' href='/sos' /></li>
+        <li><Breadcrumb text='County' href='/sos/county' /></li>
         <li><Breadcrumb className='pt-breadcrumb-current' text={ county.name } /></li>
     </ul>
 );
