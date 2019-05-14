@@ -13,6 +13,7 @@ with the following tags indicating the components affected:
 ## 2.3.0 - New Features
 - [UI - UI Refresh][pr137] - new look and feel on login and on the state dashboard
 - [API - File fails][pr139] - file upload failures show better error messages
+- API - Improved CVR import performance
 
 ## 2.2.1 - Bugfix release
 - [UI - Remove audit detail section from the county dashboard][pr136]
