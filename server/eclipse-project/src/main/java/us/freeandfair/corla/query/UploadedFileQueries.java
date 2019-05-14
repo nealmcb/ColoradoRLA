@@ -176,9 +176,10 @@ public final class UploadedFileQueries {
     final Session s = Persistence.currentSession();
     final Query q =
       s.createNativeQuery("update uploaded_file up "
-                    + " set status = :status,"
-                    + " result = :result"
-                    + " where up.id = :id");
+                          + " set status = :status,"
+                          + " result = :result, "
+                          + " version = version + 1 "
+                          + " where up.id = :id");
 
     q.setParameter("id", upF.getFileId());
     q.setParameter("status", upF.getStatus());
