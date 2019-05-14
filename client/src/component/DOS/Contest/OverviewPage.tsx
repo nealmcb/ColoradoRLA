@@ -11,7 +11,7 @@ import counties from 'corla/data/counties';
 
 const Breadcrumbs = () => (
     <ul className='pt-breadcrumbs'>
-        <li><Breadcrumb text={ <Link to='/sos'>SoS</Link> } /></li>
+        <li><Breadcrumb text='SoS' href='/sos' /></li>
         <li><Breadcrumb className='pt-breadcrumb-current' text='Contests' /></li>
     </ul>
 );
