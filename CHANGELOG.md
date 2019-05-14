@@ -10,6 +10,11 @@ with the following tags indicating the components affected:
 - `TOOLING` refers to changes to tooling that falls outside the UI or API, such
   as the RLA export.
 
+
+## 2.3.1 - Bugfix release
+- [API - add equals to Result][pr141] - fixes concurrent update bug 
+
+
 ## 2.3.0 - New Features
 - [UI - UI Refresh][pr137] - new look and feel on login and on the state dashboard
 - [API - File fails][pr139] - file upload failures show better error messages
@@ -228,3 +233,4 @@ This is [FreeAndFair's most recent tag][1.1.0.3].
 [pr137]: https://github.com/democracyworks/ColoradoRLA/pull/137
 [pr138]: https://github.com/democracyworks/ColoradoRLA/pull/138
 [pr139]: https://github.com/democracyworks/ColoradoRLA/pull/139
+[pr141]: https://github.com/democracyworks/ColoradoRLA/pull/141
