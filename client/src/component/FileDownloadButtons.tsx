@@ -6,12 +6,12 @@ import downloadFile from 'corla/action/downloadFile';
 
 interface UploadedFileProps {
     description: string;
-    file: UploadedFile | undefined;
+    file: UploadedFile | undefined | null;
 }
 
 const UploadedFile = ({ description, file }: UploadedFileProps) => {
 
-    if (undefined === file) {
+    if (null === file || undefined === file) {
         return (
             <div className='pt-card'>
                 <h4>{ description }</h4>
