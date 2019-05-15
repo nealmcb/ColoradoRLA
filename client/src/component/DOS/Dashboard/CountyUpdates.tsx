@@ -63,7 +63,7 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
      */
     public static getDerivedStateFromProps(props: UpdatesProps, state: UpdatesState) {
         const uniqueStatuses = _.uniq(_.map(props.countyStatus, c => {
-            return formatCountyAndBoardASMState(c.asmState, c.auditBoardASMState);
+            return formatCountyAndBoardASMState(c);
         }));
 
         const newFilters = _.reduce(uniqueStatuses, (acc, v) => {
@@ -106,8 +106,8 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
         const countyData: RowData[] = _.map(countyStatus, (c): RowData => {
             const county = counties[c.id];
             const missedDeadline = c.asmState === 'DEADLINE_MISSED';
-            const status = formatCountyAndBoardASMState(c.asmState, c.auditBoardASMState);
-            const statusIndicator = formatCountyAndBoardASMStateIndicator(c.asmState, c.auditBoardASMState);
+            const status = formatCountyAndBoardASMState(c);
+            const statusIndicator = formatCountyAndBoardASMStateIndicator(c);
 
             if (!auditStarted || (auditStarted && missedDeadline)) {
                 return {
@@ -119,7 +119,7 @@ class CountyUpdates extends React.Component<UpdatesProps, UpdatesState> {
                     remRound: '—',
                     remTotal: '—',
                     status,
-                    statusIndicator: '',
+                    statusIndicator,
                     submitted: '—',
                 };
             }

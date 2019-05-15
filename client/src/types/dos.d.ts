@@ -52,11 +52,12 @@ declare namespace DOS {
         asmState: County.ASMState;
         auditBoard: AuditBoardStatus;
         auditBoardASMState: AuditBoardASMState;
+        auditBoardCount?: number;
         auditedBallotCount: number;
-        ballotManifest: UploadedFile;
+        ballotManifest?: UploadedFile;
         ballotsRemainingInRound: number;
         currentRound: Round;
-        cvrExport: UploadedFile;
+        cvrExport?: UploadedFile;
         disagreementCount: number;
         discrepancyCount: DiscrepancyCount;
         estimatedBallotsToAudit: number;

@@ -15,6 +15,7 @@
  * @dark-gray5: #394B59
  *
  * @green3: #0F9960
+ * @red3: #DB3737
  */
 
 /*
@@ -214,6 +215,10 @@ h1, h2, h3, h4, h5, h6 {
   height: 8px;
   width: 8px;
   border-radius: 50%;
+}
+
+.status-indicator.status-indicator-error {
+  background-color: #DB3737;
 }
 
 .status-indicator.status-indicator-in-progress {
