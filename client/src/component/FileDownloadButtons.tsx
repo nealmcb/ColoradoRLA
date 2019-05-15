@@ -24,7 +24,7 @@ const UploadedFile = ({ description, file }: UploadedFileProps) => {
         return (
             <div className='pt-card'>
                 <h4>{ description }</h4>
-                <div><strong>File name:</strong> "{ file.name }"</div>
+                <div><strong>File name:</strong> "{ file.fileName }"</div>
                 <div><strong>SHA-256 hash:</strong> { file.hash }</div>
                 <div className='error'>
                     <strong>{file.result.success ? '' : 'Error Message: ' }</strong>

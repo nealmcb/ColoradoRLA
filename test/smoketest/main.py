@@ -390,7 +390,7 @@ def get_imported_count(dashboard):
 
     imported_count = dashboard.get('cvr_export_count', None)
     if 'cvr_export_file' in dashboard:
-        approximate_record_count = dashboard['cvr_export_file']['approximate_record_count']
+        approximate_record_count = dashboard['cvr_export_file']['approximateRecordCount']
     else:
         approximate_record_count = 0
 

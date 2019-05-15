@@ -115,12 +115,11 @@ declare namespace JSON {
     }
 
     interface UploadedFile {
-        approximate_record_count: number;
-        county_id: number;
-        file_id: number;
-        filename: string;
+        approximateRecordCount: number;
+        countyId: number;
+        id: number;
+        fileName: string;
         hash: string;
-        hash_status: string;
         status: string;
         size: number;
         timestamp: string;
