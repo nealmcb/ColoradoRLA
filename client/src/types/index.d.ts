@@ -95,9 +95,8 @@ interface UploadedFile {
     approximateRecordCount: number;
     countyId: number;
     hash: string;
-    hashStatus: string;
     id: number;
-    name: string;
+    fileName: string;
     size: number;
     status: string;
     timestamp: Date;

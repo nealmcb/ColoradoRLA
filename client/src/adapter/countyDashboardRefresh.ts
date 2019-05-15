@@ -129,12 +129,11 @@ function parseFile(file: JSON.UploadedFile): Option<UploadedFile> {
     if (!file) { return null; }
 
     return {
-        approximateRecordCount: file.approximate_record_count,
-        countyId: file.county_id,
+        approximateRecordCount: file.approximateRecordCount,
+        countyId: file.countyId,
+        fileName: file.fileName,
         hash: file.hash,
-        hashStatus: file.hash_status,
-        id: file.file_id,
-        name: file.filename,
+        id: file.id,
         result: file.result,
         size: file.size,
         status: file.status,

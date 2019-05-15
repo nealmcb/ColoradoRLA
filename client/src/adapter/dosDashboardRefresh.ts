@@ -48,11 +48,10 @@ function parseFile(file: any): any {
     if (!file) { return null; }
 
     return {
-        countyId: file.county_id,
+        countyId: file.countyId,
+        fileName: file.fileName,
         hash: file.hash,
-        hashStatus: file.hash_status,
-        id: file.file_id,
-        name: file.name,
+        id: file.id,
         result: file.result,
         size: file.size,
         status: file.status,
