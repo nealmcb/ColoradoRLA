@@ -68,6 +68,7 @@ function parseCountyStatus(countyStatus: any) {
             asmState: c.asm_state,
             auditBoard: parseAuditBoard(c.audit_board),
             auditBoardASMState: c.audit_board_asm_state,
+            auditBoardCount: c.audit_board_count,
             auditedBallotCount: c.audited_ballot_count,
             ballotManifest: parseFile(c.ballot_manifest_file),
             ballotsRemainingInRound: c.ballots_remaining_in_round,
