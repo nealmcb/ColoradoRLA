@@ -1,64 +1,22 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { Card, Icon, Intent } from '@blueprintjs/core';
+import { Card } from '@blueprintjs/core';
 
 import BallotManifestFormContainer from './BallotManifest/FormContainer';
 import CVRExportFormContainer from './CVRExport/FormContainer';
 
-interface MatchStatusProps {
-    ballotManifestCount: number;
-    cvrExportCount: number;
-    uploadedBothFiles: boolean;
-}
-
-const MatchStatus = (props: MatchStatusProps) => {
-    const { ballotManifestCount, cvrExportCount, uploadedBothFiles } = props;
-
-    if (!uploadedBothFiles) {
-        return <div />;
-    }
-
-    if (ballotManifestCount === cvrExportCount) {
-        return (
-            <Card>
-                <Icon icon='tick-circle' intent={ Intent.SUCCESS } />
-                <span> </span>
-                CVR Export and Ballot Manifest record counts <strong>match.</strong>
-            </Card>
-        );
-    } else {
-        return (
-            <Card>
-                <Icon icon='error' intent={ Intent.DANGER } />
-                <span> </span>
-                CVR Export and Ballot Manifest record counts <strong>do not match.</strong>
-                <Card>
-                    <div>Ballot Manifest count: { ballotManifestCount }</div>
-                    <div>CVR Export count: { cvrExportCount }</div>
-                </Card>
-            </Card>
-        );
-    }
-};
-
 interface FileUploadFormsProps {
     countyState: County.AppState;
-    uploadedBothFiles: boolean;
 }
 
 const FileUploadForms = (props: FileUploadFormsProps) => {
-    const { countyState, uploadedBothFiles } = props;
+    const { countyState } = props;
 
     if (!countyState) { return null; }
 
-    const { ballotManifestCount, cvrExportCount } = countyState;
-
     return (
         <div>
-            <MatchStatus ballotManifestCount={ ballotManifestCount! }
-                         cvrExportCount={ cvrExportCount! }
-                         uploadedBothFiles={ uploadedBothFiles } />
             <BallotManifestFormContainer />
             <CVRExportFormContainer />
         </div>
@@ -77,20 +35,18 @@ const MissedDeadline = () => {
 interface FileUploadContainerProps {
     countyState: County.AppState;
     missedDeadline: boolean;
-    uploadedBothFiles: boolean;
 }
 
 class FileUploadContainer extends React.Component<FileUploadContainerProps> {
     public render() {
-        const { countyState, missedDeadline, uploadedBothFiles } = this.props;
+        const { countyState, missedDeadline } = this.props;
 
         if (missedDeadline) {
             return <MissedDeadline />;
         }
 
         return (
-            <FileUploadForms countyState={ countyState }
-                             uploadedBothFiles={ uploadedBothFiles } />
+            <FileUploadForms countyState={ countyState } />
         );
     }
 }
@@ -98,11 +54,9 @@ class FileUploadContainer extends React.Component<FileUploadContainerProps> {
 function select(countyState: County.AppState) {
     const { asm } = countyState;
 
-    const uploadedBothFiles = !!(countyState.ballotManifest
-        && countyState.cvrExport);
     const missedDeadline = asm.county === 'DEADLINE_MISSED';
 
-    return { countyState, missedDeadline, uploadedBothFiles };
+    return { countyState, missedDeadline };
 }
 
 export default connect(select)(FileUploadContainer);
