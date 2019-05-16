@@ -8,44 +8,58 @@ import Uploading from './Uploading';
 
 import uploadCvrExport from 'corla/action/county/uploadCvrExport';
 
+import { Spinner } from '@blueprintjs/core';
+
 import deleteFile from 'corla/action/county/deleteFile';
 import cvrExportUploadedSelector from 'corla/selector/county/cvrExportUploaded';
 import cvrExportUploadingSelector from 'corla/selector/county/cvrExportUploading';
 
 interface UploadedProps {
+    deleting: boolean | undefined;
     enableReupload: OnClick;
-    handleDeleteFile: OnClick;
     file: UploadedFile;
+    handleDeleteFile: OnClick;
 }
 
 const UploadedCVRExport = (props: UploadedProps) => {
     const { enableReupload, handleDeleteFile, file } = props;
-    return (
-        <Card>
-            <div><strong>CVR Export</strong></div>
-            <div><strong>File name: </strong>"{ file.fileName }"</div>
-            <div><strong>SHA-256 hash: </strong>{ file.hash }</div>
-            <div className='error'>
-                <strong>{file.result.success ? '' : 'Error Message: ' }</strong>
-                { file.result.errorMessage }
-            </div>
-            <div className='error rowNum'>
-                <strong>{file.result.success ? '' : 'Error row number: ' }</strong>
-                { file.result.errorRowNum }
-            </div>
-            <div className='error rowContent'>
-                <strong>{file.result.success ? '' : 'Error row content: ' }</strong>
-                { file.result.errorRowContent }
-            </div>
-            <Button intent={ Intent.PRIMARY } onClick={ enableReupload }>
-                Re-upload
-            </Button>
-            <span> &nbsp;&nbsp; </span>
-            <Button intent={ Intent.PRIMARY } onClick={ handleDeleteFile }>
-                Delete File
-            </Button>
-        </Card>
-    );
+
+
+    if (props.deleting) {
+        return (
+            <Card>
+                <Spinner className='pt-large' intent={ Intent.PRIMARY } />
+                <div>Deleting file...</div>
+            </Card>
+        );
+    } else {
+        return (
+            <Card>
+                <div><strong>CVR Export</strong></div>
+                <div><strong>File name: </strong>"{ file.fileName }"</div>
+                <div><strong>SHA-256 hash: </strong>{ file.hash }</div>
+                <div className='error'>
+                    <strong>{file.result.success ? '' : 'Error Message: ' }</strong>
+                    { file.result.errorMessage }
+                </div>
+                <div className='error rowNum'>
+                    <strong>{file.result.success ? '' : 'Error row number: ' }</strong>
+                    { file.result.errorRowNum }
+                </div>
+                <div className='error rowContent'>
+                    <strong>{file.result.success ? '' : 'Error row content: ' }</strong>
+                    { file.result.errorRowContent }
+                </div>
+                <Button intent={ Intent.PRIMARY } onClick={ enableReupload }>
+                    Re-upload
+                </Button>
+                <span> &nbsp;&nbsp; </span>
+                <Button intent={ Intent.PRIMARY } onClick={ handleDeleteFile }>
+                    Delete File
+                </Button>
+            </Card>
+        );
+    }
 };
 
 interface ContainerProps {
@@ -82,8 +96,10 @@ class CVRExportFormContainer extends React.Component<ContainerProps, ContainerSt
 
         if (fileUploaded && !this.state.reupload && countyState.cvrExport) {
             return (
+                // shameless reuse of state variable uploading=deleting
                 <UploadedCVRExport enableReupload={ this.enableReupload }
                                    handleDeleteFile={ this.handleDeleteFile }
+                                   deleting={ countyState.uploadingCVRExport }
                                    file={ countyState.cvrExport } />
             );
         }

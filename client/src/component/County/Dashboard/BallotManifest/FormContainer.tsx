@@ -7,45 +7,57 @@ import Uploading from './Uploading';
 
 import uploadBallotManifest from 'corla/action/county/uploadBallotManifest';
 
+import { Spinner } from '@blueprintjs/core';
+
 import deleteFile from 'corla/action/county/deleteFile';
 import ballotManifestUploadedSelector from 'corla/selector/county/ballotManifestUploaded';
 
 
 interface UploadedProps {
+    deleting: boolean | undefined;
     enableReupload: OnClick;
-    handleDeleteFile: OnClick;
     file: UploadedFile;
+    handleDeleteFile: OnClick;
 }
 
 const UploadedBallotManifest = (props: UploadedProps) => {
     const { enableReupload, handleDeleteFile, file } = props;
 
-    return (
-        <Card>
-            <div><strong>Ballot Manifest</strong></div>
-            <div><strong>File name: </strong>"{ file.fileName }"</div>
-            <div><strong>SHA-256 hash: </strong> { file.hash }</div>
-            <div className='error'>
-                <strong>{file.result.success ? '' : 'Error Message: ' }</strong>
-                { file.result.errorMessage }
-            </div>
-            <div className='error rowNum'>
-                <strong>{file.result.success ? '' : 'Error row number: ' }</strong>
-                { file.result.errorRowNum }
-            </div>
-            <div className='error rowContent'>
-                <strong>{file.result.success ? '' : 'Error row content: ' }</strong>
-                { file.result.errorRowContent }
-            </div>
-            <Button intent={ Intent.PRIMARY } onClick={ enableReupload }>
-                Re-upload
-            </Button>
-            <span>&nbsp;&nbsp; </span>
-            <Button intent={ Intent.PRIMARY } onClick={ handleDeleteFile }>
-                Delete File
-            </Button>
-        </Card>
-    );
+    if (props.deleting) {
+        return (
+            <Card>
+                <Spinner className='pt-large' intent={ Intent.PRIMARY } />
+                <div>Deleting file...</div>
+            </Card>
+        );
+    } else {
+        return (
+            <Card>
+                <div><strong>Ballot Manifest</strong></div>
+                <div><strong>File name: </strong>"{ file.fileName }"</div>
+                <div><strong>SHA-256 hash: </strong> { file.hash }</div>
+                <div className='error'>
+                    <strong>{file.result.success ? '' : 'Error Message: ' }</strong>
+                    { file.result.errorMessage }
+                </div>
+                <div className='error rowNum'>
+                    <strong>{file.result.success ? '' : 'Error row number: ' }</strong>
+                    { file.result.errorRowNum }
+                </div>
+                <div className='error rowContent'>
+                    <strong>{file.result.success ? '' : 'Error row content: ' }</strong>
+                    { file.result.errorRowContent }
+                </div>
+                <Button intent={ Intent.PRIMARY } onClick={ enableReupload }>
+                    Re-upload
+                </Button>
+                <span>&nbsp;&nbsp; </span>
+                <Button intent={ Intent.PRIMARY } onClick={ handleDeleteFile }>
+                    Delete File
+                </Button>
+            </Card>
+        );
+    }
 };
 
 interface ContainerProps {
@@ -82,8 +94,10 @@ class BallotManifestFormContainer extends React.Component<ContainerProps, Contai
 
         if (fileUploaded && !this.state.reupload && countyState.ballotManifest) {
             return (
+                // shameless reuse of state variable uploading=deleting
                 <UploadedBallotManifest enableReupload={ this.enableReupload }
                                         handleDeleteFile={ this.handleDeleteFile.bind(this) }
+                                        deleting={ countyState.uploadingBallotManifest }
                                         file={ countyState.ballotManifest } />
             );
         }
