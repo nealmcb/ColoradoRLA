@@ -1,7 +1,6 @@
 import * as _ from 'lodash';
 
 import activeCounties from './activeCounties';
-import auditStarted from './auditStarted';
 
 
 function canStartNextRound(state: DOS.AppState): boolean {

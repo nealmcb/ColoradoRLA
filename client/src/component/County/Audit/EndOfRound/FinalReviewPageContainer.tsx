@@ -3,11 +3,6 @@ import { connect } from 'react-redux';
 
 import FinalReviewPage from './FinalReviewPage';
 
-import allRoundsCompleteSelector from 'corla/selector/county/allRoundsComplete';
-import countyInfoSelector from 'corla/selector/county/countyInfo';
-import currentRoundNumberSelector from 'corla/selector/county/currentRoundNumber';
-import previousRoundSelector from 'corla/selector/county/previousRound';
-
 
 interface Props {
     auditBoardIndex: number;

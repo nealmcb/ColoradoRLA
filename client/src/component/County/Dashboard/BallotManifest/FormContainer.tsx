@@ -2,8 +2,6 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { Button, Card, Intent } from '@blueprintjs/core';
-
-import action from 'corla/action';
 import BallotManifestForm from './Form';
 import Uploading from './Uploading';
 

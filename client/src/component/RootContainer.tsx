@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { connect, Provider, Store } from 'react-redux';
+import { Provider, Store } from 'react-redux';
 import {
     BrowserRouter as Router,
-    Redirect,
     Route,
     Switch,
 } from 'react-router-dom';

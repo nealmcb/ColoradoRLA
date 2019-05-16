@@ -5,9 +5,6 @@ import ReviewStage from './ReviewStage';
 
 import uploadAcvr from 'corla/action/county/uploadAcvr';
 
-import currentBallotNumber from 'corla/selector/county/currentBallotNumber';
-import totalBallotsForBoard from 'corla/selector/county/totalBallotsForBoard';
-
 interface StateProps {
     auditBoardIndex: number;
     comment?: string;

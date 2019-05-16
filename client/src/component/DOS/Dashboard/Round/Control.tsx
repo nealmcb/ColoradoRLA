@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, Card, Intent } from '@blueprintjs/core';
+import { Button, Intent } from '@blueprintjs/core';
 
 import fetchReport from 'corla/action/dos/fetchReport';
 import startNextRound from 'corla/action/dos/startNextRound';

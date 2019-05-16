@@ -10,8 +10,6 @@ import PublicMeetingDateForm from './PublicMeetingDateForm';
 import RiskLimitForm from './RiskLimitForm';
 import UploadFileButton from './UploadFileButton';
 
-import * as format from 'corla/format';
-
 const Breadcrumbs = () => (
     <ul className='pt-breadcrumbs'>
         <li><Breadcrumb href='/sos' text='SoS' /></li>

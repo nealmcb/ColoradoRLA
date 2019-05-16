@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-import { isFinite } from 'lodash';
-
 import { Card, NumericInput } from '@blueprintjs/core';
 
 interface FormProps {

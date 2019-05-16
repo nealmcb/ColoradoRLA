@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-import * as moment from 'moment';
-
 import { Card } from '@blueprintjs/core';
 import { DateInput, IDateFormatProps } from '@blueprintjs/datetime';
 

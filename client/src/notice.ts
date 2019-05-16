@@ -1,4 +1,4 @@
-import { Intent, Position, Toaster } from '@blueprintjs/core';
+import { Intent, Toaster } from '@blueprintjs/core';
 
 import {
     defaultDangerTimeout,

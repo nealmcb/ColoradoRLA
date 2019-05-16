@@ -2,13 +2,9 @@ import * as React from 'react';
 
 import * as _ from 'lodash';
 
-import { connect } from 'react-redux';
-
 import { Redirect } from 'react-router-dom';
 
 import { History } from 'history';
-
-import DOSLayout from 'corla/component/DOSLayout';
 
 import standardizeChoices from 'corla/action/dos/standardizeChoices';
 

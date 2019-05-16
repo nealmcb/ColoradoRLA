@@ -1,14 +1,11 @@
 import * as React from 'react';
 
-import { Redirect } from 'react-router-dom';
-
 import { Card } from '@blueprintjs/core';
 
 import finishAudit from 'corla/action/county/finishAudit';
 import CountyLayout from 'corla/component/CountyLayout';
 import { formatLocalDate } from 'corla/date';
 import * as format from 'corla/format';
-import notice from 'corla/notice';
 
 import SignOffFormContainer from './SignOffFormContainer';
 

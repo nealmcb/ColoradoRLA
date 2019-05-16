@@ -16,8 +16,6 @@ import { Link } from 'react-router-dom';
 
 import * as config from 'corla/config';
 
-import NavMenu from './NavMenu';
-
 import resetDatabase from 'corla/action/dos/resetDatabase';
 import logout from 'corla/action/logout';
 

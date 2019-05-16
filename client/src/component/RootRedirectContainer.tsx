@@ -5,8 +5,6 @@ import { Redirect } from 'react-router-dom';
 
 import session from 'corla/session';
 
-import { isCountyAppState } from 'corla/type';
-
 
 interface RootRedirectContainerProps {
     stateType: AppStateType;

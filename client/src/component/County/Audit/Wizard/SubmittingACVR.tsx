@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, Card, Intent, Spinner } from '@blueprintjs/core';
+import { Card, Intent, Spinner } from '@blueprintjs/core';
 
 const SubmittingACVR = () => {
     return (

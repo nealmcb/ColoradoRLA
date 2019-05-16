@@ -4,8 +4,6 @@ import * as React from 'react';
 import * as moment from 'moment';
 
 import { History } from 'history';
-
-import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
 import StartPage from './StartPage';

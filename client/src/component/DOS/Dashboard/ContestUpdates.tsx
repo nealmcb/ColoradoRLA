@@ -6,8 +6,6 @@ import { Button, Icon, InputGroup, Intent, Tooltip } from '@blueprintjs/core';
 
 import setHandCount from 'corla/action/dos/setHandCount';
 
-import counties from 'corla/data/counties';
-
 import { naturalSortBy } from 'corla/util';
 
 

@@ -2,8 +2,7 @@ import * as React from 'react';
 
 import * as _ from 'lodash';
 
-import { Breadcrumb, Button, Card, Intent, MenuItem } from '@blueprintjs/core';
-import { Select } from '@blueprintjs/labs';
+import { Breadcrumb, Button, Card, Intent } from '@blueprintjs/core';
 
 import DOSLayout from 'corla/component/DOSLayout';
 import counties from 'corla/data/counties';

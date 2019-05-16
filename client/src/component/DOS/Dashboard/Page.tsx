@@ -1,8 +1,6 @@
 import * as React from 'react';
 
-import * as _ from 'lodash';
-
-import { Tab, Tabs, Tooltip } from '@blueprintjs/core';
+import { Tab, Tabs } from '@blueprintjs/core';
 
 import DOSLayout from 'corla/component/DOSLayout';
 

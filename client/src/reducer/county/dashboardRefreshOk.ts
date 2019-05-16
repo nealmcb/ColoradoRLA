@@ -1,4 +1,4 @@
-import { isEmpty, merge } from 'lodash';
+import { merge } from 'lodash';
 
 import { parse } from 'corla/adapter/countyDashboardRefresh';
 

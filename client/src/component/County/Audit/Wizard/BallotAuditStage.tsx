@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import * as _ from 'lodash';
 
-import { Button, Checkbox, EditableText, Intent, MenuDivider } from '@blueprintjs/core';
+import { Button, Checkbox, EditableText, Intent } from '@blueprintjs/core';
 
 import BackButton from './BackButton';
 import WaitingForNextBallot from './WaitingForNextBallot';

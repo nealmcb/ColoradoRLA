@@ -5,11 +5,6 @@ import BallotAuditStage from './BallotAuditStage';
 
 import action from 'corla/action';
 
-import ballotNotFound from 'corla/action/county/ballotNotFound';
-
-import currentBallotNumber from 'corla/selector/county/currentBallotNumber';
-import totalBallotsForBoard from 'corla/selector/county/totalBallotsForBoard';
-
 
 interface StateProps {
     auditBoardIndex: number;

@@ -1,12 +1,6 @@
 import * as React from 'react';
 
-import * as _ from 'lodash';
-
-import { Button, Card, Intent } from '@blueprintjs/core';
-
 import RoundContainer from './RoundContainer';
-
-import { endpoint } from 'corla/config';
 
 interface AuditDefinitionProps {
     riskLimit?: number;

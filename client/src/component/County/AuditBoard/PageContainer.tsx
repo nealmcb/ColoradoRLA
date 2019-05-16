@@ -6,8 +6,6 @@ import * as _ from 'lodash';
 import withState from 'corla/component/withState';
 import withSync from 'corla/component/withSync';
 
-import counties from 'corla/data/counties';
-
 import AuditBoardPage from './Page';
 import SignedInPage from './SignedInPage';
 
