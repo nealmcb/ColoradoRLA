@@ -1,7 +1,4 @@
-
-
 import { parse } from 'corla/adapter/contestFetch';
-
 
 export default function contestFetchOk(
     state: DOS.AppState,

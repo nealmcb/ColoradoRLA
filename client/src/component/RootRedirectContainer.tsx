@@ -5,7 +5,6 @@ import { Redirect } from 'react-router-dom';
 
 import session from 'corla/session';
 
-
 interface RootRedirectContainerProps {
     stateType: AppStateType;
 }
@@ -37,6 +36,5 @@ export class RootRedirectContainer extends React.Component<RootRedirectContainer
 function select(state: AppState) {
     return { stateType: state.type };
 }
-
 
 export default connect(select)(RootRedirectContainer);

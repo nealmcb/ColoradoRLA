@@ -8,7 +8,6 @@ import countyInfoSelector from 'corla/selector/county/countyInfo';
 import currentRoundNumberSelector from 'corla/selector/county/currentRoundNumber';
 import previousRoundSelector from 'corla/selector/county/previousRound';
 
-
 interface ContainerProps {
     allRoundsComplete: boolean;
     auditBoardIndex: number;
@@ -41,6 +40,5 @@ function select(countyState: County.AppState) {
         previousRound: previousRound || {},
     };
 }
-
 
 export default connect(select)(EndOfRoundPageContainer);

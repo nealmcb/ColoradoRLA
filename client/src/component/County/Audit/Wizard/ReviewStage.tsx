@@ -101,7 +101,7 @@ const BallotContestReview = (props: BallotContestReviewProps) => {
       </div>
     );
 
-    const markedChoiceDivs = _.map(markedChoices, (_, name) => {
+    const markedChoiceDivs = _.map(markedChoices, (value, name) => {
         return (
             <div className='rla-contest-choice' key={ name }>
                 <span className='choice-name'>{ name }</span>

@@ -8,7 +8,6 @@ import counties from 'corla/data/counties';
 
 import CountyDetailPage from './DetailPage';
 
-
 interface ContainerProps {
     countyStatus: DOS.CountyStatuses;
     match: match<any>;
@@ -40,7 +39,6 @@ function select(dosState: DOS.AppState) {
 
     return { countyStatus };
 }
-
 
 export default withSync(
     withDOSState(CountyDetailContainer),

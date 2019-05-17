@@ -78,5 +78,4 @@ const CVRExportForm = (props: FormProps) => {
     );
 };
 
-
 export default CVRExportForm;

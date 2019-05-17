@@ -2,7 +2,6 @@ import * as _ from 'lodash';
 
 import isValidAuditBoard from './isValidAuditBoard';
 
-
 const SIGNED_IN_STATES = [
     'WAITING_FOR_ROUND_START',
     'ROUND_IN_PROGRESS',
@@ -15,6 +14,5 @@ function auditBoardSignedIn(auditBoardIndex: number,
         && isValidAuditBoard(state.auditBoards[auditBoardIndex].members)
         && _.includes(SIGNED_IN_STATES, state.asm.auditBoard);
 }
-
 
 export default auditBoardSignedIn;

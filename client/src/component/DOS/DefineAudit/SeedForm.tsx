@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import { EditableText } from '@blueprintjs/core';
 
-
 interface FormProps {
     initSeed: string;
     setValid: OnClick; // fn
@@ -12,7 +11,6 @@ interface FormProps {
 interface FormState {
     seed: string;
 }
-
 
 class SeedForm extends React.Component<FormProps, FormState> {
 
@@ -46,6 +44,5 @@ class SeedForm extends React.Component<FormProps, FormState> {
         });
     }
 }
-
 
 export default SeedForm;

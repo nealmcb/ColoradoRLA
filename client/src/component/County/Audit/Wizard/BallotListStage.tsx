@@ -116,5 +116,4 @@ const BallotListStage = (props: BallotListStageProps) => {
     );
 };
 
-
 export default BallotListStage;

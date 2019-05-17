@@ -11,7 +11,6 @@ import CommentIcon from '../../../CommentIcon';
 
 import ballotNotFound from 'corla/action/county/ballotNotFound';
 
-
 interface NotFoundProps {
     notFound: OnClick;
     currentBallot: CVR;
@@ -483,6 +482,5 @@ const BallotAuditStage = (props: StageProps) => {
         </div>
     );
 };
-
 
 export default BallotAuditStage;

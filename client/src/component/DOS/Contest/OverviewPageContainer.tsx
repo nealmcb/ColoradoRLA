@@ -1,10 +1,7 @@
-
-
 import withDOSState from 'corla/component/withDOSState';
 import withSync from 'corla/component/withSync';
 
 import OverviewPage from './OverviewPage';
-
 
 function select(dosState: DOS.AppState) {
     return {
@@ -12,7 +9,6 @@ function select(dosState: DOS.AppState) {
         dosState,
     };
 }
-
 
 export default withSync(
     withDOSState(OverviewPage),

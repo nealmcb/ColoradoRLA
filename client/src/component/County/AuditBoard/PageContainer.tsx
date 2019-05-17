@@ -13,7 +13,6 @@ import auditBoardSignedInSelector from 'corla/selector/county/auditBoardSignedIn
 import countyInfoSelector from 'corla/selector/county/countyInfo';
 import hasAuditedAnyBallotSelector from 'corla/selector/county/hasAuditedAnyBallot';
 
-
 interface MatchParams {
     id: string;
 }
@@ -80,7 +79,6 @@ function select(countyState: County.AppState): SelectProps {
         hasAuditedAnyBallot: hasAuditedAnyBallotSelector(countyState),
     };
 }
-
 
 export default withState('County', withSync(
     AuditBoardSignInContainer,

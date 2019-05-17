@@ -24,7 +24,6 @@ interface UploadedProps {
 const UploadedCVRExport = (props: UploadedProps) => {
     const { enableReupload, handleDeleteFile, file } = props;
 
-
     if (props.deleting) {
         return (
             <Card>
@@ -150,7 +149,6 @@ class CVRExportFormContainer extends React.Component<ContainerProps, ContainerSt
             s.fileDeleted = true; // don't show the cancel button momentarily
             this.setState(s);
         }
-
 
     }
 

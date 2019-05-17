@@ -4,7 +4,6 @@ import { parse } from 'corla/adapter/countyDashboardRefresh';
 
 import { countyState } from 'corla/reducer/defaultState';
 
-
 export default function dashboardRefreshOk(
     state: County.AppState,
     action: Action.CountyDashboardRefreshOk,

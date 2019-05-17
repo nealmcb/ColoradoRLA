@@ -3,28 +3,13 @@
     "extends": [
         "tslint:recommended"
     ],
-    "jsRules": {},
     "rules": {
         "arrow-parens": [true, "ban-single-arg-parens"],
         "interface-name": false,
         "max-line-length":
             [true, {"limit": 120,
                     "ignore-pattern": "<rect |<path"}],
-        "no-consecutive-blank-lines": [true, 2],
         "no-namespace": [true, "allow-declarations"],
-        "no-shadowed-variable": [
-            true,
-            {
-                "class": true,
-                "enum": true,
-                "function": true,
-                "import": false,
-                "interface": false,
-                "namespace": true,
-                "typeAlias": true,
-                "typeParameter": true
-            }
-        ],
         "quotemark": [true, "single", "jsx-single"]
     },
     "rulesDirectory": []

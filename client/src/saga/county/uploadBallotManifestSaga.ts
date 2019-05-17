@@ -5,7 +5,6 @@ import {
 
 import notice from 'corla/notice';
 
-
 function* importBallotManifestOk(action: any): IterableIterator<any> {
     const { data } = action;
     const { sent } = data;
@@ -80,7 +79,6 @@ const UPLOADING_TRUE = [
     'UPLOAD_BALLOT_MANIFEST_SEND',
     'DELETE_FILE_SEND',
 ];
-
 
 export default function* fileUploadSaga() {
     yield takeLatest('IMPORT_BALLOT_MANIFEST_OK', importBallotManifestOk);

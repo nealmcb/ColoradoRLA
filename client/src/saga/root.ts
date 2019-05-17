@@ -20,7 +20,6 @@ import loginSaga from './loginSaga';
 import logoutSaga from './logoutSaga';
 import syncSaga from './sync';
 
-
 export default function* rootSaga() {
     const sagas = [
         acvrUploadSaga(),

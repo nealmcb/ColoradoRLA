@@ -1,6 +1,5 @@
 import * as _ from 'lodash';
 
-
 function parseRound(data: any) {
     if (!data) {
         return {};

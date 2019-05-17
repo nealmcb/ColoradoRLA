@@ -1,6 +1,5 @@
 import * as _ from 'lodash';
 
-
 function totalBallotsForBoard(state: County.AppState): number | undefined {
     const { auditBoardIndex, ballotSequenceAssignment } = state;
 
@@ -13,6 +12,5 @@ function totalBallotsForBoard(state: County.AppState): number | undefined {
 
     return count;
 }
-
 
 export default totalBallotsForBoard;

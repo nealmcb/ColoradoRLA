@@ -5,7 +5,6 @@ import BallotAuditStage from './BallotAuditStage';
 
 import action from 'corla/action';
 
-
 interface StateProps {
     auditBoardIndex: number;
     comment?: string;

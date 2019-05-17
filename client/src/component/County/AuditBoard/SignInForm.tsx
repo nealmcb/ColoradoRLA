@@ -70,5 +70,4 @@ const SignInForm = (props: FormProps) => {
     );
 };
 
-
 export default SignInForm;

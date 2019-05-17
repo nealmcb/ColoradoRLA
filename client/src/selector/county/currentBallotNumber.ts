@@ -1,6 +1,5 @@
 import * as _ from 'lodash';
 
-
 // TODO: Consider another home for this
 //
 // Project an audit-board-specific view of the overall CVRs to audit.
@@ -41,6 +40,5 @@ function currentBallotNumber(state: County.AppState): number | undefined {
         return cvr.db_id === currentBallot.id;
     });
 }
-
 
 export default currentBallotNumber;

@@ -10,7 +10,6 @@ import ReviewPage from './ReviewPage';
 
 import publishBallotsToAudit from 'corla/action/dos/publishBallotsToAudit';
 
-
 interface ContainerProps {
     history: History;
     dosState: DOS.AppState;
@@ -46,7 +45,6 @@ class ReviewPageContainer extends React.Component<ContainerProps> {
 function select(dosState: DOS.AppState) {
     return { dosState };
 }
-
 
 export default withSync(
     withDOSState(ReviewPageContainer),

@@ -49,8 +49,8 @@ interface LogoutButtonProps {
     logout: OnClick;
 }
 
-const LogoutButton = ({ logout }: LogoutButtonProps) =>
-    <Button icon='log-out' minimal onClick={ logout } text='Log out' />;
+const LogoutButton = ({ logout: logoutAction }: LogoutButtonProps) =>
+    <Button icon='log-out' minimal onClick={ logoutAction } text='Log out' />;
 
 interface ResetButtonProps {
     reset: OnClick;

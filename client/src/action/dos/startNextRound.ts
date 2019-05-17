@@ -2,7 +2,6 @@ import { endpoint } from 'corla/config';
 
 import createSubmitAction from 'corla/action/createSubmitAction';
 
-
 const url = endpoint('start-audit-round');
 
 const startNextRound = createSubmitAction({
@@ -12,7 +11,6 @@ const startNextRound = createSubmitAction({
     sendType: 'DOS_START_NEXT_ROUND_SEND',
     url,
 });
-
 
 export default () => startNextRound({
     multiplier: 1,

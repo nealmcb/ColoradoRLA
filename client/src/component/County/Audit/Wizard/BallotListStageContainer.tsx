@@ -6,7 +6,6 @@ import BallotListStage from './BallotListStage';
 
 import countyInfo from 'corla/selector/county/countyInfo';
 
-
 interface ContainerProps {
     auditBoardIndex: number;
     countyInfo: CountyInfo;
@@ -35,6 +34,5 @@ function select(countyState: County.AppState) {
         cvrsToAudit: countyState.cvrsToAudit,
     };
 }
-
 
 export default connect(select)(BallotListStageContainer);

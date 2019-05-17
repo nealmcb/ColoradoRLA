@@ -12,7 +12,6 @@ import { Spinner } from '@blueprintjs/core';
 import deleteFile from 'corla/action/county/deleteFile';
 import ballotManifestUploadedSelector from 'corla/selector/county/ballotManifestUploaded';
 
-
 interface UploadedProps {
     deleting: boolean | undefined;
     enableReupload: OnClick;
@@ -172,6 +171,5 @@ const select = (countyState: County.AppState) => {
         uploadingFile,
     };
 };
-
 
 export default connect(select)(BallotManifestFormContainer);

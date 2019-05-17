@@ -38,7 +38,6 @@ export function loginState(): LoginAppState {
     return { type: 'Login' };
 }
 
-
 export default {
     county: countyState,
     dos: dosState,

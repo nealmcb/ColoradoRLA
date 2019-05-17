@@ -17,7 +17,6 @@ import isAuditBoardDoneSelector from 'corla/selector/county/isAuditBoardDone';
 import previousRoundSelector from 'corla/selector/county/previousRound';
 import roundInProgressSelector from 'corla/selector/county/roundInProgress';
 
-
 function signedOff(auditBoardIndex: number, round: Round): boolean {
     if (!round.signatories) {
         return false;
@@ -107,7 +106,6 @@ function select(countyState: County.AppState) {
         showEndOfRoundPage,
     };
 }
-
 
 export default withPoll(
     withCountyState(CountyAuditPageContainer),

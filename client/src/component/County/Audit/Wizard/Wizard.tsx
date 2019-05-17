@@ -4,7 +4,6 @@ import BallotAuditStageContainer from './BallotAuditStageContainer';
 import BallotListStageContainer from './BallotListStageContainer';
 import ReviewStageContainer from './ReviewStageContainer';
 
-
 type WizardStage = 'ballot-audit' | 'list' | 'review';
 
 interface TransitionTable {
@@ -88,6 +87,5 @@ class CountyAuditWizard extends React.Component<WizardProps, WizardState> {
         window.scrollTo(0, 0);
     }
 }
-
 
 export default CountyAuditWizard;

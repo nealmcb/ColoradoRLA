@@ -5,7 +5,6 @@ import {
 
 import notice from 'corla/notice';
 
-
 function* importCvrExportFail(action: any): IterableIterator<any> {
     const { data } = action;
     const { received, sent } = data;
@@ -67,7 +66,6 @@ const UPLOADING_TRUE = [
     'UPLOAD_CVR_EXPORT_SEND',
     'DELETE_FILE_SEND',
 ];
-
 
 export default function* uploadCvrExportSaga() {
     yield takeLatest('IMPORT_CVR_EXPORT_FAIL', importCvrExportFail);

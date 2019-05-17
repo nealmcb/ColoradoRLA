@@ -6,7 +6,6 @@ import session from './session';
 import defaultState from './reducer/defaultState';
 import rootReducer from './reducer/root';
 
-
 export const sagaMiddleware = createSagaMiddleware();
 
 // Compute default app state, given any existing user session.
@@ -33,6 +32,5 @@ export const store = createStore(
     preloadedState(),
     applyMiddleware(sagaMiddleware),
 );
-
 
 export default store;

@@ -166,7 +166,7 @@ class SelectContestsForm extends React.Component<FormProps, FormState> {
             sort: 'county',
         };
 
-        _.forEach(props.contests, (c, _) => {
+        _.forEach(props.contests, (c, key) => {
             const auditable = props.isAuditable(c.id);
 
             if (auditable) {
@@ -308,7 +308,7 @@ class SelectContestsForm extends React.Component<FormProps, FormState> {
     private resetForm(contests: DOS.Contests) {
         const form: DOS.Form.SelectContests.FormData = {};
 
-        _.forEach(contests, (c, _) => {
+        _.forEach(contests, (c, key) => {
             form[c.id] = {
                 audit: false,
                 handCount: false,
@@ -364,6 +364,5 @@ class SelectContestsForm extends React.Component<FormProps, FormState> {
         };
     }
 }
-
 
 export default SelectContestsForm;

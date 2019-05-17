@@ -39,7 +39,6 @@ const ContestTableRow = (props: RowProps) => {
     );
 };
 
-
 interface TableProps {
     contests: DOS.Contests;
 }

@@ -32,5 +32,4 @@ function select(state: County.AppState, props: WizardContainerOwnProps) {
     };
 }
 
-
 export default connect(select)(WizardContainer);

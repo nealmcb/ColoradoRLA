@@ -7,7 +7,6 @@ import DOSDashboardPage from './Page';
 import withDOSState from 'corla/component/withDOSState';
 import withPoll from 'corla/component/withPoll';
 
-
 interface ContainerProps {
     auditStarted: boolean;
     contests: DOS.Contests;
@@ -35,7 +34,6 @@ function select(dosState: DOS.AppState) {
         seed: dosState.seed,
     };
 }
-
 
 export default withPoll(
     withDOSState(DOSDashboardContainer),

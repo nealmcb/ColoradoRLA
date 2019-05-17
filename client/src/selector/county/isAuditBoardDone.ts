@@ -1,6 +1,5 @@
 import * as _ from 'lodash';
 
-
 function isAuditBoardDone(state: County.AppState): boolean {
     const { auditBoardIndex,
             ballotUnderAuditIds } = state;
@@ -10,6 +9,5 @@ function isAuditBoardDone(state: County.AppState): boolean {
 
     return _.nth(ballotUnderAuditIds, auditBoardIndex) == null;
 }
-
 
 export default isAuditBoardDone;

@@ -8,7 +8,6 @@ const formatBoardMember = (elector: AuditBoardMember): JSON.AuditBoardMember => 
     };
 };
 
-
 export const format = (index: number, board: AuditBoard): object => {
     return {
         audit_board: board.map(formatBoardMember),

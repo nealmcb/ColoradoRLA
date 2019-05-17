@@ -10,14 +10,12 @@ import SeedPage from './SeedPage';
 
 import uploadRandomSeed from 'corla/action/dos/uploadRandomSeed';
 
-
 interface ContainerProps {
     dosState: DOS.AppState;
     history: History;
     publicMeetingDate: Date;
     seed: string;
 }
-
 
 class SeedPageContainer extends React.Component<ContainerProps> {
 
@@ -57,7 +55,6 @@ function select(dosState: DOS.AppState) {
         seed: dosState.seed,
     };
 }
-
 
 export default withSync(
     withDOSState(SeedPageContainer),

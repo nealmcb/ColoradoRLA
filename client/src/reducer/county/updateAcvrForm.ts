@@ -1,6 +1,5 @@
 import * as _ from 'lodash';
 
-
 export default function updateAcvrForm(
     state: County.AppState,
     action: Action.UpdateAcvrForm,

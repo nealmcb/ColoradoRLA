@@ -2,7 +2,6 @@ import * as _ from 'lodash';
 
 import activeCounties from './activeCounties';
 
-
 function canStartNextRound(state: DOS.AppState): boolean {
     const counties = activeCounties(state);
 
@@ -17,6 +16,5 @@ function canStartNextRound(state: DOS.AppState): boolean {
 
     return allRoundsDone;
 }
-
 
 export default canStartNextRound;

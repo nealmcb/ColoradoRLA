@@ -80,7 +80,6 @@ const CountyDetails = (props: DetailsProps) => {
     const auditedCount = _.get(status, 'discrepancyCount.audited') || '—';
     const unauditedCount = _.get(status, 'discrepancyCount.unaudited') || '—';
 
-
     const auditBoardSection = auditBoard
                             ? <AuditBoard auditBoard={ auditBoard } />
                             : <NoAuditBoard />;

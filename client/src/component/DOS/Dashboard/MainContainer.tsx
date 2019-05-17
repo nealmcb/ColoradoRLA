@@ -6,7 +6,6 @@ import Main from './Main';
 import auditStarted from 'corla/selector/dos/auditStarted';
 import canRenderReport from 'corla/selector/dos/canRenderReport';
 
-
 interface ContainerProps {
     auditDefined: boolean;
     canRenderReport: boolean;
@@ -26,6 +25,5 @@ function select(dosState: DOS.AppState) {
         dosState,
     };
 }
-
 
 export default connect(select)(MainContainer);

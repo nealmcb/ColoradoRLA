@@ -1,6 +1,5 @@
 import { forEach, merge } from 'lodash';
 
-
 function createEmptyAcvr(cvr: CVR): County.ACVR {
     const acvr: any = {};
 
@@ -43,6 +42,5 @@ const fetchCvrOk = (
 
     return nextState;
 };
-
 
 export default fetchCvrOk;

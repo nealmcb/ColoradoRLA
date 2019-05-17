@@ -66,5 +66,4 @@ const Uploading = (props: UploadingProps) => {
     }
 };
 
-
 export default Uploading;

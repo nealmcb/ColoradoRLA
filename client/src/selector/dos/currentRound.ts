@@ -1,7 +1,4 @@
-
-
 import activeCounties from './activeCounties';
-
 
 function currentRound(state: DOS.AppState): number {
     const counties = activeCounties(state);
@@ -19,6 +16,5 @@ function currentRound(state: DOS.AppState): number {
 
     return roundNumber;
 }
-
 
 export default currentRound;

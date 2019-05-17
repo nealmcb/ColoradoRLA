@@ -4,14 +4,12 @@ import { empty } from 'corla/util';
 
 const deleteFileUrl = endpoint('delete-file');
 
-
 async function deleteFile(fileType: string) {
     const init: RequestInit = {
         body: JSON.stringify( { fileType } ),
         credentials: 'include',
         method: 'post',
     };
-
 
     try {
         action('DELETE_FILE_SEND', { fileType });
@@ -27,7 +25,6 @@ async function deleteFile(fileType: string) {
 
         action('DELETE_FILE_OK', {fileType, received});
         return true;
-
 
     } catch (e) {
         action('DELETE_FILE_NETWORK_FAIL', {fileType});

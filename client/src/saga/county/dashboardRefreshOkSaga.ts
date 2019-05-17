@@ -10,7 +10,6 @@ import fetchCvrsToAudit from 'corla/action/county/fetchCvrsToAudit';
 
 import { parse } from 'corla/adapter/countyDashboardRefresh';
 
-
 function nextBallotId(state: County.AppState): number | undefined {
     if (state.ballotUnderAuditIds && state.auditBoardIndex != null) {
         return state.ballotUnderAuditIds[state.auditBoardIndex];

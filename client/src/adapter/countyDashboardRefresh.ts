@@ -1,6 +1,5 @@
 import * as _ from 'lodash';
 
-
 function parseBoardMember(e: JSON.AuditBoardMember): AuditBoardMember {
     return {
         firstName: e.first_name,

@@ -1,5 +1,3 @@
-
-
 import countyDashboardRefreshOk from './county/dashboardRefreshOk';
 import deleteFileOK from './county/deleteFileOK';
 import fetchAuditBoardASMStateOk from './county/fetchAuditBoardASMStateOk';
@@ -23,7 +21,6 @@ import dosLoginOk from './dos/loginOk';
 import uploadRandomSeedOk from './dos/uploadRandomSeedOk';
 
 import login1FOk from './login1FOk';
-
 
 // Default state is preloaded in the module `corla/store`.
 export default function root(state: AppState, action: Action.App) {

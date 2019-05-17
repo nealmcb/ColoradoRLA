@@ -3,7 +3,6 @@ import * as React from 'react';
 import { IconName, Menu, MenuDivider, MenuItem } from '@blueprintjs/core';
 import { Link } from 'react-router-dom';
 
-
 interface NavItemProps {
     path: string;
     icon: IconName;
@@ -53,6 +52,5 @@ const NavMenu = () => {
         </Menu>
     );
 };
-
 
 export default NavMenu;

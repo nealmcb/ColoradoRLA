@@ -30,7 +30,6 @@ import DOSCountyOverviewPageContainer from './DOS/County/OverviewPageContainer';
 
 import DOSDashboardContainer from './DOS/Dashboard/PageContainer';
 
-
 export interface RootContainerProps {
     store: Store<AppState>;
 }

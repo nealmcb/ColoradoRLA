@@ -10,7 +10,6 @@ import SelectContestsPage from './SelectContestsPage';
 
 import selectContestsForAudit from 'corla/action/dos/selectContestsForAudit';
 
-
 interface ContainerProps {
     auditedContests: DOS.AuditedContests;
     contests: DOS.Contests;
@@ -70,7 +69,6 @@ function select(dosState: DOS.AppState) {
         isAuditable,
     };
 }
-
 
 export default withPoll(
     withDOSState(SelectContestsPageContainer),

@@ -4,7 +4,6 @@ import { Button, Dialog, FormGroup, Intent, TextArea } from '@blueprintjs/core';
 
 import action from 'corla/action/';
 
-
 interface FinalReviewDialogProps {
     cvr?: JSON.CVR;
     onClose: () => void;

@@ -75,5 +75,4 @@ function select(countyState: County.AppState): StateProps {
     };
 }
 
-
 export default connect(select)(ReviewStageContainer);

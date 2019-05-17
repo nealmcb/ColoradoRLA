@@ -4,7 +4,6 @@ import createSubmitAction from 'corla/action/createSubmitAction';
 
 import { format } from 'corla/adapter/uploadAcvr';
 
-
 const url = endpoint('upload-audit-cvr');
 
 const uploadAcvr = (
@@ -26,6 +25,5 @@ const uploadAcvr = (
 
     action(body);
 };
-
 
 export default uploadAcvr;

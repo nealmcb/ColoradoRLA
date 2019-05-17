@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 
 import FinalReviewPage from './FinalReviewPage';
 
-
 interface Props {
     auditBoardIndex: number;
     ballotSequenceAssignment?: object[];
@@ -21,6 +20,5 @@ const select = (state: County.AppState) => {
         cvrsToAudit: state.cvrsToAudit,
     };
 };
-
 
 export default connect(select)(Container);

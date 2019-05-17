@@ -2,7 +2,6 @@ import { endpoint } from 'corla/config';
 
 import createSubmitAction from 'corla/action/createSubmitAction';
 
-
 interface Payload {
     auditBoardIndex: number;
     comment?: string;
@@ -38,6 +37,5 @@ const ballotNotFound = (
 
     action(payload);
 };
-
 
 export default ballotNotFound;

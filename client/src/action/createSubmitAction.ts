@@ -2,7 +2,6 @@ import { empty } from 'corla/util';
 
 import action from '.';
 
-
 type CreateDataFn<S, R> = (sent: S, received: R) => Action.SubmitData<S, R>;
 
 interface CreateSubmitConfig<S, R> {
@@ -66,6 +65,5 @@ function createSubmitAction<S, R>(config: CreateSubmitConfig<S, R>) {
 
     return submitAction;
 }
-
 
 export default createSubmitAction;

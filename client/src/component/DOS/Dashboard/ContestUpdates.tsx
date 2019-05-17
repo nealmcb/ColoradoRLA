@@ -8,7 +8,6 @@ import setHandCount from 'corla/action/dos/setHandCount';
 
 import { naturalSortBy } from 'corla/util';
 
-
 const RemainingToAuditHeader = () => {
     const content =
         'Estimated number of ballots to audit to meet risk limit.';

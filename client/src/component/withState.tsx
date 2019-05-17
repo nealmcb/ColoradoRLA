@@ -3,7 +3,6 @@ import { Redirect } from 'react-router';
 
 import { connect } from 'react-redux';
 
-
 interface WrapperProps {
     hasState: boolean;
 }
@@ -32,6 +31,5 @@ function withState<P>(
 
     return connect(select)(Wrapper);
 }
-
 
 export default withState;
