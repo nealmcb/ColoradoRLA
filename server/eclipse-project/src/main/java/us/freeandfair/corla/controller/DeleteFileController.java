@@ -118,7 +118,7 @@ public abstract class DeleteFileController {
   public static void deleteCastVoteRecords(final Long countyId)
     throws DeleteFileFail {
     final Integer rowsDeleted = CastVoteRecordQueries.deleteAll(countyId);
-    LOGGER.info(String.format("%d bmis deleted!", rowsDeleted));
+    LOGGER.info(String.format("%d cvrs deleted!", rowsDeleted));
   }
 
   /**

@@ -132,8 +132,6 @@ public class ExportQueries {
       "contest_comparison.sql",
       "contest_selection.sql",
       "contests_by_county.sql",
-      "cvr_hash.sql",
-      "manifest_hash.sql",
       "tabulate.sql",
       "tabulate_county.sql",
       "upload_status.sql",
