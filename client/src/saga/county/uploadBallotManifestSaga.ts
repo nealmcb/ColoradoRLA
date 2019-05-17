@@ -10,15 +10,15 @@ function* importBallotManifestOk(action: any): IterableIterator<any> {
     const { data } = action;
     const { sent } = data;
 
-    notice.ok(`Imported ballot manifest "${sent.filename}".`);
+    notice.ok(`Imported ballot manifest "${sent.fileName}".`);
 }
 
 function* importBallotManifestFail(action: any): IterableIterator<any> {
     const { data } = action;
     const { received, sent } = data;
 
-    switch (sent.hash_status) {
-    case 'MISMATCH': {
+    switch (sent.status) {
+    case 'HASH_MISMATCH': {
         notice.danger('Failed to import ballot manifest.');
         notice.warning('Please verify that the hash matches the file to be uploaded.');
         break;
