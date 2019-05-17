@@ -192,6 +192,61 @@ h1, h2, h3, h4, h5, h6 {
   max-width: 550px;
 }
 
+/* Uploaded file component */
+
+.uploaded-file {
+  max-width: 750px;
+}
+
+dl.uploaded-file-details {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  overflow: visible;
+}
+
+dl.uploaded-file-details dt {
+  flex: 0 0 20%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+dl.uploaded-file-details dd {
+  flex: 0 0 80%;
+  margin-left: auto;
+  margin-top: 10px;
+  text-align: left;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.uploaded-file-footer {
+  align-items: center;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.uploaded-file-footer-status p:last-child {
+  margin-bottom: 0px;
+}
+
+.uploaded-file-footer-status.pt-callout {
+  background-color: transparent;
+  width: auto;
+}
+
+.uploaded-file-popover .pt-popover-content {
+  padding: 20px;
+}
+
+.uploaded-file-popover-target {
+  cursor: pointer;
+  text-decoration: underline dashed;
+  margin-left: 5px;
+}
+
 /*** State Dashboard ***/
 
 /*
