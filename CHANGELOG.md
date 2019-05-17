@@ -10,10 +10,17 @@ with the following tags indicating the components affected:
 - `TOOLING` refers to changes to tooling that falls outside the UI or API, such
   as the RLA export.
 
+## 2.3.2 - UNRELEASED
+- [UI - simple change to remove warning about breadcrumbs][pr142]
+- [UI - Add two new statuses to the state dashboard][pr143]
+- [UI - Result on cdb][pr144]
+- [UI - Remove manifest and CVR export matcher][pr145]
+- [API - update reports sql using uf.computed\_hash][pr146]
+- [UI - spinner for delete file][pr147]
+- [UI - Re-style file download widget][pr148]
 
 ## 2.3.1 - Bugfix release
 - [API - add equals to Result][pr141] - fixes concurrent update bug 
-
 
 ## 2.3.0 - New Features
 - [UI - UI Refresh][pr137] - new look and feel on login and on the state dashboard
@@ -234,3 +241,10 @@ This is [FreeAndFair's most recent tag][1.1.0.3].
 [pr138]: https://github.com/democracyworks/ColoradoRLA/pull/138
 [pr139]: https://github.com/democracyworks/ColoradoRLA/pull/139
 [pr141]: https://github.com/democracyworks/ColoradoRLA/pull/141
+[pr142]: https://github.com/democracyworks/ColoradoRLA/pull/142
+[pr143]: https://github.com/democracyworks/ColoradoRLA/pull/143
+[pr144]: https://github.com/democracyworks/ColoradoRLA/pull/144
+[pr145]: https://github.com/democracyworks/ColoradoRLA/pull/145
+[pr146]: https://github.com/democracyworks/ColoradoRLA/pull/146
+[pr147]: https://github.com/democracyworks/ColoradoRLA/pull/147
+[pr148]: https://github.com/democracyworks/ColoradoRLA/pull/148
