@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.OptionalInt;
 import java.util.Set;
 
@@ -25,7 +26,6 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.log4j.Logger;
 import org.apache.log4j.LogManager;
-
 
 import us.freeandfair.corla.model.BallotManifestInfo;
 import us.freeandfair.corla.persistence.Persistence;
@@ -38,7 +38,6 @@ import us.freeandfair.corla.util.SuppressFBWarnings;
  * @version 1.0.0
  */
 public class ColoradoBallotManifestParser {
-
   /**
    * Class-wide logger
    */
@@ -180,7 +179,6 @@ public class ColoradoBallotManifestParser {
    *
    * @return true if the parse was successful, false otherwise
    */
-  @SuppressWarnings({"PMD.AvoidCatchingGenericException"})
   public synchronized Result parse() {
     final Result result = new Result();
     final Iterator<CSVRecord> records = my_parser.iterator();
@@ -201,7 +199,10 @@ public class ColoradoBallotManifestParser {
         my_record_count = my_record_count + 1;
         my_ballot_count = Math.toIntExact(bmi.sequenceEnd());
       }
-    } catch (final Exception e) {
+
+      result.success = true;
+      result.importedCount = my_record_count;
+    } catch (final IllegalStateException | NoSuchElementException e) {
       result.success = false;
       result.errorMessage = e.getClass().toString() +" "+ e.getMessage();
       result.errorRowNum = my_record_count;
@@ -216,9 +217,6 @@ public class ColoradoBallotManifestParser {
                    +"\n line number: "+ result.errorRowNum
                    +"\n content:"+ result.errorRowContent);
     }
-
-    result.success = true;
-    result.importedCount = my_record_count;
 
     return result;
   }
