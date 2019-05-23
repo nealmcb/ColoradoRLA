@@ -11,6 +11,7 @@ with the following tags indicating the components affected:
   as the RLA export.
 
 ## 2.3.3 - UNRELEASED
+- [API - Throw error on invalid ballot manifests][pr149]
 
 ## 2.3.2 - Bugfix release
 - [UI - simple change to remove warning about breadcrumbs][pr142]
@@ -250,3 +251,4 @@ This is [FreeAndFair's most recent tag][1.1.0.3].
 [pr146]: https://github.com/democracyworks/ColoradoRLA/pull/146
 [pr147]: https://github.com/democracyworks/ColoradoRLA/pull/147
 [pr148]: https://github.com/democracyworks/ColoradoRLA/pull/148
+[pr149]: https://github.com/democracyworks/ColoradoRLA/pull/149
