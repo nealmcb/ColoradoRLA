@@ -14,9 +14,9 @@ package us.freeandfair.corla.csv;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.OptionalInt;
 import java.util.Set;
@@ -24,12 +24,11 @@ import java.util.Set;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.apache.log4j.Logger;
 import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import us.freeandfair.corla.model.BallotManifestInfo;
 import us.freeandfair.corla.persistence.Persistence;
-import us.freeandfair.corla.util.SuppressFBWarnings;
 
 /**
  * The parser for Colorado ballot manifests.
@@ -42,7 +41,7 @@ public class ColoradoBallotManifestParser {
    * Class-wide logger
    */
   public static final Logger LOGGER =
-    LogManager.getLogger(ColoradoBallotManifestParser.class);
+      LogManager.getLogger(ColoradoBallotManifestParser.class);
 
   /**
    * The size of a batch of ballot manifests to be flushed to the database.
@@ -204,7 +203,7 @@ public class ColoradoBallotManifestParser {
       result.importedCount = my_record_count;
     } catch (final IllegalStateException | NoSuchElementException e) {
       result.success = false;
-      result.errorMessage = e.getClass().toString() +" "+ e.getMessage();
+      result.errorMessage = e.getClass().toString() + " " + e.getMessage();
       result.errorRowNum = my_record_count;
       if (null != bmi_line) {
         final List<String> values = new ArrayList<>();
@@ -213,9 +212,9 @@ public class ColoradoBallotManifestParser {
       }
       // this log message is partially here to make findbugs happy. For some
       // reason URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD would not be suppressed.
-      LOGGER.error(e.getClass().toString() +" "+ e.getMessage()
-                   +"\n line number: "+ result.errorRowNum
-                   +"\n content:"+ result.errorRowContent);
+      LOGGER.error(e.getClass().toString() + " " + e.getMessage()
+                   + "\n line number: " + result.errorRowNum
+                   + "\n content:" + result.errorRowContent);
     }
 
     return result;
