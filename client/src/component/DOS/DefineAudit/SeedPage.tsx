@@ -7,7 +7,7 @@ import DOSLayout from 'corla/component/DOSLayout';
 import SeedForm from './SeedForm';
 
 const Breadcrumbs = () => (
-    <ul className='pt-breadcrumbs'>
+    <ul className='pt-breadcrumbs mb-default'>
         <li><Breadcrumb href='/sos' text='SoS' />></li>
         <li><Breadcrumb href='/sos/audit' text='Audit Admin' /></li>
         <li><Breadcrumb className='pt-breadcrumb-current' text='Seed' /></li>

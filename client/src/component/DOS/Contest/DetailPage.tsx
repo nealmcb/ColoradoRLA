@@ -13,7 +13,7 @@ interface BreadcrumbProps {
 }
 
 const Breadcrumbs = ({ contest }: BreadcrumbProps) => (
-    <ul className='pt-breadcrumbs'>
+    <ul className='pt-breadcrumbs mb-default'>
         <li><Breadcrumb text='SoS' href='/sos' /></li>
         <li><Breadcrumb text='Contests' href='/sos/contest'/></li>
         <li><Breadcrumb className='pt-breadcrumb-current' text={ contest.name } /></li>

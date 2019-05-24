@@ -10,7 +10,7 @@ import counties from 'corla/data/counties';
 import { formatCountyASMState } from 'corla/format';
 
 const Breadcrumbs = () => (
-    <ul className='pt-breadcrumbs'>
+    <ul className='pt-breadcrumbs mb-default'>
         <li><Breadcrumb text='SoS' href='/sos' /></li>
         <li><Breadcrumb className='pt-breadcrumb-current' text='Counties' /></li>
     </ul>

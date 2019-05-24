@@ -11,7 +11,7 @@ import RiskLimitForm from './RiskLimitForm';
 import UploadFileButton from './UploadFileButton';
 
 const Breadcrumbs = () => (
-    <ul className='pt-breadcrumbs'>
+    <ul className='pt-breadcrumbs mb-default'>
         <li><Breadcrumb href='/sos' text='SoS' /></li>
         <li><Breadcrumb className='pt-breadcrumb-current' text='Audit Admin' /></li>
     </ul>
@@ -79,40 +79,46 @@ const AuditPage = (props: PageProps) => {
         <div>
             <Breadcrumbs />
 
-            <h2>Administer an Audit</h2>
+            <h2 className="mb-default">Administer an Audit</h2>
 
             <Card>
                 <h3>Election Info</h3>
-                <div>Enter the date the election will take place, and the type of election.</div>
-                <ElectionDateForm onChange={ setElectionDate }
+                <div className="mb-default">Enter the date the election will take place, and the type of election.</div>
+                <div className="mb-default">
+                    <ElectionDateForm onChange={ setElectionDate }
                                   initDate={ electionDate } />
-                <ElectionTypeForm onChange={ setType }
+                </div>
+                <div className="mb-default">
+                    <ElectionTypeForm onChange={ setType }
                                   initType={ type } />
+                </div>
             </Card>
+            <br />
 
             <Card>
                 <h3>Public Meeting Date</h3>
-                <div>Enter the date of the public meeting to establish the random seed.</div>
+                <div className="mb-default">Enter the date of the public meeting to establish the random seed.</div>
                 <PublicMeetingDateForm onChange={ setPublicMeetingDate }
                                        initDate={ publicMeetingDate } />
             </Card>
+            <br />
 
             <Card>
                 <h3>Risk Limit</h3>
-                <div>
+                <div className="mb-default">
                   <strong>Enter the risk limit for comparison audits as a percentage.</strong>
                 </div>
                 <RiskLimitForm onChange={ setRiskLimit }
                                riskLimit={ riskLimit } />
 
             </Card>
-
+            <br />
             <Card>
                 <h3>Contests</h3>
                 <UploadFileButton onChange={ setUploadedFiles } />
             </Card>
 
-            <div className='control-buttons'>
+            <div className='control-buttons mt-default'>
               <SaveButton disabled={ disableButton }
                           nextPage={ nextPage } />
             </div>

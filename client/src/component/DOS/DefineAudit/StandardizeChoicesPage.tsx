@@ -44,7 +44,7 @@ const defaultCanonicalName = (
 };
 
 const Breadcrumbs = () => (
-    <ul className='pt-breadcrumbs'>
+    <ul className='pt-breadcrumbs mb-default'>
         <Breadcrumb href='/sos' />
         <Breadcrumb href='/sos/audit' />
         <Breadcrumb className='pt-breadcrumb-current' />

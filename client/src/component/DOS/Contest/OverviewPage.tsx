@@ -10,7 +10,7 @@ import DOSLayout from 'corla/component/DOSLayout';
 import counties from 'corla/data/counties';
 
 const Breadcrumbs = () => (
-    <ul className='pt-breadcrumbs'>
+    <ul className='pt-breadcrumbs mb-default'>
         <li><Breadcrumb text='SoS' href='/sos' /></li>
         <li><Breadcrumb className='pt-breadcrumb-current' text='Contests' /></li>
     </ul>

@@ -405,6 +405,8 @@ dl.uploaded-file-details dd {
 .state-dashboard-updates-preface-description{
   color: #5C7080;
   flex-basis: 50%;
+  margin-top: 30px;
+  margin-bottom: 20px;
 }
 
 .state-dashboard-updates-preface-search {
