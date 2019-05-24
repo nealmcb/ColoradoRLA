@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Breadcrumb, Card } from '@blueprintjs/core';
+import { Breadcrumb } from '@blueprintjs/core';
 
 import DOSLayout from 'corla/component/DOSLayout';
 
@@ -79,10 +79,10 @@ const AuditPage = (props: PageProps) => {
         <div>
             <Breadcrumbs />
 
-            <h2 className="mb-default">Administer an Audit</h2>
+            <h2 className="page-heading">Administer an Audit</h2>
 
-            <Card>
-                <h3>Election Info</h3>
+            <div>
+                <h3 className="section-heading">Election Info</h3>
                 <div className="mb-default">Enter the date the election will take place, and the type of election.</div>
                 <div className="mb-default">
                     <ElectionDateForm onChange={ setElectionDate }
@@ -92,31 +92,31 @@ const AuditPage = (props: PageProps) => {
                     <ElectionTypeForm onChange={ setType }
                                   initType={ type } />
                 </div>
-            </Card>
-            <br />
+            </div>
+            <hr />
 
-            <Card>
-                <h3>Public Meeting Date</h3>
+            <div>
+                <h3 className="section-heading">Public Meeting Date</h3>
                 <div className="mb-default">Enter the date of the public meeting to establish the random seed.</div>
                 <PublicMeetingDateForm onChange={ setPublicMeetingDate }
                                        initDate={ publicMeetingDate } />
-            </Card>
-            <br />
+            </div>
+            <hr />
 
-            <Card>
-                <h3>Risk Limit</h3>
+            <div>
+                <h3 className="section-heading">Risk Limit</h3>
                 <div className="mb-default">
-                  <strong>Enter the risk limit for comparison audits as a percentage.</strong>
+                  Enter the risk limit for comparison audits as a percentage.
                 </div>
                 <RiskLimitForm onChange={ setRiskLimit }
                                riskLimit={ riskLimit } />
 
-            </Card>
-            <br />
-            <Card>
-                <h3>Contests</h3>
+            </div>
+            <hr />
+            <div>
+                <h3 className="section-heading">Contests</h3>
                 <UploadFileButton onChange={ setUploadedFiles } />
-            </Card>
+            </div>
 
             <div className='control-buttons mt-default'>
               <SaveButton disabled={ disableButton }
