@@ -182,7 +182,7 @@ class StandardizeContestsPage extends React.Component<PageProps> {
             main =
                 <div>
                     <Breadcrumbs />
-                    <h2>Standardize Contest Names</h2>
+                    <h2 className="mb-default">Standardize Contest Names</h2>
                     <Card>
                         <p>
                             Contest names must be standardized to group records
@@ -209,10 +209,12 @@ class StandardizeContestsPage extends React.Component<PageProps> {
             main =
                 <div>
                     <Breadcrumbs />
-                    <h2>Standardize Contest Names</h2>
-                    <Card>
-                        Waiting for counties to upload contest data.
-                    </Card>
+                    <h2 className="mb-default">Standardize Contest Names</h2>
+                    <div  className="mb-default">
+                        <Card>
+                            Waiting for counties to upload contest data.
+                        </Card>
+                    </div>
                     <Button onClick={ back }>Back</Button>
                     <Button className='ml-default'
                             disabled

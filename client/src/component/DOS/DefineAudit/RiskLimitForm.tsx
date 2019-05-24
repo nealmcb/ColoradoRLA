@@ -39,7 +39,7 @@ class RiskLimitForm extends React.Component<FormProps, FormState> {
         return (
             <Card>
                 <label>
-                    Comparison Audits (%)
+                    <div className="mb-default">Comparison Audits (%)</div>
                     <NumericInput
                         min={ toPercent(MIN_RISK_LIMIT) }
                         max={ toPercent(MAX_RISK_LIMIT) }
