@@ -128,23 +128,27 @@ const Main = (props: MainProps) => {
 
     return (
         <div>
-            <h1>Hello, { name } County!</h1>
-            <Callout icon='info-sign'>
-                <span className='font-weight-bold pt-ui-text-large'>{ directions }</span>
-            </Callout>
+            <h1 className="mt-default mb-default">Hello, { name } County!</h1>
+            <div className='mb-default'>
+                <Callout icon='info-sign'>
+                    <span className='font-weight-bold pt-ui-text-large'>{ directions }</span>
+                </Callout>
+            </div>
+            <hr />
             { fileUploadContainer }
             { fileDownloadButtons }
-            <div className='mt-default'>
-                <h4>{ reportType } audit report (CSV)</h4>
+            <div>
+                <h4 className="form-container-heading">{ reportType } audit report (CSV)</h4>
                 <button
                     className='pt-button  pt-intent-primary'
                     disabled={ !canRenderReport }
                     onClick={ fetchReport }>
                     Download
                 </button>
+                <hr />
             </div>
             <div className='mt-default'>
-                <h4>List of ballots to audit (CSV)</h4>
+                <h4 className="form-container-heading">List of ballots to audit (CSV)</h4>
                 <button
                     className='pt-button pt-intent-primary'
                     disabled={ typeof countyState.auditBoardCount !== 'number' }

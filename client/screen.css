@@ -43,6 +43,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /*
+ * Divider / Horizontal rule
+ */
+
+hr {
+  margin: 40px 0;
+}
+
+/*
  * Layout utilities
  */
 
@@ -100,13 +108,29 @@ h1, h2, h3, h4, h5, h6 {
 
 .l-footer {
   border-top: 1px solid #CED9E0;
-  margin-top: 20px;
+  margin-top: 60px;
   padding: 15px;
 }
 
 /*
  * Modules
  */
+
+/* Forms */
+
+.form-group-label {
+  margin-bottom: 10px;
+  display: block;
+}
+
+.form-controls {
+  margin-top: 30px;
+}
+
+.form-container-heading {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
 
 /* Custom table */
 

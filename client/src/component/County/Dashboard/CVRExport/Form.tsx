@@ -51,14 +51,16 @@ const CVRExportForm = (props: FormProps) => {
                                : '';
 
     return (
-        <Card>
-            <Card>
-                <div style={{ width: '600px' }}>
-                    <FormGroup label={ <span className='pt-ui-text-large font-weight-bold'>CVR Export</span> }>
-                        <FileInput fill={ true } text={ fileName } onInputChange={ onFileChange } />
-                    </FormGroup>
+        <div>
+
+                <div style={{ width: '500px' }}>
+                    <div className="mb-default">
+                        <FormGroup label={ <span className='form-group-label pt-ui-text-large font-weight-bold'>CVR Export</span> }>
+                            <FileInput fill={ true } text={ fileName } onInputChange={ onFileChange } />
+                        </FormGroup>
+                    </div>
                     <FormGroup label={
-                        <span className='pt-ui-text-large font-weight-bold'>
+                        <span className='form-group-label pt-ui-text-large font-weight-bold'>
                             SHA-256 hash for CVR Export
                         </span>
                     }>
@@ -69,12 +71,14 @@ const CVRExportForm = (props: FormProps) => {
                                       onChange={ onHashChange } />
                     </FormGroup>
                 </div>
-            </Card>
-            { renderedCancelButton }
-            <Button intent={ Intent.PRIMARY } onClick={ upload }>
-                Upload
-            </Button>
-        </Card>
+            <div className="form-controls">
+                { renderedCancelButton }
+                <Button intent={ Intent.PRIMARY } onClick={ upload }>
+                    Upload
+                </Button>
+            </div>
+            <hr />
+        </div>
     );
 };
 

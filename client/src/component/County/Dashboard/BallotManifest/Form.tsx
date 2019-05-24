@@ -51,30 +51,37 @@ const BallotManifestForm = (props: FormProps) => {
                                : '';
 
     return (
-        <Card>
-            <Card>
-                <div style={{ width: '600px' }}>
-                    <FormGroup label={ <span className='pt-ui-text-large font-weight-bold'>Ballot Manifest</span> }>
+        <div>
+
+            <div style={{ width: '500px' }}>
+                <div className="mb-default">
+                    <FormGroup label={ <span className='form-group-label pt-ui-text-large font-weight-bold'>Ballot Manifest</span> }>
                         <FileInput fill={ true } text={ fileName } onInputChange={ onFileChange } />
                     </FormGroup>
+                </div>
+                <div className="mb-default">
                     <FormGroup label={
-                        <span className='pt-ui-text-large font-weight-bold'>
+                        <span className='form-group-label pt-ui-text-large font-weight-bold'>
                             SHA-256 hash for Ballot Manifest
                         </span>
                     }>
-                        <EditableText className='pt-input'
-                                      minWidth={ 600 }
-                                      maxLength={ 64 }
-                                      value={ hash }
-                                      onChange={ onHashChange } />
+                
+                    <EditableText className='pt-input'
+                                    minWidth={ 600 }
+                                    maxLength={ 64 }
+                                    value={ hash }
+                                    onChange={ onHashChange } />
                     </FormGroup>
                 </div>
-            </Card>
-            { renderedCancelButton }
-            <Button intent={ Intent.PRIMARY } onClick={ upload }>
-                Upload
-            </Button>
-        </Card>
+            </div>
+            <div className="form-controls">
+                { renderedCancelButton }
+                <Button intent={ Intent.PRIMARY } onClick={ upload }>
+                    Upload
+                </Button>
+            </div>
+            <hr />
+        </div>
     );
 };
 

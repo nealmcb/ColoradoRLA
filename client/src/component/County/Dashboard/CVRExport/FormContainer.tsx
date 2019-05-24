@@ -33,10 +33,12 @@ const UploadedCVRExport = (props: UploadedProps) => {
         );
     } else {
         return (
-            <Card>
-                <div><strong>CVR Export</strong></div>
-                <div><strong>File name: </strong>"{ file.fileName }"</div>
-                <div><strong>SHA-256 hash: </strong>{ file.hash }</div>
+            <div>
+                <div className="mb-default">
+                    <div className="form-container-heading"><strong>CVR Export</strong></div>
+                    <div className="mb-def"><strong>File name: </strong>"{ file.fileName }"</div>
+                    <div><strong>SHA-256 hash: </strong>{ file.hash }</div>
+                </div>
                 <div className='error'>
                     <strong>{file.result.success ? '' : 'Error Message: ' }</strong>
                     { file.result.errorMessage }
@@ -49,14 +51,17 @@ const UploadedCVRExport = (props: UploadedProps) => {
                     <strong>{file.result.success ? '' : 'Error row content: ' }</strong>
                     { file.result.errorRowContent }
                 </div>
+                
+                
+                <Button onClick={ handleDeleteFile }>
+                    Delete File
+                </Button>
+                <span> &nbsp;&nbsp; </span>
                 <Button intent={ Intent.PRIMARY } onClick={ enableReupload }>
                     Re-upload
                 </Button>
-                <span> &nbsp;&nbsp; </span>
-                <Button intent={ Intent.PRIMARY } onClick={ handleDeleteFile }>
-                    Delete File
-                </Button>
-            </Card>
+                <hr />
+            </div>
         );
     }
 };
