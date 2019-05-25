@@ -3,7 +3,7 @@ import withSync from 'corla/component/withSync';
 
 import OverviewPage from './OverviewPage';
 
-function select(dosState: DOS.AppState) {
+function mapStateToProps(dosState: DOS.AppState) {
     return {
         contests: dosState.contests,
         dosState,
@@ -13,5 +13,5 @@ function select(dosState: DOS.AppState) {
 export default withSync(
     withDOSState(OverviewPage),
     'DOS_CONTEST_OVERVIEW_SYNC',
-    select,
+    mapStateToProps,
 );

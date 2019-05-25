@@ -13,7 +13,7 @@ const Container = (props: Props) => {
     return <FinalReviewPage { ...props } />;
 };
 
-const select = (state: County.AppState) => {
+const mapStateToProps = (state: County.AppState) => {
     return {
         auditBoardIndex: state.auditBoardIndex || 0,
         ballotSequenceAssignment: state.ballotSequenceAssignment,
@@ -21,4 +21,4 @@ const select = (state: County.AppState) => {
     };
 };
 
-export default connect(select)(Container);
+export default connect(mapStateToProps)(Container);

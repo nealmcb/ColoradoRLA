@@ -23,13 +23,13 @@ function withState<P>(
         }
     }
 
-    function select(state: AppState) {
+    function mapStateToProps(state: AppState) {
         const hasState = state.type === stateType;
 
         return { hasState };
     }
 
-    return connect(select)(Wrapper);
+    return connect(mapStateToProps)(Wrapper);
 }
 
 export default withState;

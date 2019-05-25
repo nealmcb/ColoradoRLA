@@ -7,7 +7,7 @@ import action from 'corla/action';
 function withSync<P, SelectP, TOwnProps, TState, BindP, BindS>(
     Wrapped: React.ComponentType<P>,
     didMount: string,
-    select: MapStateToProps<SelectP, TOwnProps, TState>,
+    mapStateToProps: MapStateToProps<SelectP, TOwnProps, TState>,
     bind?: Bind<BindP, BindS>,
 ) {
     type Props = P & SelectP & TOwnProps & BindP;
@@ -23,9 +23,9 @@ function withSync<P, SelectP, TOwnProps, TState, BindP, BindS>(
     }
 
     if (bind) {
-        return connect(select, bind)(Wrapper);
+        return connect(mapStateToProps, bind)(Wrapper);
     } else {
-        return connect(select)(Wrapper);
+        return connect(mapStateToProps)(Wrapper);
     }
 }
 

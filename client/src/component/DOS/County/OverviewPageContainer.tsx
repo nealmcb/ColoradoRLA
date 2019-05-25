@@ -3,7 +3,7 @@ import withSync from 'corla/component/withSync';
 
 import CountyOverviewPage from './OverviewPage';
 
-function select(dosState: DOS.AppState) {
+function mapStateToProps(dosState: DOS.AppState) {
     const { countyStatus } = dosState;
 
     return { countyStatus, dosState };
@@ -12,5 +12,5 @@ function select(dosState: DOS.AppState) {
 export default withSync(
     withDOSState(CountyOverviewPage),
     'DOS_COUNTY_OVERVIEW_SYNC',
-    select,
+    mapStateToProps,
 );

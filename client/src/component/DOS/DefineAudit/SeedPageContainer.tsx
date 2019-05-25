@@ -46,7 +46,7 @@ class SeedPageContainer extends React.Component<ContainerProps> {
     }
 }
 
-function select(dosState: DOS.AppState) {
+function mapStateToProps(dosState: DOS.AppState) {
     if (!dosState) { return {}; }
 
     return {
@@ -59,5 +59,5 @@ function select(dosState: DOS.AppState) {
 export default withSync(
     withDOSState(SeedPageContainer),
     'DOS_DEFINE_AUDIT_RANDOM_SEED_SYNC',
-    select,
+    mapStateToProps,
 );

@@ -162,7 +162,7 @@ class BallotManifestFormContainer extends React.Component<ContainerProps, Contai
     }
 }
 
-const select = (countyState: County.AppState) => {
+const mapStateToProps = (countyState: County.AppState) => {
     const uploadingFile = !!countyState.uploadingBallotManifest;
 
     return {
@@ -172,4 +172,4 @@ const select = (countyState: County.AppState) => {
     };
 };
 
-export default connect(select)(BallotManifestFormContainer);
+export default connect(mapStateToProps)(BallotManifestFormContainer);
