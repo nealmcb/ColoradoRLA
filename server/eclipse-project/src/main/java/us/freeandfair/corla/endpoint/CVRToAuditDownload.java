@@ -221,16 +221,14 @@ public class CVRToAuditDownload extends AbstractEndpoint {
         cvr_to_audit_list =
             ComparisonAuditController.ballotsToAudit(cdb, round.getAsInt(), audited);
 
-        response_list.addAll(BallotSelection.toResponseList(cvr_to_audit_list));
-        response_list.sort(null);
+      response_list.addAll(BallotSelection.toResponseList(cvr_to_audit_list));
+      response_list.sort(null);
         final Round roundObject = cdb.rounds().get(round.getAsInt() - 1);
 
         final List<Map<String, Integer>> bsa =
           roundObject.ballotSequenceAssignment();
 
-        // The ballot sequence assignments won't line up if audited cvrs are filtered out.
-        // The audited param is never false and should probably be removed.
-        if (bsa != null && audited) {
+        if (bsa != null) {
           // Walk the sequence assignments getting the audit boards' index and
           // count values. Use that information to set the audit board index for
           // each response row.
