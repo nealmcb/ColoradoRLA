@@ -68,7 +68,7 @@ interface SelectProps {
     hasAuditedAnyBallot: boolean;
 }
 
-function select(countyState: County.AppState): SelectProps {
+function mapStateToProps(countyState: County.AppState): SelectProps {
     const countyInfo = countyInfoSelector(countyState);
     const countyName = _.get(countyInfo, 'name', '');
 
@@ -83,5 +83,5 @@ function select(countyState: County.AppState): SelectProps {
 export default withState('County', withSync(
     AuditBoardSignInContainer,
     'COUNTY_BOARD_SIGN_IN_SYNC',
-    select,
+    mapStateToProps,
 ));

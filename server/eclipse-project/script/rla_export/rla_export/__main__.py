@@ -696,7 +696,7 @@ def pull_endpoints(args, ac):
                     # This query doesn't work in 2.0.11, so leave it out by default and avoid confusion
                     filename = os.path.join(args.export_dir, 'ballot_list_%s.csv' % county_name)
                     query = ("cvr-to-audit-download?county=%d&start=0&ballot_count=%d"
-                            "&include_audited" % (county_id, ballot_count))
+                             (county_id, ballot_count))
                     r = download_content(session, baseurl, query, filename)
 
                 filename = os.path.join(args.export_dir, 'county_report_%s.xlsx' % county_name)

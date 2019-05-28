@@ -169,7 +169,7 @@ class CVRExportFormContainer extends React.Component<ContainerProps, ContainerSt
     }
 }
 
-const select = (countyState: County.AppState) => {
+const mapStateToProps = (countyState: County.AppState) => {
     const uploadingFile = cvrExportUploadingSelector(countyState);
 
     return {
@@ -179,4 +179,4 @@ const select = (countyState: County.AppState) => {
     };
 };
 
-export default connect(select)(CVRExportFormContainer);
+export default connect(mapStateToProps)(CVRExportFormContainer);

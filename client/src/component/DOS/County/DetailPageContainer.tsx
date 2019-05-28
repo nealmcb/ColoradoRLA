@@ -34,7 +34,7 @@ class CountyDetailContainer extends React.Component<ContainerProps> {
     }
 }
 
-function select(dosState: DOS.AppState) {
+function mapStateToProps(dosState: DOS.AppState) {
     const { countyStatus } = dosState;
 
     return { countyStatus };
@@ -43,5 +43,5 @@ function select(dosState: DOS.AppState) {
 export default withSync(
     withDOSState(CountyDetailContainer),
     'DOS_COUNTY_DETAIL_SYNC',
-    select,
+    mapStateToProps,
 );

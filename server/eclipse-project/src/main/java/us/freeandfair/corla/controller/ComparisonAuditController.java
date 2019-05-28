@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.OptionalInt;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -111,8 +110,7 @@ public final class ComparisonAuditController {
    * The returned list will not have duplicates and is in an undefined order.
    *
    * @param countyDashboard county dashboard owning the rounds
-   * @param roundNumber 1-indexed round number
-   * @param includeAudited include audited ballots
+   * @param roundNumber 1-based round number
    *
    * @return the list of ballot cards for audit. If the query does not result in
    *         any ballot cards, for instance when the round number is invalid,
@@ -120,53 +118,47 @@ public final class ComparisonAuditController {
    */
   public static List<CastVoteRecord>
       ballotsToAudit(final CountyDashboard countyDashboard,
-                     final int roundNumber,
-                     final boolean audited) {
-
-    final List<Long> cvrIds = cvrIdsToAudit(countyDashboard, roundNumber);
-
-    LOGGER.debug(String.format("Ballot cards to audit: "
-                               + "[round=%d, n = %d,"
-                               + " cvrIds = %s]",
-                               roundNumber, cvrIds.size(),
-                               cvrIds));
-
-    final List<CastVoteRecord> cvrs = CastVoteRecordQueries.get(cvrIds);
-
-    return cvrs.stream()
-      .map(c -> {c.setAuditFlag(audited(countyDashboard, c)); return c;})
-      // remove if audited is false and auditFlag is true
-      .filter(c -> audited || !c.auditFlag())
-      .collect(Collectors.toList());
-  }
-
-  /**
-   * access the list of cvrIds stored on the round, and subtract those from previous
-   * rounds
-   **/
-  public static List<Long> cvrIdsToAudit(final CountyDashboard countyDashboard,
-                                         final int roundNumber) {
-    final Round round;
-    final List<Round> rounds;
+                     final int roundNumber) {
+    final List<Round> rounds = countyDashboard.rounds();
+    Round round;
 
     try {
       // roundNumber is 1-based
-      round = countyDashboard.rounds().get(roundNumber - 1);
-      rounds = countyDashboard.rounds();
+      round = rounds.get(roundNumber - 1);
     } catch (IndexOutOfBoundsException e) {
-      return new ArrayList<Long>();
+      return new ArrayList<CastVoteRecord>();
     }
 
-    // we can't filter on "auditFlag" because we need to fetch these for the
-    // final review page.
-    final Set<Long> previouslyAudited = rounds.stream()
-      .filter(r -> r.number() < roundNumber)
-      .map(r -> r.ballotSequence())
-      .flatMap(List::stream)
-      .collect(Collectors.toSet());
-    return round.ballotSequence().stream()
-      .filter(cvrId -> !previouslyAudited.contains(cvrId))
-      .collect(Collectors.toList());
+    LOGGER.info(
+        String.format(
+            "Ballot cards to audit: "
+            + "[round=%s, round.ballotSequence.size()=%d, round.ballotSequence()=%s]",
+            round,
+            round.ballotSequence().size(),
+            round.ballotSequence()
+        )
+    );
+
+    // Get all ballot cards for the target round
+    final List<CastVoteRecord> cvrs = CastVoteRecordQueries.get(round.ballotSequence());
+
+    // Fetch the CVRs from previous rounds in order to set a flag determining
+    // whether they had been audited previously.
+    final Set<CastVoteRecord> previousCvrs = new HashSet<CastVoteRecord>();
+    for (int i = 1; i < roundNumber; i++) {
+      // i is 1-based
+      final Round r = rounds.get(i - 1);
+      previousCvrs.addAll(CastVoteRecordQueries.get(r.ballotSequence()));
+    }
+
+    // PERF TODO: We may be able to replace calls to `audited` with a query that
+    // determines the audit status of all the CVRs when they are fetched.
+    for (final CastVoteRecord cvr : cvrs) {
+      cvr.setAuditFlag(audited(countyDashboard, cvr));
+      cvr.setPreviouslyAudited(previousCvrs.contains(cvr));
+    }
+
+    return cvrs;
   }
 
   /**

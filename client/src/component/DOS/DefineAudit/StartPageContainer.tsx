@@ -126,7 +126,7 @@ class StartPageContainer extends React.Component<ContainerProps, ContainerState>
     }
 }
 
-function select(dosState: DOS.AppState) {
+function mapStateToProps(dosState: DOS.AppState) {
     const { election, publicMeetingDate, riskLimit } = dosState;
 
     return { election, riskLimit, publicMeetingDate, dosState };
@@ -135,5 +135,5 @@ function select(dosState: DOS.AppState) {
 export default withSync(
     withDOSState(StartPageContainer),
     'DOS_DEFINE_AUDIT_SYNC',
-    select,
+    mapStateToProps,
 );

@@ -53,7 +53,7 @@ class SelectContestsPageContainer extends React.Component<ContainerProps> {
     }
 }
 
-function select(dosState: DOS.AppState) {
+function mapStateToProps(dosState: DOS.AppState) {
     const isAuditable = (contestId: number): boolean => {
         if (!dosState.auditTypes) { return false; }
 
@@ -74,5 +74,5 @@ export default withPoll(
     withDOSState(SelectContestsPageContainer),
     'DOS_SELECT_CONTESTS_POLL_START',
     'DOS_SELECT_CONTESTS_POLL_STOP',
-    select,
+    mapStateToProps,
 );

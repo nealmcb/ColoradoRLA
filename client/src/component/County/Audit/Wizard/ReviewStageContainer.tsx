@@ -59,7 +59,7 @@ const ReviewStageContainer = (props: Props) => {
                         uploadAcvr={ uploadAcvr } />;
 };
 
-function select(countyState: County.AppState): StateProps {
+function mapStateToProps(countyState: County.AppState): StateProps {
     const { currentBallot } = countyState;
 
     const auditBoardIndex = countyState.auditBoardIndex || 0;
@@ -75,4 +75,4 @@ function select(countyState: County.AppState): StateProps {
     };
 }
 
-export default connect(select)(ReviewStageContainer);
+export default connect(mapStateToProps)(ReviewStageContainer);

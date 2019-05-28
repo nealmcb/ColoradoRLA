@@ -10,8 +10,11 @@ with the following tags indicating the components affected:
 - `TOOLING` refers to changes to tooling that falls outside the UI or API, such
   as the RLA export.
 
-## 2.3.3 - UNRELEASED
+## 2.3.4 - UNRELEASED
+
+## 2.3.3 - Bugfix release
 - [API - Throw error on invalid ballot manifests][pr149]
+- [API - Fix infinite round loop under certain circumstances][pr152]
 
 ## 2.3.2 - Bugfix release
 - [UI - simple change to remove warning about breadcrumbs][pr142]
@@ -252,3 +255,4 @@ This is [FreeAndFair's most recent tag][1.1.0.3].
 [pr147]: https://github.com/democracyworks/ColoradoRLA/pull/147
 [pr148]: https://github.com/democracyworks/ColoradoRLA/pull/148
 [pr149]: https://github.com/democracyworks/ColoradoRLA/pull/149
+[pr152]: https://github.com/democracyworks/ColoradoRLA/pull/152

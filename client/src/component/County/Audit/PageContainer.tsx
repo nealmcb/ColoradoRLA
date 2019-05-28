@@ -81,7 +81,7 @@ const CountyAuditPageContainer = (props: CountyAuditPageContainerProps) => {
     return <CountyAuditPage reviewingBallotId={ reviewingBallotId } />;
 };
 
-function select(countyState: County.AppState) {
+function mapStateToProps(countyState: County.AppState) {
     const auditBoardIndex = countyState.auditBoardIndex || 0;
     const isAuditBoardDone = isAuditBoardDoneSelector(countyState);
     const finalReviewComplete = countyState.finalReview.complete;
@@ -111,5 +111,5 @@ export default withPoll(
     withCountyState(CountyAuditPageContainer),
     'COUNTY_AUDIT_POLL_START',
     'COUNTY_AUDIT_POLL_STOP',
-    select,
+    mapStateToProps,
 );
