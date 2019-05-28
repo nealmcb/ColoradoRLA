@@ -82,6 +82,12 @@ public class CVRToAuditResponse implements Comparable<CVRToAuditResponse> {
   protected final boolean my_audited;
 
   /**
+   * A flag that indicates whether or not the CVR was audited in a previous
+   * round
+   */
+  protected final boolean my_previously_audited;
+
+  /**
    * Create a new response object.
    *
    * @param the_audit_sequence_number The audit sequence number.
@@ -94,6 +100,8 @@ public class CVRToAuditResponse implements Comparable<CVRToAuditResponse> {
    * @param the_ballot_type The ballot type.
    * @param the_storage_location The storage location.
    * @param the_audited true if the ballot has been audited, false otherwise.
+   * @param the_previously_audited true if the ballot has been audited in a
+   *                               previous round, false otherwise.
    */
   @SuppressWarnings("PMD.ExcessiveParameterList")
   public CVRToAuditResponse(final int the_audit_sequence_number,
@@ -105,7 +113,8 @@ public class CVRToAuditResponse implements Comparable<CVRToAuditResponse> {
                             final long the_db_id,
                             final String the_ballot_type,
                             final String the_storage_location,
-                            final boolean the_audited) {
+                            final boolean the_audited,
+                            final boolean the_previously_audited) {
     my_audit_sequence_number = the_audit_sequence_number;
     my_scanner_id = the_scanner_id;
     my_batch_id = the_batch_id;
@@ -116,6 +125,7 @@ public class CVRToAuditResponse implements Comparable<CVRToAuditResponse> {
     my_ballot_type = the_ballot_type;
     my_storage_location = the_storage_location;
     my_audited = the_audited;
+    my_previously_audited = the_previously_audited;
   }
 
   /**
@@ -200,6 +210,13 @@ public class CVRToAuditResponse implements Comparable<CVRToAuditResponse> {
    */
   public boolean audited() {
     return my_audited;
+  }
+
+  /**
+   * @return the "previously audited" flag.
+   */
+  public boolean previouslyAudited() {
+    return my_previously_audited;
   }
 
   /**

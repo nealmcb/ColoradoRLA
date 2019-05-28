@@ -519,7 +519,8 @@ public final class BallotSelection {
                                   cvr.id(),
                                   cvr.ballotType(),
                                   storageLocation,
-                                  cvr.auditFlag());
+                                  cvr.auditFlag(),
+                                  cvr.previouslyAudited());
   }
 
   /**

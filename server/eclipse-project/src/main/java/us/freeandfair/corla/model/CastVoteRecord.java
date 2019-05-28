@@ -208,6 +208,12 @@ final public class CastVoteRecord implements Comparable<CastVoteRecord>,
    */
   private transient boolean my_audit_flag;
 
+  /**
+   * A transient flag that indicates whether this CVR was audited in a "previous
+   * round"; this is only used for passing information around and is not
+   * serialized in the database.
+   */
+  private transient boolean my_previously_audited;
 
   /**
    * The CVR to audit, for ACVRs only
@@ -564,6 +570,23 @@ final public class CastVoteRecord implements Comparable<CastVoteRecord>,
    */
   public void setAuditFlag(final boolean the_audit_flag) {
     my_audit_flag = the_audit_flag;
+  }
+
+  /**
+   * Whether or not the ballot was previously audited
+   *
+   * Like auditFlag(), this is not persisted to the database, and is only used
+   * during a single run of the tool.
+   */
+  public boolean previouslyAudited() {
+    return my_previously_audited;
+  }
+
+  /**
+   * Set whether or not the ballot was previously audited
+   */
+  public void setPreviouslyAudited(final boolean the_previously_audited) {
+    my_previously_audited = the_previously_audited;
   }
 
   /**

@@ -107,6 +107,7 @@ declare namespace JSON {
         db_id?: number;
         id: number;
         imprinted_id: string;
+        previously_audited?: boolean;
         record_id: number;
         record_type: RecordType;
         scanner_id: number;
