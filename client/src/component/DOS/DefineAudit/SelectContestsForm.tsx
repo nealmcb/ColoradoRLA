@@ -4,7 +4,6 @@ import * as _ from 'lodash';
 
 import {
     Button,
-    Card,
     Checkbox,
     Classes,
     EditableText,

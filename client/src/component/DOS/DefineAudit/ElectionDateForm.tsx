@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import { Card } from '@blueprintjs/core';
 import { DateInput, IDateFormatProps } from '@blueprintjs/datetime';
 
 import { formatLocalDate, parseLocalDate } from 'corla/date';
