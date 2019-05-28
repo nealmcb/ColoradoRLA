@@ -31,6 +31,7 @@ const WaitingForContestsPage = ({ back }: WaitingPageProps) => {
                     className='pt-breadcrumb'>
                 Back
             </Button>
+            &nbsp;
             <Button disabled
                     intent={ Intent.PRIMARY }
                     className='pt-breadcrumb'>
@@ -85,6 +86,7 @@ const SelectContestsPage = (props: PageProps) => {
                     className='pt-breadcrumb'>
                 Back
             </Button>
+            &nbsp;
             <Button onClick={ onSaveAndNext }
                     intent={ Intent.PRIMARY }
                     className='pt-breadcrumb'>
