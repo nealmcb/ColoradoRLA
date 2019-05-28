@@ -110,40 +110,52 @@ public final class ComparisonAuditController {
    * The returned list will not have duplicates and is in an undefined order.
    *
    * @param countyDashboard county dashboard owning the rounds
-   * @param roundNumber 1-indexed round number
-   * @param includeAudited include audited ballots
+   * @param roundNumber 1-based round number
    *
    * @return the list of ballot cards for audit. If the query does not result in
    *         any ballot cards, for instance when the round number is invalid,
    *         the returned list is empty.
    */
-  // TODO: includeAudited is unused
   public static List<CastVoteRecord>
       ballotsToAudit(final CountyDashboard countyDashboard,
-                     final int roundNumber,
-                     final boolean includeAudited) {
-    final Round round;
+                     final int roundNumber) {
+    final List<Round> rounds = countyDashboard.rounds();
+    Round round;
 
     try {
       // roundNumber is 1-based
-      round = countyDashboard.rounds().get(roundNumber - 1);
+      round = rounds.get(roundNumber - 1);
     } catch (IndexOutOfBoundsException e) {
       return new ArrayList<CastVoteRecord>();
     }
 
-    LOGGER.info(String.format("Ballot cards to audit: "
-                              + "[round=%s, round.ballotSequence.size() = %d,"
-                              + " round.ballotSequence() = %s]",
-                              round, round.ballotSequence().size(),
-                              round.ballotSequence()));
+    LOGGER.info(
+        String.format(
+            "Ballot cards to audit: "
+            + "[round=%s, round.ballotSequence.size()=%d, round.ballotSequence()=%s]",
+            round,
+            round.ballotSequence().size(),
+            round.ballotSequence()
+        )
+    );
 
-    // we already have the list of CVR IDs for the round
+    // Get all ballot cards for the target round
     final List<CastVoteRecord> cvrs = CastVoteRecordQueries.get(round.ballotSequence());
 
-    // PERF: Is this a hotspot? We can figure out the audit flag using a single
-    // query.
+    // Fetch the CVRs from previous rounds in order to set a flag determining
+    // whether they had been audited previously.
+    final Set<CastVoteRecord> previousCvrs = new HashSet<CastVoteRecord>();
+    for (int i = 1; i < roundNumber; i++) {
+      // i is 1-based
+      final Round r = rounds.get(i - 1);
+      previousCvrs.addAll(CastVoteRecordQueries.get(r.ballotSequence()));
+    }
+
+    // PERF TODO: We may be able to replace calls to `audited` with a query that
+    // determines the audit status of all the CVRs when they are fetched.
     for (final CastVoteRecord cvr : cvrs) {
       cvr.setAuditFlag(audited(countyDashboard, cvr));
+      cvr.setPreviouslyAudited(previousCvrs.contains(cvr));
     }
 
     return cvrs;

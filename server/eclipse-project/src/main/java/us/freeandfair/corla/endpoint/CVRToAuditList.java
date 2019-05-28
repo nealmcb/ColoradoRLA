@@ -46,16 +46,6 @@ public class CVRToAuditList extends AbstractEndpoint {
   public static final String START = "start";
 
   /**
-   * The "include duplicates" parameter.
-   */
-  public static final String INCLUDE_DUPLICATES = "include_duplicates";
-
-  /**
-   * The "include audited" parameter.
-   */
-  public static final String INCLUDE_AUDITED = "include_audited";
-
-  /**
    * The "round" parameter.
    */
   public static final String ROUND = "round";
@@ -150,16 +140,9 @@ public class CVRToAuditList extends AbstractEndpoint {
     }
 
     try {
-      // get the request parameters
-      final String audited_param = the_request.queryParams(INCLUDE_AUDITED);
+      // get the request parameter
       final String round_param = the_request.queryParams(ROUND);
 
-      final boolean audited;
-      if (audited_param == null) {
-        audited = false;
-      } else {
-        audited = true;
-      }
       // get other things we need
       final CountyDashboard cdb = Persistence.getByID(county.id(), CountyDashboard.class);
       final List<CastVoteRecord> cvr_to_audit_list;
@@ -178,8 +161,10 @@ public class CVRToAuditList extends AbstractEndpoint {
       }
 
       if (round.isPresent()) {
-        cvr_to_audit_list =
-            ComparisonAuditController.ballotsToAudit(cdb, round.getAsInt(), audited);
+        cvr_to_audit_list = ComparisonAuditController.ballotsToAudit(
+            cdb,
+            round.getAsInt()
+        );
         response_list.addAll(BallotSelection.toResponseList(cvr_to_audit_list));
         response_list.sort(null);
 
@@ -192,6 +177,10 @@ public class CVRToAuditList extends AbstractEndpoint {
           // Walk the sequence assignments getting the audit boards' index and
           // count values. Use that information to set the audit board index for
           // each response row.
+          //
+          // Note: the board assignment has already been created, so the list of
+          // ballots returned to the client cannot change after the round
+          // starts.
           for (int i = 0; i < bsa.size(); i++) {
             final Map<String, Integer> m = bsa.get(i);
 
@@ -199,7 +188,6 @@ public class CVRToAuditList extends AbstractEndpoint {
             final Integer boardCount = m.get("count");
 
             for (int j = boardIndex; j < boardIndex + boardCount; j++) {
-              // TODO: Will this always agree with the round information?
               final CVRToAuditResponse row = response_list.get(j);
               row.setAuditBoardIndex(i);
             }

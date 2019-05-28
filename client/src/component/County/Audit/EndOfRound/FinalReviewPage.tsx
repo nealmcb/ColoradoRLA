@@ -138,13 +138,14 @@ class FinalReviewPage extends React.Component<FinalReviewPageProps, FinalReviewP
                         </tr>
                     </thead>
                     <tbody>
-                    {
-                        _.map(auditBoardSlice(
-                            cvrsToAudit,
-                            ballotSequenceAssignment,
-                            auditBoardIndex,
-                        ), renderRow)
-                    }
+                    { _.chain(auditBoardSlice(
+                           cvrsToAudit,
+                           ballotSequenceAssignment,
+                           auditBoardIndex,
+                       ))
+                       .filter(cvr => !cvr.previously_audited)
+                       .map(renderRow)
+                       .value() }
                     </tbody>
                 </table>
             </Card>;
