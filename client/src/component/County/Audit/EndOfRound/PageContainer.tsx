@@ -25,7 +25,7 @@ class EndOfRoundPageContainer extends React.Component<ContainerProps> {
     }
 }
 
-function select(countyState: County.AppState) {
+function mapStateToProps(countyState: County.AppState) {
     const auditBoardIndex = countyState.auditBoardIndex || 0;
     const previousRound = previousRoundSelector(countyState);
 
@@ -41,4 +41,4 @@ function select(countyState: County.AppState) {
     };
 }
 
-export default connect(select)(EndOfRoundPageContainer);
+export default connect(mapStateToProps)(EndOfRoundPageContainer);

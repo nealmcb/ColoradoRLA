@@ -51,7 +51,7 @@ class FileUploadContainer extends React.Component<FileUploadContainerProps> {
     }
 }
 
-function select(countyState: County.AppState) {
+function mapStateToProps(countyState: County.AppState) {
     const { asm } = countyState;
 
     const missedDeadline = asm.county === 'DEADLINE_MISSED';
@@ -59,4 +59,4 @@ function select(countyState: County.AppState) {
     return { countyState, missedDeadline };
 }
 
-export default connect(select)(FileUploadContainer);
+export default connect(mapStateToProps)(FileUploadContainer);

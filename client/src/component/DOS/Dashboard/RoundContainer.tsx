@@ -40,7 +40,7 @@ class RoundContainer extends React.Component<ContainerProps> {
     }
 }
 
-function select(dosState: DOS.AppState) {
+function mapStateToProps(dosState: DOS.AppState) {
     const currentRound = currentRoundSelector(dosState);
     const countiesWithRound = countiesWithRoundSelector(dosState, currentRound);
 
@@ -63,4 +63,4 @@ function select(dosState: DOS.AppState) {
     };
 }
 
-export default connect(select)(RoundContainer);
+export default connect(mapStateToProps)(RoundContainer);

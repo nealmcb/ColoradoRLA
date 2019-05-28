@@ -26,7 +26,7 @@ class BallotListStageContainer extends React.Component<ContainerProps> {
     }
 }
 
-function select(countyState: County.AppState) {
+function mapStateToProps(countyState: County.AppState) {
     return {
         auditBoardIndex: countyState.auditBoardIndex,
         countyInfo: countyInfo(countyState),
@@ -35,4 +35,4 @@ function select(countyState: County.AppState) {
     };
 }
 
-export default connect(select)(BallotListStageContainer);
+export default connect(mapStateToProps)(BallotListStageContainer);

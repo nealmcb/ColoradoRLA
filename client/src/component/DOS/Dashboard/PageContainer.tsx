@@ -25,7 +25,7 @@ class DOSDashboardContainer extends React.Component<ContainerProps> {
     }
 }
 
-function select(dosState: DOS.AppState) {
+function mapStateToProps(dosState: DOS.AppState) {
     return {
         auditStarted: auditStartedSelector(dosState),
         contests: dosState.contests,
@@ -39,5 +39,5 @@ export default withPoll(
     withDOSState(DOSDashboardContainer),
     'DOS_DASHBOARD_POLL_START',
     'DOS_DASHBOARD_POLL_STOP',
-    select,
+    mapStateToProps,
 );

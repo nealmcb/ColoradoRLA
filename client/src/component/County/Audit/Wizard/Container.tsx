@@ -23,7 +23,7 @@ const WizardContainer = (props: WizardContainerProps) => {
     return <Wizard { ...props } />;
 };
 
-function select(state: County.AppState, props: WizardContainerOwnProps) {
+function mapStateToProps(state: County.AppState, props: WizardContainerOwnProps) {
     return {
         countyState: state,
         currentBallotNumber: currentBallotNumber(state),
@@ -32,4 +32,4 @@ function select(state: County.AppState, props: WizardContainerOwnProps) {
     };
 }
 
-export default connect(select)(WizardContainer);
+export default connect(mapStateToProps)(WizardContainer);

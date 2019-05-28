@@ -26,7 +26,7 @@ type Props = StateProps & OwnProps;
 
 const Component = (props: Props) => <BallotAuditStage { ...props } />;
 
-const select = (countyState: County.AppState): StateProps => {
+const mapStateToProps = (countyState: County.AppState): StateProps => {
     const { currentBallot } = countyState;
 
     const comment = countyState.finalReview.comment;
@@ -43,4 +43,4 @@ const select = (countyState: County.AppState): StateProps => {
     };
 };
 
-export default connect(select)(Component);
+export default connect(mapStateToProps)(Component);

@@ -85,7 +85,7 @@ class CountyDashboardContainer extends React.Component<DashboardProps> {
     }
 }
 
-function select(countyState: County.AppState) {
+function mapStateToProps(countyState: County.AppState) {
     return {
         allRoundsComplete: allRoundsCompleteSelector(countyState),
         auditComplete: auditCompleteSelector(countyState),
@@ -103,5 +103,5 @@ export default withPoll(
     withCountyState(CountyDashboardContainer),
     'COUNTY_DASHBOARD_POLL_START',
     'COUNTY_DASHBOARD_POLL_STOP',
-    select,
+    mapStateToProps,
 );

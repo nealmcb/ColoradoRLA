@@ -42,12 +42,12 @@ class ReviewPageContainer extends React.Component<ContainerProps> {
     }
 }
 
-function select(dosState: DOS.AppState) {
+function mapStateToProps(dosState: DOS.AppState) {
     return { dosState };
 }
 
 export default withSync(
     withDOSState(ReviewPageContainer),
     'DOS_DEFINE_AUDIT_REVIEW_SYNC',
-    select,
+    mapStateToProps,
 );

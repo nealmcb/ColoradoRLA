@@ -82,10 +82,10 @@ class SignOffFormContainer extends React.Component<ContainerProps, ContainerStat
     }
 }
 
-function select(countyState: County.AppState) {
+function mapStateToProps(countyState: County.AppState) {
     return {
         countyInfo: countyInfo(countyState),
     };
 }
 
-export default connect(select)(SignOffFormContainer);
+export default connect(mapStateToProps)(SignOffFormContainer);
