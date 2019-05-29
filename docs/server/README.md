@@ -48,7 +48,10 @@ you want to use Eclipse.
       `rla_export/` is housed here.
     - [`src/`][source-guide]
       - `main/resources/`: Here you can configure logging with
-        `log4j.properties`, or the Java system properties for the application
+        `log4j.properties`, or the Java system properties for the application.
+        - `sql/`: SQL for reports, extracted from the old `rla_export` tool that
+          used to be separate from the application. These queries are run
+          directly by the code.
       under `us/freeandfair/corla/default.properties`.
       - [`main/java/`][source-guide]: All of the source code lives here. TODO: Link to source
         docs
