@@ -52,25 +52,28 @@ const CVRExportForm = (props: FormProps) => {
     return (
         <div>
 
-                <div style={{ width: '500px' }}>
-                    <div className="mb-default">
-                        <FormGroup label={ <span className='form-group-label pt-ui-text-large font-weight-bold'>CVR Export</span> }>
-                            <FileInput fill={ true } text={ fileName } onInputChange={ onFileChange } />
-                        </FormGroup>
-                    </div>
-                    <FormGroup label={
+            <div style={{ width: '500px' }}>
+                <div className='mb-default'>
+                    <FormGroup label={ 
                         <span className='form-group-label pt-ui-text-large font-weight-bold'>
-                            SHA-256 hash for CVR Export
-                        </span>
-                    }>
-                        <EditableText className='pt-input'
-                                      minWidth={ 600 }
-                                      maxLength={ 64 }
-                                      value={ hash }
-                                      onChange={ onHashChange } />
+                            CVR Export
+                        </span> }>
+                        <FileInput fill={ true } text={ fileName } onInputChange={ onFileChange } />
                     </FormGroup>
                 </div>
-            <div className="form-controls">
+                <FormGroup label={
+                    <span className='form-group-label pt-ui-text-large font-weight-bold'>
+                        SHA-256 hash for CVR Export
+                    </span>
+                }>
+                    <EditableText className='pt-input'
+                                    minWidth={ 600 }
+                                    maxLength={ 64 }
+                                    value={ hash }
+                                    onChange={ onHashChange } />
+                </FormGroup>
+            </div>
+            <div className='form-controls'>
                 { renderedCancelButton }
                 <Button intent={ Intent.PRIMARY } onClick={ upload }>
                     Upload

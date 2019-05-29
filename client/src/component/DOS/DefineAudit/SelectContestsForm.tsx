@@ -254,7 +254,6 @@ class SelectContestsForm extends React.Component<FormProps, FormState> {
                     full hand count at any time.</p>
                 </div>
                 <hr />
-                
                 <div>
                     <strong>Filter by Contest Name:</strong>
                     <span> </span>
