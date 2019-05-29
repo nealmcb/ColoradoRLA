@@ -35,9 +35,6 @@ Guides to the source code can be found below:
 - `specs`: Formal specifications developed by Free and Fair, not currently used.
 - [`test`][test]: End-to-end test scripts, test credentials, and test data.
 - `tools`: Used by Free and Fair to build documentation, not currently used.
-- [`vagrant`][vagrant]: Used to build a CentOS virtual machine to emulate a
-  CDOS-like environment for verifying builds. Documentation contained within
-  that directory.
 
 ## Free and Fair documentation
 
@@ -52,4 +49,3 @@ The original documentation for this software is available under the `freeandfair
 [server-readme]: server/README.md
 [server-source-guide]: server/source-guide.md
 [test]: ../test/README.md
-[vagrant]: ../vagrant/README.markdown
