@@ -20,6 +20,75 @@ const UploadedFile = ({ description, file }: UploadedFileProps) => {
     } else {
 
         const onClick = () => downloadFile(file.id);
+
+        const downloadButton = (
+            <div className='uploaded-file-footer-action'>
+                <Button intent={ Intent.PRIMARY }
+                        onClick={ onClick }>
+                    Download
+                </Button>
+            </div>);
+
+        const successCard = (
+            <Callout className='uploaded-file-footer'>
+                <Callout className='uploaded-file-footer-status'
+                         intent={ Intent.SUCCESS }
+                         icon='tick-circle'>
+                    File successfully uploaded
+                </Callout>
+                { downloadButton }
+            </Callout>
+        );
+
+        const errorCard = (
+            <Callout className='uploaded-file-footer'>
+                <Callout className='uploaded-file-footer-status'
+                         intent={ Intent.DANGER }
+                         icon='error'>
+                    <p>
+                        <strong>Error: </strong>
+                        { file.result.errorMessage ? file.result.errorMessage : 'unknown' }
+                        { file.result.errorRowNum &&
+                          <Popover className='uploaded-file-popover-target'
+                                   popoverClassName='uploaded-file-popover'>
+                              <span>at row { file.result.errorRowNum }</span>
+                              <div>
+                                  <h4>Row { file.result.errorRowNum }</h4>
+                                  <p>The content of row { file.result.errorRowNum } is displayed below:</p>
+                                  <pre>{ file.result.errorRowContent }</pre>
+                              </div>
+                          </Popover>
+                        }
+                    </p>
+                </Callout>
+                { downloadButton }
+            </Callout>
+        );
+
+        const pendingCard = (
+            <Callout className='uploaded-file-footer'>
+                <Callout className='uploaded-file-footer-status'
+                         intent={ Intent.WARNING }
+                         icon='tick-circle'>
+                    File upload in progress...
+                </Callout>
+            </Callout>
+        );
+
+        const resultCard = () => {
+            // this behavior lines up with ImportFileController.java
+            if (file.result.success === true) {
+                return successCard;
+                /* if result.success === undefined would be nice, but is */
+                /* prevented by the GSON during db storage which sets null to false */
+                /* this is a cheap way to infer pending */
+            } else if (file.result.errorMessage === undefined) {
+                return pendingCard;
+            } else {
+                return errorCard;
+            }
+        };
+
         return (
             <div className='uploaded-file mt-default'>
                 <h4>{ description }</h4>
@@ -30,41 +99,7 @@ const UploadedFile = ({ description, file }: UploadedFileProps) => {
                     <dt>SHA-256 hash</dt>
                     <dd>{ file.hash }</dd>
                 </dl>
-                <Callout className='uploaded-file-footer'>
-                    { file.result.success ?
-                        <Callout className='uploaded-file-footer-status'
-                                 intent={ Intent.SUCCESS }
-                                 icon='tick-circle'>
-                            File successfully uploaded
-                        </Callout> :
-                        <Callout className='uploaded-file-footer-status'
-                                 intent={ Intent.DANGER }
-                                 icon='error'>
-                            <p>
-                                <strong>Error: </strong>
-                                { file.result.errorMessage ? file.result.errorMessage : 'unknown' }
-                                { file.result.errorRowNum &&
-                                    <Popover className='uploaded-file-popover-target'
-                                             popoverClassName='uploaded-file-popover'>
-                                        <span>at row { file.result.errorRowNum }</span>
-                                        <div>
-                                            <h4>Row { file.result.errorRowNum }</h4>
-                                            <p>The content of row { file.result.errorRowNum } is displayed below:</p>
-                                            <pre>{ file.result.errorRowContent }</pre>
-                                        </div>
-                                    </Popover>
-                                }
-                            </p>
-                        </Callout>
-                    }
-                    <div className='uploaded-file-footer-action'>
-                        <Button disabled={ !file.result.success }
-                                intent={ Intent.PRIMARY }
-                                onClick={ onClick }>
-                            Download
-                        </Button>
-                    </div>
-                </Callout>
+                { resultCard() }
             </div>
         );
     }

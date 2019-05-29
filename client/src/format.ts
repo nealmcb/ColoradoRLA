@@ -35,6 +35,16 @@ export function formatCountyASMState(state: County.ASMState): string {
     }
 }
 
+function formatFileUploadStatus(countyStatus: DOS.CountyStatus): string {
+// here we are either really failed or pending
+    if (_.get(countyStatus, 'ballotManifest.result.errorMessage') === undefined &&
+        _.get(countyStatus, 'cvrExport.result.errorMessage') === undefined) {
+        return 'File upload in progress';
+    } else {
+        return 'File upload failed';
+    }
+}
+
 export function formatCountyAndBoardASMState(countyStatus: DOS.CountyStatus): string {
     const countyAsmState = countyStatus.asmState;
     const boardAsmState = countyStatus.auditBoardASMState;
@@ -82,7 +92,7 @@ export function formatCountyAndBoardASMState(countyStatus: DOS.CountyStatus): st
     default:
         if (_.get(countyStatus, 'ballotManifest.result.success') === false ||
             _.get(countyStatus, 'cvrExport.result.success') === false) {
-            return 'File upload failed';
+            return formatFileUploadStatus(countyStatus);
         } else {
             return formatCountyASMState(countyAsmState);
         }
@@ -106,8 +116,8 @@ export function formatCountyAndBoardASMStateIndicator(countyStatus: DOS.CountySt
         }
     }
     default:
-        if (_.get(countyStatus, 'ballotManifest.result.success') === false ||
-            _.get(countyStatus, 'cvrExport.result.success') === false) {
+        if (_.get(countyStatus, 'ballotManifest.result.errorMessage') !== undefined ||
+            _.get(countyStatus, 'cvrExport.result.errorMessage') !== undefined) {
             return 'status-indicator-error';
         } else {
             return '';
