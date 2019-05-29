@@ -11,6 +11,8 @@ import spark.Response;
 
 import us.freeandfair.corla.controller.DeleteFileController;
 import us.freeandfair.corla.Main;
+import us.freeandfair.corla.model.Administrator;
+import us.freeandfair.corla.model.Administrator.AdministratorType;
 
 /**
  * The endpoint for deleting a file or files for a county
@@ -48,7 +50,7 @@ public class DeleteFile extends AbstractEndpoint {
    */
   @Override
   public AuthorizationType requiredAuthorization() {
-    return AuthorizationType.COUNTY;
+    return AuthorizationType.EITHER;
   }
 
   /**
@@ -59,14 +61,33 @@ public class DeleteFile extends AbstractEndpoint {
                              final Response response) {
     final JsonParser parser = new JsonParser();
     final JsonObject o;
+    Long countyId = null;
+    String fileType = null;
 
     try {
       o = parser.parse(request.body()).getAsJsonObject();
-      final Long countyId   = Main.authentication().authenticatedCounty(request).id();
-      final String fileType = o.get("fileType").getAsString();
+      Administrator admin = request.session().attribute("admin");
+
+      if (admin.type() == AdministratorType.STATE) {
+        if (null != o.get("countyId")) {
+          countyId = o.get("countyId").getAsLong();
+        } else {
+          // bad request
+          badDataContents(response, "Missing countyId in post body");
+        }
+      } else if (admin.type() == AdministratorType.COUNTY) {
+        countyId = Main.authentication().authenticatedCounty(request).id();
+      }
+
+      if (null != o.get("fileType")) {
+        fileType = o.get("fileType").getAsString();
+      } else {
+        // bad request
+        badDataContents(response, "Missing fileType in post body");
+      }
 
       LOGGER.debug(String.format("[parsed request for deleting file: countyId=%d, fileType=%s",
-                                countyId, fileType));
+                                 countyId, fileType));
       DeleteFileController.deleteFile(countyId, fileType);
     } catch (final PersistenceException | DeleteFileController.DeleteFileFail e) {
       // this will roll back the transaction in afterAfter()
