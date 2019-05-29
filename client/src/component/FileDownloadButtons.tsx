@@ -2,14 +2,17 @@ import * as React from 'react';
 
 import { Button, Callout, Intent, Popover } from '@blueprintjs/core';
 
+import deleteFileForCounty from 'corla/action/dos/deleteFileForCounty';
 import downloadFile from 'corla/action/downloadFile';
 
 interface UploadedFileProps {
+    allowDelete: boolean;
     description: string;
     file: UploadedFile | undefined | null;
+    fileType: string;
 }
 
-const UploadedFile = ({ description, file }: UploadedFileProps) => {
+const UploadedFile = ({ description, file, fileType, allowDelete }: UploadedFileProps) => {
     if (null === file || undefined === file) {
         return (
             <div className='uploaded-file mt-default'>
@@ -20,6 +23,7 @@ const UploadedFile = ({ description, file }: UploadedFileProps) => {
     } else {
 
         const onClick = () => downloadFile(file.id);
+        const onDelete = () => deleteFileForCounty(fileType, file.countyId);
 
         const downloadButton = (
             <div className='uploaded-file-footer-action'>
@@ -29,6 +33,16 @@ const UploadedFile = ({ description, file }: UploadedFileProps) => {
                 </Button>
             </div>);
 
+        const deleteButton = (
+            <div className='uploaded-file-footer-action'>
+            { allowDelete ?
+                <Button intent={ Intent.PRIMARY }
+                        onClick={ onDelete }>
+                    Delete File
+                </Button>
+                    : <div></div> }
+            </div> );
+
         const successCard = (
             <Callout className='uploaded-file-footer'>
                 <Callout className='uploaded-file-footer-status'
@@ -37,6 +51,7 @@ const UploadedFile = ({ description, file }: UploadedFileProps) => {
                     File successfully uploaded
                 </Callout>
                 { downloadButton }
+                { deleteButton }
             </Callout>
         );
 
@@ -107,10 +122,11 @@ const UploadedFile = ({ description, file }: UploadedFileProps) => {
 
 interface DownloadButtonsProps {
     status: County.AppState | DOS.CountyStatus;
+    allowDelete: boolean;
 }
 
 const FileDownloadButtons = (props: DownloadButtonsProps) => {
-    const { status } = props;
+    const { status, allowDelete } = props;
 
     if (!status) {
         return <div />;
@@ -120,8 +136,11 @@ const FileDownloadButtons = (props: DownloadButtonsProps) => {
 
     return (
         <div className='mt-default'>
-            <UploadedFile description='Ballot Manifest' file={ ballotManifest } />
-            <UploadedFile description='CVR Export' file={ cvrExport } />
+            {/* fileType matches DeleteFileController.java */}
+            <UploadedFile description='Ballot Manifest' file={ ballotManifest }
+                          fileType='bmi' allowDelete={ allowDelete } />
+            <UploadedFile description='CVR Export' file={ cvrExport }
+                          fileType='cvr' allowDelete={ allowDelete } />
         </div>
     );
 };
