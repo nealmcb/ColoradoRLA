@@ -1,13 +1,13 @@
 import * as React from 'react';
 
-import { Breadcrumb, Button, Card, Intent } from '@blueprintjs/core';
+import { Breadcrumb, Button, Intent } from '@blueprintjs/core';
 
 import DOSLayout from 'corla/component/DOSLayout';
 
 import SeedForm from './SeedForm';
 
 const Breadcrumbs = () => (
-    <ul className='pt-breadcrumbs'>
+    <ul className='pt-breadcrumbs mb-default'>
         <li><Breadcrumb href='/sos' text='SoS' />></li>
         <li><Breadcrumb href='/sos/audit' text='Audit Admin' /></li>
         <li><Breadcrumb className='pt-breadcrumb-current' text='Seed' /></li>
@@ -42,18 +42,19 @@ class AuditSeedPage extends React.Component<PageProps> {
         const main =
             <div>
                 <Breadcrumbs />
-                <Card>
+                <div className='mb-default'>
                     <h3>Audit Definition - Enter Random Seed</h3>
-                    <Card>
+                    <div>
                         Enter the random seed generated from the public meeting
                         on { this.props.formattedPublicMeetingDate }.
-                    </Card>
-                    <Card>
+                    </div>
+                    <hr />
+                    <div>
                         <SeedForm initSeed={ this.state.form.seed }
                                   updateForm={ (seed: string) => { this.state.form.seed = seed; } }
                                   setValid={ (v: boolean) => { this.setValid(v); } } />
-                    </Card>
-                </Card>
+                    </div>
+                </div>
                 <div>
                     <Button onClick={ this.props.back }>Back</Button>
                     <Button className='ml-default'

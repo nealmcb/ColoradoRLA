@@ -45,7 +45,7 @@ const defaultCanonicalName = (
 };
 
 const Breadcrumbs = () => (
-    <ul className='pt-breadcrumbs'>
+    <ul className='pt-breadcrumbs mb-default'>
         <li><Breadcrumb href='/sos' text='SoS' />></li>
         <li><Breadcrumb href='/sos/audit' text='Audit Admin' /></li>
         <li><Breadcrumb className='pt-breadcrumb-current' text='Standardize Contest Names' /></li>
@@ -182,7 +182,7 @@ class StandardizeContestsPage extends React.Component<PageProps> {
             main =
                 <div>
                     <Breadcrumbs />
-                    <h2>Standardize Contest Names</h2>
+                    <h2 className='mb-default'>Standardize Contest Names</h2>
                     <Card>
                         <p>
                             Contest names must be standardized to group records
@@ -209,10 +209,12 @@ class StandardizeContestsPage extends React.Component<PageProps> {
             main =
                 <div>
                     <Breadcrumbs />
-                    <h2>Standardize Contest Names</h2>
-                    <Card>
-                        Waiting for counties to upload contest data.
-                    </Card>
+                    <h2 className='mb-default'>Standardize Contest Names</h2>
+                    <div  className='mb-default'>
+                        <Card>
+                            Waiting for counties to upload contest data.
+                        </Card>
+                    </div>
                     <Button onClick={ back }>Back</Button>
                     <Button className='ml-default'
                             disabled

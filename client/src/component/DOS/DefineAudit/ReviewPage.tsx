@@ -9,7 +9,7 @@ import counties from 'corla/data/counties';
 import { formatLocalDate } from 'corla/date';
 
 const Breadcrumbs = () => (
-    <ul className='pt-breadcrumbs'>
+    <ul className='pt-breadcrumbs mb-default'>
         <li><Breadcrumb href='/sos' text='SoS' />></li>
         <li><Breadcrumb href='/sos/audit' text='Audit Admin' /></li>
         <li><Breadcrumb className='pt-breadcrumb-current' text='Review' /></li>

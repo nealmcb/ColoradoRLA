@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Card, NumericInput } from '@blueprintjs/core';
+import { NumericInput } from '@blueprintjs/core';
 
 interface FormProps {
     onChange: (r: number) => void;
@@ -37,9 +37,9 @@ class RiskLimitForm extends React.Component<FormProps, FormState> {
         const { riskLimitPercent } = this.state;
 
         return (
-            <Card>
+            <div>
                 <label>
-                    Comparison Audits (%)
+                    <div className='mb-default'>Comparison Audits (%)</div>
                     <NumericInput
                         min={ toPercent(MIN_RISK_LIMIT) }
                         max={ toPercent(MAX_RISK_LIMIT) }
@@ -47,7 +47,7 @@ class RiskLimitForm extends React.Component<FormProps, FormState> {
                         value={ riskLimitPercent }
                         onValueChange={ this.onChange } />
                 </label>
-            </Card>
+            </div>
         );
     }
 

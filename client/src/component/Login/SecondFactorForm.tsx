@@ -42,7 +42,7 @@ export default class SecondFactorForm extends React.Component<FormProps, FormSta
 
         return (
             <form onSubmit={ this.onSubmit }>
-                <p>
+                <p className='mb-default'>
                     Enter a response to the grid challenge
                     {' '} <span className='pt-ui-text-large font-weight-bold'>{ challenge }</span>
                     {' '} for the user

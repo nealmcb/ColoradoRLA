@@ -43,6 +43,35 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /*
+ * Display utilities
+ */
+
+ .block {
+   display: block;
+ }
+
+/*
+ * Divider / Horizontal rule
+ */
+
+hr {
+  margin: 40px 0;
+}
+
+/*
+ * Headings
+ */
+
+.page-heading {
+  font-size: 21px;
+  margin-bottom: 50px;
+}
+
+.section-heading {
+  font-size: 18px;
+}
+
+/*
  * Layout utilities
  */
 
@@ -100,13 +129,29 @@ h1, h2, h3, h4, h5, h6 {
 
 .l-footer {
   border-top: 1px solid #CED9E0;
-  margin-top: 20px;
+  margin-top: 60px;
   padding: 15px;
 }
 
 /*
  * Modules
  */
+
+/* Forms */
+
+.form-group-label {
+  margin-bottom: 10px;
+  display: block;
+}
+
+.form-controls {
+  margin-top: 30px;
+}
+
+.form-container-heading {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
 
 /* Custom table */
 
@@ -177,13 +222,15 @@ h1, h2, h3, h4, h5, h6 {
 /* Login */
 
 .login {
-  max-width: 550px;
+  max-width: 400px;
   margin-left: auto;
   margin-right: auto;
+  margin-top: 100px;
 }
 
 .login h1 {
   margin-bottom: 30px;
+  font-size: 21px;
 }
 
 /* License */
@@ -405,6 +452,8 @@ dl.uploaded-file-details dd {
 .state-dashboard-updates-preface-description{
   color: #5C7080;
   flex-basis: 50%;
+  margin-top: 30px;
+  margin-bottom: 20px;
 }
 
 .state-dashboard-updates-preface-search {
@@ -794,4 +843,18 @@ th.rla-county-contest-info {
 #item5:checked ~ #content5 {
     max-height: 350px;
     transform: scaleY(1);
+}
+
+.uploaded-file-name {
+  padding: 10px 20px;
+  display: inline-block;
+  background-color: #efefef;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-radius: 2px;
+  font-size: 16px;
+}
+
+.dropzone {
+  cursor: pointer;
 }

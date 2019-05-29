@@ -49,7 +49,7 @@ class UploadFileButton extends React.Component<UploadFileButtonProps, UploadFile
                                 Drag and drop or click here to select the file you wish to use as the source
                                 for standardized contest names across jurisdictions.
                             </strong>
-                            <div>File requirements:</div>
+                            <div className='mt-default'>File requirements:</div>
                             <ul>
                                 <li>File must be CSV formatted, with a <em>.csv</em> or <em>.txt</em>
                                     &nbsp;extension. Other file types are not accepted</li>
@@ -64,10 +64,14 @@ class UploadFileButton extends React.Component<UploadFileButtonProps, UploadFile
                 <aside>
                     <div className='import-file'
                          style={ this.areFilesReady() ? { display: 'inline' } : {} }>
-                        <strong>Ready to import: </strong>
+                        <div className='mt-default'><strong>Ready to import:</strong></div>
                         {
                             this.state.files.map((file: File) => {
-                                return <span key={ file.name }>{ file.name } ({ file.size } bytes.)</span>;
+                                return (
+                                    <span className='uploaded-file-name' key={ file.name }>
+                                        { file.name } ({ file.size } bytes.)
+                                    </span>
+                                );
                             })
                         }
                     </div>

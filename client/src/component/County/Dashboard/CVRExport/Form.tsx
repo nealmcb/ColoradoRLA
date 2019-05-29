@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import {
     Button,
-    Card,
     EditableText,
     FileInput,
     FormGroup,
@@ -51,30 +50,37 @@ const CVRExportForm = (props: FormProps) => {
                                : '';
 
     return (
-        <Card>
-            <Card>
-                <div style={{ width: '600px' }}>
-                    <FormGroup label={ <span className='pt-ui-text-large font-weight-bold'>CVR Export</span> }>
+        <div>
+
+            <div style={{ width: '500px' }}>
+                <div className='mb-default'>
+                    <FormGroup label={
+                        <span className='form-group-label pt-ui-text-large font-weight-bold'>
+                            CVR Export
+                        </span> }>
                         <FileInput fill={ true } text={ fileName } onInputChange={ onFileChange } />
                     </FormGroup>
-                    <FormGroup label={
-                        <span className='pt-ui-text-large font-weight-bold'>
-                            SHA-256 hash for CVR Export
-                        </span>
-                    }>
-                        <EditableText className='pt-input'
-                                      minWidth={ 600 }
-                                      maxLength={ 64 }
-                                      value={ hash }
-                                      onChange={ onHashChange } />
-                    </FormGroup>
                 </div>
-            </Card>
-            { renderedCancelButton }
-            <Button intent={ Intent.PRIMARY } onClick={ upload }>
-                Upload
-            </Button>
-        </Card>
+                <FormGroup label={
+                    <span className='form-group-label pt-ui-text-large font-weight-bold'>
+                        SHA-256 hash for CVR Export
+                    </span>
+                }>
+                    <EditableText className='pt-input'
+                                    minWidth={ 600 }
+                                    maxLength={ 64 }
+                                    value={ hash }
+                                    onChange={ onHashChange } />
+                </FormGroup>
+            </div>
+            <div className='form-controls'>
+                { renderedCancelButton }
+                <Button intent={ Intent.PRIMARY } onClick={ upload }>
+                    Upload
+                </Button>
+            </div>
+            <hr />
+        </div>
     );
 };
 

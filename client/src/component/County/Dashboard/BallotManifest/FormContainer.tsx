@@ -31,10 +31,12 @@ const UploadedBallotManifest = (props: UploadedProps) => {
         );
     } else {
         return (
-            <Card>
-                <div><strong>Ballot Manifest</strong></div>
-                <div><strong>File name: </strong>"{ file.fileName }"</div>
-                <div><strong>SHA-256 hash: </strong> { file.hash }</div>
+            <div>
+                <div className='form-container-heading'><strong>Ballot Manifest</strong></div>
+                <div className='mb-default'>
+                    <div><strong>File name: </strong>"{ file.fileName }"</div>
+                    <div><strong>SHA-256 hash: </strong> { file.hash }</div>
+                </div>
                 <div className='error'>
                     <strong>{file.result.success ? '' : 'Error Message: ' }</strong>
                     { file.result.errorMessage }
@@ -47,14 +49,15 @@ const UploadedBallotManifest = (props: UploadedProps) => {
                     <strong>{file.result.success ? '' : 'Error row content: ' }</strong>
                     { file.result.errorRowContent }
                 </div>
+                <Button onClick={ handleDeleteFile }>
+                    Delete File
+                </Button>
+                <span>&nbsp;&nbsp; </span>
                 <Button intent={ Intent.PRIMARY } onClick={ enableReupload }>
                     Re-upload
                 </Button>
-                <span>&nbsp;&nbsp; </span>
-                <Button intent={ Intent.PRIMARY } onClick={ handleDeleteFile }>
-                    Delete File
-                </Button>
-            </Card>
+                <hr />
+            </div>
         );
     }
 };
