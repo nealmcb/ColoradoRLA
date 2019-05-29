@@ -1,7 +1,7 @@
-# ColoradoRLA Licensing
+# Colorado RLA Software Licensing
 
-The code in this Colorado RLA Tool repository, except as explicitly noted
-otherwise, is Copyright (C) 2017 the Colorado Department of State.
+The code in this Colorado RLA Software repository, except as explicitly noted
+otherwise, is Copyright © 2019 the Colorado Department of State.
 
 The code, except as explicitly noted, is licensed under the GNU Affero General
 Public License Version 3 (AGPLv3). A copy of the AGPLv3 is provided in the
