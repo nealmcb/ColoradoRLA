@@ -111,15 +111,17 @@ public class CVRExportImport extends AbstractCountyDashboardEndpoint {
   @SuppressWarnings({"PMD.ConfusingTernary"})
   public String endpointBody(final Request the_request, final Response the_response) {
     final County county = Main.authentication().authenticatedCounty(the_request);
-    UploadedFileDTO upF = null;
-    final Map<String, Instant> responseBody = new HashMap<>();
-
-
     // check logged in as county admin
     if (county == null) {
       unauthorized(the_response, "unauthorized administrator for CVR import");
       return my_endpoint_result.get();
     }
+
+
+    final CountyDashboard cdb = Persistence.getByID(county.id(), CountyDashboard.class);
+    UploadedFileDTO upF = null;
+    final Map<String, Instant> responseBody = new HashMap<>();
+
 
     // check valid json
     try {
@@ -158,6 +160,7 @@ public class CVRExportImport extends AbstractCountyDashboardEndpoint {
       upF.setStatus(FileStatus.IMPORTING.toString());
       upF.setCountyId(county.id());
       UploadedFileQueries.updateStatus(upF);
+      cdb.setCVRImportStatus(new ImportStatus(ImportState.IN_PROGRESS));
       // spawn a thread to do the import; this endpoint always immediately
       // returns a successful result if we get to this point
       (new Thread(new ImportFileController(upF))).start();
