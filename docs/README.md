@@ -32,7 +32,6 @@ Guides to the source code can be found below:
   might be useful to read to understand how the project fits together.
 - [`server`][server-readme]: The back-end of the tool including the API
   server. This is where the bulk of the code is located.
-- `specs`: Formal specifications developed by Free and Fair, not currently used.
 - [`test`][test]: End-to-end test scripts, test credentials, and test data.
 - `tools`: Used by Free and Fair to build documentation, not currently used.
 
