@@ -35,7 +35,7 @@ class PublicMeetingDateForm extends React.Component<FormProps, FormState> {
     public render() {
         return (
             <div>
-                <div className="mb-default">Public Meeting Date</div>
+                <div className='mb-default'>Public Meeting Date</div>
                 <DateInput { ...blueprintFormatter() }
                            onChange={ this.onDateChange }
                            value={ parseLocalDate(this.state.date) } />

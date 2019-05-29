@@ -32,8 +32,8 @@ const UploadedBallotManifest = (props: UploadedProps) => {
     } else {
         return (
             <div>
-                <div className="form-container-heading"><strong>Ballot Manifest</strong></div>
-                <div className="mb-default">
+                <div className='form-container-heading'><strong>Ballot Manifest</strong></div>
+                <div className='mb-default'>
                     <div><strong>File name: </strong>"{ file.fileName }"</div>
                     <div><strong>SHA-256 hash: </strong> { file.hash }</div>
                 </div>

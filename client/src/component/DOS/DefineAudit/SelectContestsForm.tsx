@@ -243,7 +243,7 @@ class SelectContestsForm extends React.Component<FormProps, FormState> {
         });
 
         return (
-            <div className="mb-default">
+            <div className='mb-default'>
                 <div>
                    <p>According to Colorado statute, at least one statewide contest and
                     one countywide contest must be chosen for audit. The Secretary of State
@@ -264,7 +264,7 @@ class SelectContestsForm extends React.Component<FormProps, FormState> {
                         value={ this.state.filter }
                         onChange={ this.onFilterChange } />
                 </div>
-                <div className="mt-default mb-default">
+                <div className='mt-default mb-default'>
                     Click on the "Contest" column name to sort by that
                     column's data. To reverse sort, click on the column name again.
                 </div>

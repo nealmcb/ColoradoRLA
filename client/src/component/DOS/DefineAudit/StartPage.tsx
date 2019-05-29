@@ -79,16 +79,16 @@ const AuditPage = (props: PageProps) => {
         <div>
             <Breadcrumbs />
 
-            <h2 className="page-heading">Administer an Audit</h2>
+            <h2 className='page-heading'>Administer an Audit</h2>
 
             <div>
-                <h3 className="section-heading">Election Info</h3>
-                <div className="mb-default">Enter the date the election will take place, and the type of election.</div>
-                <div className="mb-default">
+                <h3 className='section-heading'>Election Info</h3>
+                <div className='mb-default'>Enter the date the election will take place, and the type of election.</div>
+                <div className='mb-default'>
                     <ElectionDateForm onChange={ setElectionDate }
                                   initDate={ electionDate } />
                 </div>
-                <div className="mb-default">
+                <div className='mb-default'>
                     <ElectionTypeForm onChange={ setType }
                                   initType={ type } />
                 </div>
@@ -96,16 +96,16 @@ const AuditPage = (props: PageProps) => {
             <hr />
 
             <div>
-                <h3 className="section-heading">Public Meeting Date</h3>
-                <div className="mb-default">Enter the date of the public meeting to establish the random seed.</div>
+                <h3 className='section-heading'>Public Meeting Date</h3>
+                <div className='mb-default'>Enter the date of the public meeting to establish the random seed.</div>
                 <PublicMeetingDateForm onChange={ setPublicMeetingDate }
                                        initDate={ publicMeetingDate } />
             </div>
             <hr />
 
             <div>
-                <h3 className="section-heading">Risk Limit</h3>
-                <div className="mb-default">
+                <h3 className='section-heading'>Risk Limit</h3>
+                <div className='mb-default'>
                   Enter the risk limit for comparison audits as a percentage.
                 </div>
                 <RiskLimitForm onChange={ setRiskLimit }
@@ -114,7 +114,7 @@ const AuditPage = (props: PageProps) => {
             </div>
             <hr />
             <div>
-                <h3 className="section-heading">Contests</h3>
+                <h3 className='section-heading'>Contests</h3>
                 <UploadFileButton onChange={ setUploadedFiles } />
             </div>
 

@@ -27,7 +27,7 @@ class SeedForm extends React.Component<FormProps, FormState> {
     public render() {
         return (
             <label>
-               <strong className="block mb-default"> Seed:</strong>
+               <strong className='block mb-default'> Seed:</strong>
                 <EditableText
                     className='pt-input'
                     minWidth={ 200 }

@@ -42,7 +42,7 @@ class AuditSeedPage extends React.Component<PageProps> {
         const main =
             <div>
                 <Breadcrumbs />
-                <div className="mb-default">
+                <div className='mb-default'>
                     <h3>Audit Definition - Enter Random Seed</h3>
                     <div>
                         Enter the random seed generated from the public meeting

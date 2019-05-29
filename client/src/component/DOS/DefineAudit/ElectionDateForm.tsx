@@ -35,7 +35,7 @@ class ElectionDateForm extends React.Component<FormProps, FormState> {
     public render() {
         return (
             <div>
-                <div className="mb-default">Election Date</div>
+                <div className='mb-default'>Election Date</div>
                 <DateInput { ...blueprintFormatter() }
                            onChange={ this.onDateChange }
                            value={ parseLocalDate(this.state.date) } />
