@@ -72,22 +72,34 @@ interface ContainerState {
         hash: string;
     };
     reupload: boolean;
+    uploadClicked: boolean;
 }
 
 class BallotManifestFormContainer extends React.Component<ContainerProps, ContainerState> {
-    public state: ContainerState = {
-        fileDeleted: false,
-        form: {
-            file: undefined,
-            hash: '',
-        },
-        reupload: false,
-    };
+    public constructor(props: ContainerProps) {
+        super(props);
+
+        this.state = {
+            fileDeleted: false,
+            form: {
+                file: undefined,
+                hash: '',
+            },
+            reupload: false,
+            uploadClicked: false,
+        };
+    }
+
+    public componentDidUpdate(prevProps: ContainerProps) {
+        if (prevProps.uploadingFile !== this.props.uploadingFile) {
+            this.setState({ uploadClicked: false });
+        }
+    }
 
     public render() {
         const { countyState, fileUploaded, uploadingFile } = this.props;
 
-        if (uploadingFile) {
+        if (this.state.uploadClicked || uploadingFile) {
             return <Uploading />;
         }
 
@@ -155,10 +167,12 @@ class BallotManifestFormContainer extends React.Component<ContainerProps, Contai
         const { file, hash } = this.state.form;
 
         if (file) {
-            uploadBallotManifest(countyState.id!, file, hash);
-        }
+            this.setState({ uploadClicked: true });
 
-        this.disableReupload();
+            uploadBallotManifest(countyState.id!, file, hash);
+
+            this.disableReupload();
+        }
     }
 }
 
