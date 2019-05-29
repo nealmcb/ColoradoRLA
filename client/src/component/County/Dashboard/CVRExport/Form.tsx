@@ -54,7 +54,7 @@ const CVRExportForm = (props: FormProps) => {
 
             <div style={{ width: '500px' }}>
                 <div className='mb-default'>
-                    <FormGroup label={ 
+                    <FormGroup label={
                         <span className='form-group-label pt-ui-text-large font-weight-bold'>
                             CVR Export
                         </span> }>

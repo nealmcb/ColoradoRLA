@@ -54,8 +54,8 @@ const BallotManifestForm = (props: FormProps) => {
 
             <div style={{ width: '500px' }}>
                 <div className='mb-default'>
-                    <FormGroup 
-                        label={ 
+                    <FormGroup
+                        label={
                             <span className='form-group-label pt-ui-text-large font-weight-bold'>
                                 Ballot Manifest
                             </span> }>
@@ -68,7 +68,6 @@ const BallotManifestForm = (props: FormProps) => {
                             SHA-256 hash for Ballot Manifest
                         </span>
                     }>
-                
                     <EditableText className='pt-input'
                                     minWidth={ 600 }
                                     maxLength={ 64 }

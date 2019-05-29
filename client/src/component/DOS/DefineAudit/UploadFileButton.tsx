@@ -68,7 +68,9 @@ class UploadFileButton extends React.Component<UploadFileButtonProps, UploadFile
                         {
                             this.state.files.map((file: File) => {
                                 return (
-                                    <span className='uploaded-file-name' key={ file.name }>{ file.name } ({ file.size } bytes.)</span>
+                                    <span className='uploaded-file-name' key={ file.name }>
+                                        { file.name } ({ file.size } bytes.)
+                                    </span>
                                 );
                             })
                         }
