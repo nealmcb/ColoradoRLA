@@ -1,8 +1,5 @@
-/server/eclipse-project/.settings/org.testng.eclipse.maven.prefs
-/specs/pvs/.pvscontext
-/specs/pvs/corla.tex
-.DS_Store
-.vagrant/
 /docker-compose.override.yml
+
+/server/eclipse-project/.settings/org.testng.eclipse.maven.prefs
 /server/eclipse-project/gc.log
 /server/eclipse-project/target/
