@@ -23,16 +23,6 @@ fewer ballots than a full hand recount or fixed-percentage audit, while also
 providing strong statistical evidence that the outcome of the election was
 correct.
 
-## Objectives
-
-- State and county election officials are able to successfully conduct a
-  statewide risk-limiting audit of their election
-- Election administrators and citizen Audit Boards find the RLA Software easy to use
-  and helpful in conducting the audit
-- Public observers have increased confidence in the electoral outcomes as a
-  result of the risk-limiting audit
-- The RLA Software is reliable, scalable, and performant
-
 ## Description
 
 The RLA Software is designed to facilitate a statistically valid audit of vote
