@@ -2,7 +2,7 @@ import * as React from 'react';
 import { match } from 'react-router-dom';
 
 import withDOSState from 'corla/component/withDOSState';
-import withSync from 'corla/component/withSync';
+import withPoll from 'corla/component/withPoll';
 
 import counties from 'corla/data/counties';
 
@@ -14,6 +14,7 @@ interface ContainerProps {
 }
 
 class CountyDetailContainer extends React.Component<ContainerProps> {
+
     public render() {
         const { countyStatus } = this.props;
 
@@ -40,8 +41,9 @@ function mapStateToProps(dosState: DOS.AppState) {
     return { countyStatus };
 }
 
-export default withSync(
+export default withPoll(
     withDOSState(CountyDetailContainer),
-    'DOS_COUNTY_DETAIL_SYNC',
+    'DOS_DASHBOARD_POLL_START',
+    'DOS_DASHBOARD_POLL_STOP',
     mapStateToProps,
 );
