@@ -144,17 +144,40 @@ public final class CountyContestResultQueries {
    * @param the_id The county ID.
    */
   public static Integer deleteForCounty(final Long the_county_id) {
-    final Set<CountyContestResult> results = 
-        forCounty(Persistence.getByID(the_county_id, County.class));
-    Integer n = 0;
-    if (results != null) {
+    final Session s = Persistence.currentSession();
+
+    final Set<CountyContestResult> results =
+      forCounty(Persistence.getByID(the_county_id, County.class));
+
+    final List<Long> contestIds = new ArrayList();
+
+    if (results.size() > 0) {
       for (final CountyContestResult c : results) {
-        Persistence.delete(c);
-        Persistence.delete(c.contest());
-        n++;
+        contestIds.add(c.contest().id());
       }
+
+      // optimizing for speed, over a network connection
+      final Query q = s
+        .createNativeQuery("begin;"
+                           +"delete from county_contest_comparison_audit where contest_id in (:contest_ids);"
+                           +"delete from contests_to_contest_results where contest_id in (:contest_ids);"
+                           +"delete from contest_to_audit where contest_id in (:contest_ids);"
+                           +"delete from contest_choice where contest_id in (:contest_ids);"
+
+                           +"delete from county_contest_vote_total "
+                           +" where result_id in (select id from county_contest_result "
+                           +"                       where contest_id in (:contest_ids));"
+
+                           +"delete from county_contest_result where contest_id in (:contest_ids);"
+
+                           +"commit"
+
+                           );
+      q.setParameter("contest_ids", contestIds);
+      q.executeUpdate();
+
     }
     Persistence.flush();
-    return n;
+    return contestIds.size();
   }
 }
