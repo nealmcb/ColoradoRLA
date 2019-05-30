@@ -22,10 +22,9 @@ class UploadedFileCard extends React.Component<UploadedFileProps, UploadedFileSt
         this.state = { deleting: false };
     }
 
-    public componentDidUpdate(prevProps: UploadedFileProps) {
-        /* the file has been deleted, says the dosDashboardRefresh */
-        if (!!prevProps.file && !this.props.file) {
-            this.setState({deleting: false});
+    public componentDidUpdate() {
+        if (this.state.deleting && !this.props.file) {
+            this.setState({ deleting: false });
         }
     }
 
@@ -42,7 +41,7 @@ class UploadedFileCard extends React.Component<UploadedFileProps, UploadedFileSt
 
             const onClick = () => downloadFile(file.id);
             const onDelete = () => {
-                this.setState({deleting: true});
+                this.setState({ deleting: true });
                 deleteFileForCounty(fileType, file.countyId);
             };
 

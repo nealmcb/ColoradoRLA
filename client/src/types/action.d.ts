@@ -16,6 +16,7 @@ declare namespace Action {
         | CountyFetchCvrOk
         | CountyLoginOk
         | DOSDashboardRefreshOk
+        | DOSDeleteFileOk
         | DOSFetchContestsOk
         | DOSLoginOk
         | DeleteFileOK
@@ -92,6 +93,11 @@ declare namespace Action {
 
     interface DOSDashboardRefreshOk {
         type: 'DOS_DASHBOARD_REFRESH_OK';
+        data: any;
+    }
+
+    interface DOSDeleteFileOk {
+        type: 'DOS_DELETE_FILE_OK';
         data: any;
     }
 

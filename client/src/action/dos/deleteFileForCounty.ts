@@ -12,27 +12,25 @@ async function deleteFileForCounty(fileType: string, countyId: number) {
     };
 
     try {
-        action('DELETE_FILE_SEND', { fileType, countyId });
+        action('DOS_DELETE_FILE_SEND', { fileType, countyId });
 
         const r = await fetch(deleteFileUrl, init);
 
         const received = await r.json().catch(empty);
 
         if (!r.ok) {
-            action('DELETE_FILE_FAIL', {fileType, received});
+            action('DOS_DELETE_FILE_FAIL', { fileType, received });
             return false;
         }
 
-        action('DELETE_FILE_OK', {fileType, countyId, received});
+        action('DOS_DELETE_FILE_OK', { fileType, countyId, received });
         return true;
 
     } catch (e) {
-        action('DELETE_FILE_NETWORK_FAIL', {fileType, countyId});
+        action('DOS_DELETE_FILE_NETWORK_FAIL', { fileType, countyId });
 
         throw e;
-
     }
-
 }
 
 export default deleteFileForCounty;
