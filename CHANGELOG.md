@@ -10,7 +10,14 @@ with the following tags indicating the components affected:
 - `TOOLING` refers to changes to tooling that falls outside the UI or API, such
   as the RLA export.
 
-## 2.3.4 - UNRELEASED
+## 2.3.5 - UNRELEASED
+
+## 2.3.4 - Bugfix release
+- [UI - style updates][pr154]
+- [UI - Fix slow-to-appear upload spinner][pr157]
+- [UI - indicate upload in progress rather than an error][pr158]
+- [API - Delete file as the state][pr159]
+- [API - fast contest delete][pr160]
 
 ## 2.3.3 - Bugfix release
 - [API - Throw error on invalid ballot manifests][pr149]
@@ -256,3 +263,8 @@ This is [FreeAndFair's most recent tag][1.1.0.3].
 [pr148]: https://github.com/democracyworks/ColoradoRLA/pull/148
 [pr149]: https://github.com/democracyworks/ColoradoRLA/pull/149
 [pr152]: https://github.com/democracyworks/ColoradoRLA/pull/152
+[pr154]: https://github.com/democracyworks/ColoradoRLA/pull/154
+[pr157]: https://github.com/democracyworks/ColoradoRLA/pull/157
+[pr158]: https://github.com/democracyworks/ColoradoRLA/pull/158
+[pr159]: https://github.com/democracyworks/ColoradoRLA/pull/159
+[pr160]: https://github.com/democracyworks/ColoradoRLA/pull/160
