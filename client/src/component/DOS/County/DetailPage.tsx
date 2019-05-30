@@ -106,7 +106,7 @@ const CountyDetails = (props: DetailsProps) => {
                     </tr>
                 </tbody>
             </table>
-            <FileDownloadButtons status={ status } />
+            <FileDownloadButtons status={ status } allowDelete={ status.asmState !== 'COUNTY_AUDIT_UNDERWAY' } />
             { auditBoardSection }
         </div>
     );

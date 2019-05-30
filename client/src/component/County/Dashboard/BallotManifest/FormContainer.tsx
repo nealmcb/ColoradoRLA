@@ -49,7 +49,7 @@ const UploadedBallotManifest = (props: UploadedProps) => {
                     <strong>{file.result.success ? '' : 'Error row content: ' }</strong>
                     { file.result.errorRowContent }
                 </div>
-                <Button onClick={ handleDeleteFile }>
+                <Button intent={ Intent.PRIMARY } onClick={ handleDeleteFile }>
                     Delete File
                 </Button>
                 <span>&nbsp;&nbsp; </span>

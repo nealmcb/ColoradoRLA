@@ -117,7 +117,7 @@ const Main = (props: MainProps) => {
                               : <FileUploadContainer />;
 
     const fileDownloadButtons = auditStarted
-                              ? <FileDownloadButtons status={ countyState } />
+                              ? <FileDownloadButtons status={ countyState } allowDelete={ false } />
                               : <div />;
 
     const reportType = auditComplete
