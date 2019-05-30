@@ -36,7 +36,7 @@ const UploadedCVRExport = (props: UploadedProps) => {
             <div>
                 <div className='mb-default'>
                     <div className='form-container-heading'><strong>CVR Export</strong></div>
-                    <div className='mb-default'><strong>File name: </strong>"{ file.fileName }"</div>
+                    <div><strong>File name: </strong>"{ file.fileName }"</div>
                     <div><strong>SHA-256 hash: </strong>{ file.hash }</div>
                 </div>
                 <div className='error'>
