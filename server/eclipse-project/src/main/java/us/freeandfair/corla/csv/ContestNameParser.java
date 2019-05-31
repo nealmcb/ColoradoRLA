@@ -190,7 +190,7 @@ public class ContestNameParser {
         final String choiceNames = record.getOrDefault("ContestChoices", "");
 
         if (!choiceNames.isEmpty()){
-          addChoices(contestName, choiceNames.split(","));
+          addChoices(contestName, choiceNames.split("\\s*,\\s*"));
         }
 
         if (countyName.isEmpty() || contestName.isEmpty()) {

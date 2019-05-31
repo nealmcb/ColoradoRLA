@@ -39,11 +39,8 @@ public class ContestNameParserTest {
     malformedCSV = "County Name\",Contest Name\t\nboulder,\n";
 
     withChoicesCSV = "CountyName,ContestName,ContestChoices\n" +
-      "boulder,IPA,\"Mojo,Moirai\"\nboulder,kombucha,\"happy leaf,Rowdy Mermaid\"\nboulder,coffee\n" +
+      "boulder,IPA,\"Mojo , Moirai\"\nboulder,kombucha,\"happy leaf,Rowdy Mermaid\"\nboulder,coffee\n" +
       "denver,IPA\ndenver,stout\ndenver,coffee";
-
-
-
   }
 
   @Test()
