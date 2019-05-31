@@ -10,7 +10,12 @@ with the following tags indicating the components affected:
 - `TOOLING` refers to changes to tooling that falls outside the UI or API, such
   as the RLA export.
 
+## 2.3.6 - UNRELEASED
+
 ## 2.3.5 - Bugfix release
+- [UI - Immediately show deleted files on the DOS dashboard][pr161]
+- [API - Ensure BMI and CVR deletions are reflected in the ASM][pr162]
+- [API - Ensure contests are deleted][pr163]
 
 ## 2.3.4 - Bugfix release
 - [UI - style updates][pr154]
@@ -268,3 +273,6 @@ This is [FreeAndFair's most recent tag][1.1.0.3].
 [pr158]: https://github.com/democracyworks/ColoradoRLA/pull/158
 [pr159]: https://github.com/democracyworks/ColoradoRLA/pull/159
 [pr160]: https://github.com/democracyworks/ColoradoRLA/pull/160
+[pr161]: https://github.com/democracyworks/ColoradoRLA/pull/161
+[pr162]: https://github.com/democracyworks/ColoradoRLA/pull/162
+[pr163]: https://github.com/democracyworks/ColoradoRLA/pull/163
