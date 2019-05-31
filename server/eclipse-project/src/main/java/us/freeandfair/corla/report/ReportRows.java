@@ -331,14 +331,20 @@ public class ReportRows {
 
   /** risk limit achieved according to math.Audit **/
   public static BigDecimal riskMeasurement(final ComparisonAudit ca) {
-    final BigDecimal result =  Audit.pValueApproximation(ca.getAuditedSampleCount(),
-                                                         ca.getDilutedMargin(),
-                                                         ca.getGamma(),
-                                                         ca.discrepancyCount(-1),
-                                                         ca.discrepancyCount(-2),
-                                                         ca.discrepancyCount(1),
-                                                         ca.discrepancyCount(2));
-    return result.setScale(3, BigDecimal.ROUND_HALF_UP);
+    if (ca.getAuditedSampleCount() > 0
+        && ca.getDilutedMargin().compareTo(BigDecimal.ZERO) > 0) {
+      final BigDecimal result =  Audit.pValueApproximation(ca.getAuditedSampleCount(),
+                                                           ca.getDilutedMargin(),
+                                                           ca.getGamma(),
+                                                           ca.discrepancyCount(-1),
+                                                           ca.discrepancyCount(-2),
+                                                           ca.discrepancyCount(1),
+                                                           ca.discrepancyCount(2));
+      return result.setScale(3, BigDecimal.ROUND_HALF_UP);
+    } else {
+      // full risk (100%) when nothing is known
+      return BigDecimal.ONE;
+    }
   }
 
   /** compare risk sought vs measured **/
