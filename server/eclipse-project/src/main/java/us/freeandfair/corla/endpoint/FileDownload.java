@@ -24,7 +24,6 @@ import spark.Request;
 import spark.Response;
 
 import us.freeandfair.corla.Main;
-import us.freeandfair.corla.json.UploadedFileDTO;
 import us.freeandfair.corla.model.County;
 import us.freeandfair.corla.model.UploadedFile;
 import us.freeandfair.corla.persistence.Persistence;

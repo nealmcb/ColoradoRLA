@@ -33,8 +33,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
-import com.google.gson.annotations.JsonAdapter;
-
 import us.freeandfair.corla.persistence.PersistentEntity;
 import us.freeandfair.corla.persistence.ResultConverter;
 import us.freeandfair.corla.csv.Result;

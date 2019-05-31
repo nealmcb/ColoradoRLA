@@ -1,8 +1,6 @@
 package us.freeandfair.corla.json;
 
-
 import us.freeandfair.corla.model.UploadedFile;
-import us.freeandfair.corla.csv.DominionCVRExportParser;
 import us.freeandfair.corla.csv.Result;
 import us.freeandfair.corla.util.SuppressFBWarnings;
 

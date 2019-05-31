@@ -1,7 +1,5 @@
 package us.freeandfair.corla.controller;
 
-import java.util.Set;
-
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -9,27 +7,21 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import us.freeandfair.corla.Main;
-import us.freeandfair.corla.controller.DeleteFileController;
+import us.freeandfair.corla.asm.ASMEvent.CountyDashboardEvent;
+import us.freeandfair.corla.asm.CountyDashboardASM;
+import us.freeandfair.corla.asm.ASMUtilities;
 import us.freeandfair.corla.csv.DominionCVRExportParser;
 import us.freeandfair.corla.csv.Result;
 import us.freeandfair.corla.json.UploadedFileDTO;
 import us.freeandfair.corla.model.County;
 import us.freeandfair.corla.model.CountyDashboard;
-import us.freeandfair.corla.model.DoSDashboard;
 import us.freeandfair.corla.model.ImportStatus;
 import us.freeandfair.corla.model.ImportStatus.ImportState;
-
-import us.freeandfair.corla.asm.ASMEvent.CountyDashboardEvent;
-import us.freeandfair.corla.asm.CountyDashboardASM;
-import us.freeandfair.corla.asm.ASMUtilities;
-import us.freeandfair.corla.model.UploadedFile;
 import us.freeandfair.corla.model.UploadedFile.FileStatus;
+import us.freeandfair.corla.persistence.Persistence;
 import us.freeandfair.corla.query.CastVoteRecordQueries;
 import us.freeandfair.corla.query.CountyContestResultQueries;
 import us.freeandfair.corla.query.UploadedFileQueries;
-
-import us.freeandfair.corla.persistence.Persistence;
-
 import us.freeandfair.corla.util.UploadedFileStreamer;
 
 public class ImportFileController implements Runnable {

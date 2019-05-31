@@ -15,8 +15,8 @@ import spark.Request;
 import spark.Response;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 
 import java.util.Locale;
 
