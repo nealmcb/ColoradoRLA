@@ -4,6 +4,7 @@ package us.freeandfair.corla.controller;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import us.freeandfair.corla.asm.ASMEvent.CountyDashboardEvent;
 import us.freeandfair.corla.asm.ASMUtilities;
 import us.freeandfair.corla.asm.CountyDashboardASM;
 import us.freeandfair.corla.model.CountyDashboard;
@@ -54,7 +55,7 @@ public abstract class DeleteFileController {
   }
 
   /** reset cvr file info or bmi info on the county dashboard **/
-  public static Boolean resetDashboards(final Long countyId,final  String fileType)
+  public static Boolean resetDashboards(final Long countyId, final String fileType)
     throws DeleteFileFail {
     final CountyDashboard cdb = Persistence.getByID(countyId, CountyDashboard.class);
     if ("cvr".equals(fileType)) {
@@ -83,13 +84,32 @@ public abstract class DeleteFileController {
     return true;
   }
 
-  /** if both cvr and bmi have been deleted use a asm reset shortcut **/
+  /**
+   * Re-initialize county dashboard ASM state based on newly-deleted files
+   *
+   * Uses an ASM shortcut if both are deleted, otherwises assumes that before
+   * the deletion, both the CVR and ballot manifests were uploaded successfully,
+   * and transitions the ASM backward to indicate removal of the respective
+   * files.
+   *
+   * @param cdb the county dashboard to modify
+   */
   public static void reinitializeCDB(final CountyDashboard cdb) {
+    final CountyDashboardASM cdbASM =
+        ASMUtilities.asmFor(CountyDashboardASM.class, String.valueOf(cdb.id()));
+
+    // no CVR, no manifest
     if (null == cdb.cvrFile() && null == cdb.manifestFile()) {
-      final CountyDashboardASM countyDashboardASM = ASMUtilities.asmFor(CountyDashboardASM.class,
-                                                                        String.valueOf(cdb.id()));
-      countyDashboardASM.reinitialize();
-      ASMUtilities.save(countyDashboardASM);
+      cdbASM.reinitialize();
+      ASMUtilities.save(cdbASM);
+    // no CVR, yes manifest
+    } else if (null == cdb.cvrFile() && null != cdb.manifestFile()) {
+      cdbASM.stepEvent(CountyDashboardEvent.DELETE_CVRS_EVENT);
+      ASMUtilities.save(cdbASM);
+    // yes CVR, no manifest
+    } else if (null != cdb.cvrFile() && null == cdb.manifestFile()) {
+      cdbASM.stepEvent(CountyDashboardEvent.DELETE_BALLOT_MANIFEST_EVENT);
+      ASMUtilities.save(cdbASM);
     }
   }
 
