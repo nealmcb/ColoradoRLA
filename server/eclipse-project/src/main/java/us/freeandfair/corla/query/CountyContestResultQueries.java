@@ -170,6 +170,8 @@ public final class CountyContestResultQueries {
 
                            +"delete from county_contest_result where contest_id in (:contest_ids);"
 
+                           +"delete from contest where id in (:contest_ids);"
+
                            +"commit"
 
                            );
