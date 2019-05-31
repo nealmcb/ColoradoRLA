@@ -145,7 +145,8 @@ const TableRow = (props: TableRowProps) => {
             <td>{ row.choiceName }</td>
             <td>
                 <form>
-                    <select onChange={ changeHandler }
+                    <select className='max-width-select'
+                            onChange={ changeHandler }
                             defaultValue={ defaultName }>
                         <option key='' value=''>-- No change --</option>
                         {
