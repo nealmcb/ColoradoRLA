@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import * as React from 'react';
 import { connect } from 'react-redux';
 
@@ -94,7 +95,8 @@ class BallotManifestFormContainer extends React.Component<ContainerProps, Contai
     }
 
     public componentDidUpdate(prevProps: ContainerProps) {
-        if (prevProps.uploadingFile !== this.props.uploadingFile) {
+        // Remove temporary state override if anything at all changed
+        if (!_.isEqual(prevProps, this.props)) {
             this.setState({ uploadClicked: false });
         }
     }
