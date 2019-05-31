@@ -136,7 +136,8 @@ const ContestRow = (props: ContestRowProps) => {
                 <form>
                     <select name={ String(contest.id) }
                             onChange={ changeHandler }
-                            defaultValue={ defaultName }>
+                            defaultValue={ defaultName }
+                            className={ 'max-width-select'}>
                         <option value=''>-- No change --</option>
                         {
                           _.map(standards, n => <option value={ n }>{ n }</option>)

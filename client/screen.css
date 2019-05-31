@@ -153,6 +153,10 @@ hr {
   margin-bottom: 20px;
 }
 
+.max-width-select {
+  max-width: 450px;
+}
+
 /* Custom table */
 
 .pt-html-table.rla-table {
