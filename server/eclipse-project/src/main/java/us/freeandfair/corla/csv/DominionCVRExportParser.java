@@ -31,8 +31,8 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.text.WordUtils;
-import org.apache.log4j.Logger;
 import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import us.freeandfair.corla.model.CVRContestInfo;
 import us.freeandfair.corla.model.CastVoteRecord;

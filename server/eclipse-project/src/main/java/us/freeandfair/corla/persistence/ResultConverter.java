@@ -1,7 +1,6 @@
 package us.freeandfair.corla.persistence;
 
 import java.lang.reflect.Type;
-import java.util.Set;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
@@ -11,7 +10,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import us.freeandfair.corla.csv.Result;
-import us.freeandfair.corla.model.AuditReason;
 
 /**
  * A converter for the Result class to json.

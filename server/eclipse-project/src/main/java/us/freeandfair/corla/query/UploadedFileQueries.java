@@ -14,8 +14,6 @@ package us.freeandfair.corla.query;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
@@ -33,7 +31,6 @@ import org.hibernate.query.Query;
 import us.freeandfair.corla.Main;
 import us.freeandfair.corla.json.UploadedFileDTO;
 import us.freeandfair.corla.model.UploadedFile;
-import us.freeandfair.corla.model.UploadedFile.FileStatus;
 import us.freeandfair.corla.persistence.Persistence;
 
 /**
