@@ -10,7 +10,7 @@ with the following tags indicating the components affected:
 - `TOOLING` refers to changes to tooling that falls outside the UI or API, such
   as the RLA export.
 
-## 2.3.5 - UNRELEASED
+## 2.3.5 - Bugfix release
 
 ## 2.3.4 - Bugfix release
 - [UI - style updates][pr154]
