@@ -800,13 +800,13 @@ public class CountyReport {
     row.setHeightInPoints(affirmationRowHeight * 2);
     CellUtil.createCell(row, cell_number++, AFFIRMATION_STATEMENT, wrapped_style);
 
-    // Merge the affirmation row columns 0-2
+    // Merge the affirmation row columns A-G (0-6)
     affirmation_sheet.addMergedRegion(
         new CellRangeAddress(
             row_number - 1,
             row_number - 1,
             0,
-            2
+            6
         )
     );
 
