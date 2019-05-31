@@ -19,20 +19,18 @@ async function deleteFile(fileType: string) {
         const received = await r.json().catch(empty);
 
         if (!r.ok) {
-            action('DELETE_FILE_FAIL', {fileType, received});
+            action('DELETE_FILE_FAIL', { fileType, received });
             return false;
         }
 
-        action('DELETE_FILE_OK', {fileType, received});
+        action('DELETE_FILE_OK', { fileType, received });
         return true;
 
     } catch (e) {
-        action('DELETE_FILE_NETWORK_FAIL', {fileType});
+        action('DELETE_FILE_NETWORK_FAIL', { fileType });
 
         throw e;
-
     }
-
 }
 
 export default deleteFile;

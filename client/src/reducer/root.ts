@@ -1,5 +1,5 @@
 import countyDashboardRefreshOk from './county/dashboardRefreshOk';
-import deleteFileOK from './county/deleteFileOK';
+import countyDeleteFileOk from './county/deleteFileOK';
 import fetchAuditBoardASMStateOk from './county/fetchAuditBoardASMStateOk';
 import countyFetchContestsOk from './county/fetchContestsOk';
 import fetchCountyASMStateOk from './county/fetchCountyASMStateOk';
@@ -16,6 +16,7 @@ import uploadingCvrExport from './county/uploadingCvrExport';
 
 import dosContestFetchOk from './dos/contestFetchOk';
 import dosDashboardRefreshOk from './dos/dashboardRefreshOk';
+import dosDeleteFileOk from './dos/deleteFileOk';
 import fetchDOSASMStateOk from './dos/fetchDOSASMStateOk';
 import dosLoginOk from './dos/loginOk';
 import uploadRandomSeedOk from './dos/uploadRandomSeedOk';
@@ -89,7 +90,11 @@ export default function root(state: AppState, action: Action.App) {
     }
 
     case 'DELETE_FILE_OK': {
-        return deleteFileOK(state as County.AppState, action);
+        return countyDeleteFileOk(state as County.AppState, action);
+    }
+
+    case 'DOS_DELETE_FILE_OK': {
+        return dosDeleteFileOk(state as DOS.AppState, action);
     }
 
     case 'IMPORT_CVR_EXPORT_OK': {
