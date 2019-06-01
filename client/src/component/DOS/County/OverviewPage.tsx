@@ -52,15 +52,11 @@ interface TableProps {
 const CountyTable = (props: TableProps) => {
     const { countyStatus } = props;
 
-    const countyRows = _.map(counties, c => {
-        const status = countyStatus[c.id];
-
-        if (!status) {
-            return <div key={ c.id } />;
-        }
-
-        return <CountyTableRow key={ c.id } county={ c } status={ status } />;
-    });
+    const countyRows = _
+        .chain(counties)
+        .filter((c: CountyInfo) => !!countyStatus[c.id])
+        .map(c => <CountyTableRow key={ c.id } county={ c } status={ countyStatus[c.id] } />)
+        .value();
 
     return (
         <table className='pt-html-table pt-html-table-striped rla-table mt-default'>

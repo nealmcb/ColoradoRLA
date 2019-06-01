@@ -50,7 +50,7 @@ declare namespace DOS {
 
     interface CountyStatus {
         asmState: County.ASMState;
-        auditBoard: AuditBoardStatus;
+        auditBoards: AuditBoards;
         auditBoardASMState: AuditBoardASMState;
         auditBoardCount?: number;
         auditedBallotCount: number;

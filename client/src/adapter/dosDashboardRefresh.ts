@@ -64,9 +64,9 @@ function parseCountyStatus(countyStatus: any) {
     _.forEach(countyStatus, c => {
         result[c.id] = {
             asmState: c.asm_state,
-            auditBoard: parseAuditBoard(c.audit_board),
             auditBoardASMState: c.audit_board_asm_state,
             auditBoardCount: c.audit_board_count,
+            auditBoards: _.map(c.audit_boards, parseAuditBoard),
             auditedBallotCount: c.audited_ballot_count,
             ballotManifest: parseFile(c.ballot_manifest_file),
             ballotsRemainingInRound: c.ballots_remaining_in_round,
