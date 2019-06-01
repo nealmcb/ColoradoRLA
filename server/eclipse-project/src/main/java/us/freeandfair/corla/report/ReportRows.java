@@ -418,15 +418,24 @@ public class ReportRows {
 
     final ComparisonAudit audit = ComparisonAuditQueries.matching(contestName);
     if (null == audit) {
+      // return something in a response to explain the situation
       rows.add(NOT_FOUND_ROW);
       return rows;
     }
 
+    rows.add(Arrays.asList(ActivityReport.HEADERS));
     final List<Long> contestCVRIds = audit.getContestCVRIds();
+    if (contestCVRIds.isEmpty()) {
+      // Something has gone wrong, it seems, because all targeted contests should
+      // have contestCVRIds by the time the reports button can be clicked - at
+      // least that is the intention.
+      return rows;
+    }
+
+    // now we can see if there is any activity
     final List<CastVoteRecord> acvrs = CastVoteRecordQueries.activityReport(contestCVRIds);
     acvrs.sort(Comparator.comparing(CastVoteRecord::timestamp));
 
-    rows.add(Arrays.asList(ActivityReport.HEADERS));
     acvrs.forEach(acvr -> {
         final Row row = ActivityReport.newRow();
         rows.add(addActivityFields(addBaseFields(row, audit, acvr), acvr).toArray());
