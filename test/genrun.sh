@@ -99,8 +99,7 @@ function import() {
 function init() {
     echo "defining audit partially";
     riskLimit=0.01;
-    ./smoketest/main.py dos_init -r ${riskLimit};
-    # ./smoketest/main.py dos_init;
+    ./smoketest/main.py dos_init -r ${riskLimit} -X './test-data/contest-names/canonical-contests.csv';
 }
 
 function reset() {
@@ -121,9 +120,9 @@ function performRound() {
     for county in ${counties[*]}; do
         echo "executing audit for county ${county}";
         # -p discrepancy plan -1 1 means no discrepancies, -R 1 means one round
-        discrepancyPlan='-1 1';
+        discrepancyPlan="-1 1";
         round=1;
-        ./smoketest/main.py -c $countyId -p ${discrepancyPlan} county_audit -R ${round} -d 25;
+        ./smoketest/main.py -c $countyId -p "${discrepancyPlan}" county_audit -R ${round} -d 25;
         ((countyId++));
         if [ $countyId -gt $counties_todo ]; then
             echo "done"
