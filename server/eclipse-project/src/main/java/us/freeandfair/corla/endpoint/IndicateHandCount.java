@@ -21,6 +21,9 @@ import javax.persistence.PersistenceException;
 
 import com.google.gson.JsonParseException;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 import spark.Request;
 import spark.Response;
 
@@ -42,6 +45,13 @@ import us.freeandfair.corla.query.ComparisonAuditQueries;
  */
 @SuppressWarnings("PMD.AtLeastOneConstructor")
 public class IndicateHandCount extends AbstractDoSDashboardEndpoint {
+  /**
+   * Class-wide logger
+   */
+  public static final Logger LOGGER =
+    LogManager.getLogger(IndicateHandCount.class);
+
+
   /**
    * The event to return for this endpoint.
    */
@@ -113,6 +123,7 @@ public class IndicateHandCount extends AbstractDoSDashboardEndpoint {
         }
         if (hand_count) {
           unTargetContests(dosdb, hand_count_contests);
+          LOGGER.info("HAND_COUNT set for: " + String.join(",", hand_count_contests));
         } else {
           // bad data was submitted for hand count selection
           badDataContents(the_response, "Invalid contest selection data");

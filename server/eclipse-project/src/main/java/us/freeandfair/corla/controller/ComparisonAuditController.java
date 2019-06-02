@@ -129,7 +129,7 @@ public final class ComparisonAuditController {
       return new ArrayList<CastVoteRecord>();
     }
 
-    LOGGER.info(
+    LOGGER.debug(
         String.format(
             "Ballot cards to audit: "
             + "[round=%s, round.ballotSequence.size()=%d, round.ballotSequence()=%s]",

@@ -18,6 +18,8 @@ import java.util.OptionalInt;
 
 import javax.persistence.PersistenceException;
 
+import org.apache.log4j.Level;
+
 import spark.Request;
 import spark.Response;
 
@@ -61,6 +63,14 @@ public class CVRToAuditList extends AbstractEndpoint {
   @Override
   public EndpointType endpointType() {
     return EndpointType.GET;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Level logLevel() {
+    return Level.DEBUG;
   }
 
   /**
