@@ -71,7 +71,9 @@ counties=( Adams
 
 # num ballots, margin for county, rest are margins for state-wide
 # remember to calculate margin by multiplying counties by ballot count for a total
-small=(640 45 45 45);
+# contests=(640 45 45 45); #small
+# contests=(64000 45 45 45 45 45); #large
+contests=(640 45 45 45);
 
 function import() {
     trap exit INT #easy quit
@@ -79,11 +81,11 @@ function import() {
     for county in ${counties[*]}; do
             echo "importing county ${countyId} ${county[0]}";
             cvrFile=cvr-${county[0]}.csv;
-            manifestFile=manifest-${small[0]}.csv
-            ballotCount=${small[0]}
+            manifestFile=manifest-${contests[0]}.csv
+            ballotCount=${contests[0]}
             sed "s/{ballot-count}/${ballotCount}/g" > $manifestFile < manifest-template.csv
-            ../smoketest/genelect.py ${small[*]} --county ${county[0]} > $cvrFile;
-            ../smoketest/main.py -c $countyId county_setup -f $cvrFile -F $manifestFile;
+            ./smoketest/genelect.py ${contests[*]} --county ${county[0]} > $cvrFile;
+            ./smoketest/main.py -c $countyId county_setup -f $cvrFile -F $manifestFile;
             rm $cvrFile;
             rm $manifestFile;
             ((countyId++));
@@ -96,20 +98,21 @@ function import() {
 
 function init() {
     echo "defining audit partially";
-    ../smoketest/main.py dos_init -r 0.01;
-    # ../smoketest/main.py dos_init;
+    riskLimit=0.01;
+    ./smoketest/main.py dos_init -r ${riskLimit};
+    # ./smoketest/main.py dos_init;
 }
 
 function reset() {
     echo "deleting all data";
-    ../smoketest/main.py reset;
+    ./smoketest/main.py reset;
 }
 
 # start audit by starting round 1
 function startRound() {
     echo "starting the round";
     #-1 means all contests
-    ../smoketest/main.py dos_start -C '-1' --debuglevel 21;
+    ./smoketest/main.py dos_start -C '-1' --debuglevel 21;
 }
 
 function performRound() {
@@ -118,7 +121,9 @@ function performRound() {
     for county in ${counties[*]}; do
         echo "executing audit for county ${county}";
         # -p discrepancy plan -1 1 means no discrepancies, -R 1 means one round
-        ../smoketest/main.py -c $countyId -p '-1 1' county_audit -R 1 -d 25;
+        discrepancyPlan='-1 1';
+        round=1;
+        ./smoketest/main.py -c $countyId -p ${discrepancyPlan} county_audit -R ${round} -d 25;
         ((countyId++));
         if [ $countyId -gt $counties_todo ]; then
             echo "done"
