@@ -63,9 +63,13 @@ export function formatCountyAndBoardASMState(countyStatus: DOS.CountyStatus): st
                 return 'Waiting for round start';
             }
         case 'ROUND_IN_PROGRESS':
-            return 'Round in progress';
         case 'ROUND_IN_PROGRESS_NO_AUDIT_BOARD':
-            if (countyStatus.auditBoardCount) {
+            // TODO: Counterintuitive, but on rounds past the first, the ASM
+            // state indicates the round is in progress when it should
+            // probably be WAITING_FOR_ROUND_START.
+            if (!countyStatus.auditBoardCount && _.isEmpty(countyStatus.auditBoards)) {
+                return 'Waiting for round start';
+            } else if (_.isEmpty(countyStatus.auditBoards)) {
                 return 'Audit board # is set';
             } else {
                 return 'Round in progress';
@@ -110,7 +114,11 @@ export function formatCountyAndBoardASMStateIndicator(countyStatus: DOS.CountySt
     case 'COUNTY_AUDIT_UNDERWAY': {
         switch (boardAsmState) {
         case 'ROUND_IN_PROGRESS':
-            return 'status-indicator-in-progress';
+            if (!_.isEmpty(countyStatus.auditBoards)) {
+                return 'status-indicator-in-progress';
+            } else {
+                return '';
+            }
         default:
             return '';
         }

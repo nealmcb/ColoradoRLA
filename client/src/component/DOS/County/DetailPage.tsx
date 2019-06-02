@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import * as _ from 'lodash';
 
-import { Breadcrumb } from '@blueprintjs/core';
+import { Breadcrumb, NonIdealState } from '@blueprintjs/core';
 
 import DOSLayout from 'corla/component/DOSLayout';
 import FileDownloadButtons from 'corla/component/FileDownloadButtons';
@@ -26,30 +26,36 @@ function formatMember(member: AuditBoardMember): string {
     return `${firstName} ${lastName} (${party})`;
 }
 
-interface AuditBoardProps {
-    auditBoard: AuditBoardStatus;
+function formatAuditBoardRow(board: AuditBoardStatus) {
+    return (
+        <tr>
+            <td>{ formatMember(board.members[0]) }</td>
+            <td>{ formatMember(board.members[1]) }</td>
+            <td>{ `${board.signIn}` }</td>
+        </tr>
+    );
 }
 
-const AuditBoard = (props: AuditBoardProps) => {
-    const { auditBoard } = props;
+interface AuditBoardsProps {
+    auditBoards: AuditBoards;
+}
+
+const AuditBoards = (props: AuditBoardsProps) => {
+    const { auditBoards } = props;
 
     return (
         <div className='mt-default'>
-            <h3>Audit Board</h3>
+            <h3>Audit boards</h3>
             <table className='pt-html-table pt-html-table-striped rla-table'>
+                <thead>
+                    <tr>
+                        <th>Board member #1</th>
+                        <th>Board member #2</th>
+                        <th>Sign-in time</th>
+                    </tr>
+                </thead>
                 <tbody>
-                    <tr>
-                        <td><strong>Board Member #1:</strong></td>
-                        <td>{ formatMember(auditBoard.members[0]) }</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Board Member #2:</strong></td>
-                        <td>{ formatMember(auditBoard.members[1]) }</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Sign-in Time:</strong></td>
-                        <td>{ `${auditBoard.signIn}` }</td>
-                    </tr>
+                    { _.map(auditBoards, formatAuditBoardRow) }
                 </tbody>
             </table>
         </div>
@@ -59,8 +65,9 @@ const AuditBoard = (props: AuditBoardProps) => {
 const NoAuditBoard = () => {
     return (
         <div className='mt-default'>
-            <h3>Audit Board</h3>
-            <p>Audit Board not signed in.</p>
+            <h3>Audit boards</h3>
+            <NonIdealState title='Audit boards are not signed in.'
+                           visual='people' />
         </div>
     );
 };
@@ -72,7 +79,7 @@ interface DetailsProps {
 
 const CountyDetails = (props: DetailsProps) => {
     const { county, status } = props;
-    const { auditBoard } = status;
+    const { auditBoards } = status;
 
     const countyState = formatCountyASMState(status.asmState);
     const submitted = status.auditedBallotCount;
@@ -80,8 +87,8 @@ const CountyDetails = (props: DetailsProps) => {
     const auditedCount = _.get(status, 'discrepancyCount.audited') || '—';
     const unauditedCount = _.get(status, 'discrepancyCount.unaudited') || '—';
 
-    const auditBoardSection = auditBoard
-                            ? <AuditBoard auditBoard={ auditBoard } />
+    const auditBoardSection = auditBoards
+                            ? <AuditBoards auditBoards={ auditBoards } />
                             : <NoAuditBoard />;
 
     return (
