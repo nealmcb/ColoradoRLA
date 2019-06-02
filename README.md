@@ -135,7 +135,7 @@ following:
    automatically create the schema for you. If your API server is not available
    at `localhost:8888`, you may need to adjust the client configuration later.
 3. Seed the database with test credentials. These are available in
-   `test/corla-test-credentials.psql`. It is required that the server starts and
+   `test/sql/corla-test-credentials.psql`. It is required that the server starts and
    populates the schema first.
 4. Start the client.
 

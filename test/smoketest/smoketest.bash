@@ -49,7 +49,7 @@ java -jar $jar > target/server.stdout &
 ( tail -f -n0 target/server.stdout & ) | grep -q "INFO Server:444 - Started"
 
 cd ${TEST_DIR}/smoketest
-psql -d corla -a -f ../corla-test-credentials.psql > credentials.stdout
+psql -d corla -a -f ../sql/corla-test-credentials.psql > credentials.stdout
 
 ./main.py
 
