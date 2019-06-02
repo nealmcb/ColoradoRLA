@@ -578,8 +578,9 @@ public class ComparisonAudit implements PersistentEntity {
     my_estimated_recalculate_needed = true;
     my_audited_sample_count = my_audited_sample_count + count;
 
-    if (my_audit_status != AuditStatus.ENDED &&
-        my_audit_status != AuditStatus.NOT_AUDITABLE) {
+    // this may not be needed, but I'm not sure
+    if (my_audit_status == AuditStatus.RISK_LIMIT_ACHIEVED) {
+      LOGGER.warn("RESETTING AuditStatus from RISK_LIMIT_ACHIEVED to IN_PROGRESS");
       my_audit_status = AuditStatus.IN_PROGRESS;
     }
   }
@@ -623,8 +624,9 @@ public class ComparisonAudit implements PersistentEntity {
     my_estimated_recalculate_needed = true;
     my_audited_sample_count = my_audited_sample_count - count;
 
-    if (my_audit_status != AuditStatus.ENDED &&
-        my_audit_status != AuditStatus.NOT_AUDITABLE) {
+    // this may not be needed, but I'm not sure
+    if (my_audit_status == AuditStatus.RISK_LIMIT_ACHIEVED) {
+      LOGGER.warn("RESETTING AuditStatus from RISK_LIMIT_ACHIEVED to IN_PROGRESS");
       my_audit_status = AuditStatus.IN_PROGRESS;
     }
   }
@@ -713,7 +715,8 @@ public class ComparisonAudit implements PersistentEntity {
    * Is this audit because of a targeted contest?
    */
   public boolean isTargeted() {
-    return this.contestResult().getAuditReason().isTargeted();
+    return this.contestResult().getAuditReason().isTargeted()
+      && !isHandCount();
   }
 
   /**
@@ -726,6 +729,10 @@ public class ComparisonAudit implements PersistentEntity {
       this.auditStatus().equals(AuditStatus.RISK_LIMIT_ACHIEVED) ||
       this.auditStatus().equals(AuditStatus.HAND_COUNT) ||
       this.auditStatus().equals(AuditStatus.ENDED);
+  }
+
+  public boolean isHandCount() {
+    return this.auditStatus().equals(AuditStatus.HAND_COUNT);
   }
 
   /** calculate the number of times the given cvrId appears in the selection
