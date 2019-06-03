@@ -10,11 +10,6 @@ These building blocks can be composed to create a running system using the
 `docker-compose.yml` file located in the RLA project root. This system will
 primarily be used for development and a demo/staging environment.
 
-If you want to run the system in an environment that is as close to the Colorado
-production environment as possible, please see the `vagrant` directory under the
-project root, where you can bring up a CentOS virtual machine configured for
-use.
-
 ## Requirements
 
 - `make` if you want to use the Makefile targets
