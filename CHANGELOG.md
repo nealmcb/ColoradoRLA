@@ -10,7 +10,15 @@ with the following tags indicating the components affected:
 - `TOOLING` refers to changes to tooling that falls outside the UI or API, such
   as the RLA export.
 
-## 2.3.6 - UNRELEASED
+## 2.3.6 - Bugfix release
+- [API - allow report to run before any audit submissions][pr165]
+- [API - Affirmation text on the county report has more room][pr167]
+- [UI - Prevent choice and contest names from growing too long][pr168]
+- [API - Allow spaces in canonical choice names][pr169]
+- [UI - Remove spinners on CVR upload error][pr170]
+- [API - fix weird issue in reports where there are no contestCVRIds][pr171]
+- [UI - Update DoS dashboard to handle multiple audit boards][pr173]
+- [API - don't set auditStatus if hand counting][pr174]
 
 ## 2.3.5 - Bugfix release
 - [UI - Immediately show deleted files on the DOS dashboard][pr161]
@@ -276,3 +284,11 @@ This is [FreeAndFair's most recent tag][1.1.0.3].
 [pr161]: https://github.com/democracyworks/ColoradoRLA/pull/161
 [pr162]: https://github.com/democracyworks/ColoradoRLA/pull/162
 [pr163]: https://github.com/democracyworks/ColoradoRLA/pull/163
+[pr165]: https://github.com/democracyworks/ColoradoRLA/pull/165
+[pr167]: https://github.com/democracyworks/ColoradoRLA/pull/167
+[pr168]: https://github.com/democracyworks/ColoradoRLA/pull/168
+[pr169]: https://github.com/democracyworks/ColoradoRLA/pull/169
+[pr170]: https://github.com/democracyworks/ColoradoRLA/pull/170
+[pr171]: https://github.com/democracyworks/ColoradoRLA/pull/171
+[pr173]: https://github.com/democracyworks/ColoradoRLA/pull/173
+[pr174]: https://github.com/democracyworks/ColoradoRLA/pull/174
