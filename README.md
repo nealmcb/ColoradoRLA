@@ -60,15 +60,21 @@ system.
 
 ### Setup
 
-Ensure you have the latest images:
+Build the latest development images:
 
 ```sh
-docker-compose pull
+docker-compose build
 ```
+
+You do not need to do this every time, just when you need to update a component.
+Otherwise, `docker-compose up` will use the existing Docker images that are on
+your system, which may not be what you want (e.g. if you want to test some
+changes you made, you need to rebuild the dependent image).
 
 ### Running
 
-Assuming you have built images, you can bring up the system with those images:
+Assuming you now have up-to-date images, you can bring up the system with those
+images:
 
 ```sh
 docker-compose up
@@ -93,6 +99,8 @@ As an example, an easy way to get started if you **just want to work on the
 client** would be to run the following:
 
 ```sh
+## OPTIONAL: Build updated images first
+# docker-compose build postgresql server
 docker-compose up postgresql server test-credentials
 ```
 
@@ -100,21 +108,6 @@ This will start the database, the API server, and automatically seed test
 credentials when the server comes up. Then, all you need to do is enter
 `client/` and follow the usual `npm install; npm start` workflow to fire up a
 development server, and you're off!
-
-### Docker image development
-
-A development `docker-compose.yml` override file is provided at
-`docker-compose.dev.yml`. If you use `docker-compose -f docker-compose.yml -f
-docker-compose.dev.yml` instead of just `docker-compose`, you can build your own
-local Docker images based on code you are working on, and then use a similar
-workflow as above to work with those locally-built images. You may need to
-execute the `build` subcommand with the two compose files specified in order to
-build new images first, as Docker will use the latest images on your machine by
-default, and will not build images with your latest code changes unless you
-specifically ask.
-
-See the [`docker-compose`](https://docs.docker.com/compose/overview/)
-documentation if you are not familiar with that tool.
 
 ## Development (non-Docker)
 
