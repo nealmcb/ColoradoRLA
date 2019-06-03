@@ -53,4 +53,15 @@ and `controller`, and the "view" layer in packages like `json`. If you choose to
 stick with that architecture, it could be nice to remove direct calls to
 Hibernate from the controllers. Refactoring to Spring Data will be helpful here.
 
+### TODOs
+
+There are three types of markers that may exist in the source code. These are
+typically in comments, and their names and meanings are listed:
+
+- **TODO**: The author suggests something more needs to be done here. It may
+  work as-is, but is not optimal.
+- **PERF**: Suggested performance improvement.
+- **XXX**: Hack/kludge that should be addressed or removed, or a place where
+  apologies to future maintainers are otherwise warranted.
+
 [sparkjava]: http://sparkjava.com/
