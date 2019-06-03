@@ -45,7 +45,7 @@ zip -r "${reldir}/corla-client.zip" dist
 
 ### Test credentials
 
-cp "${TEST_DIR}/corla-test-credentials.psql" "${reldir}"
+cp "${TEST_DIR}/sql/corla-test-credentials.psql" "${reldir}"
 
 ### Package release
 

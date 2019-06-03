@@ -73,7 +73,7 @@ cd -
 
 Load the credentials for testing:
 
-`psql -d corla -a -f ../corla-test-credentials.psql`
+`psql -d corla -a -f ../sql/corla-test-credentials.psql`
 
 ### Uploading CVRs and manifests
 
@@ -157,7 +157,7 @@ order:
 
 Load the credentials for testing:
 
-`psql -d corla -a -f ../corla-test-credentials.psql`
+`psql -d corla -a -f ../sql/corla-test-credentials.psql`
 
 Run `./main.py` to upload the cvr and manifest files.
 
@@ -189,7 +189,7 @@ Note that overvotes are allowed in ACVRs.
 Errors reported from the scripts, such as
 
 ```
-psql:../corla-test-credentials.psql:82: ERROR:  column "administrators_id" of relation "county_administrator" does not exist
+psql:../sql/corla-test-credentials.psql:82: ERROR:  column "administrators_id" of relation "county_administrator" does not exist
 LINE 1: insert into county_administrator (county_id, administrators_...
 ```
 

@@ -253,7 +253,7 @@ parser.add_argument('-t','--trackstates', type=bool, dest='trackstates',
 parser.add_argument('-d','--debuglevel', type=int, default=logging.WARNING, dest='debuglevel',
   help='Set logging level to debuglevel: DEBUG=10, INFO=20,\n WARNING=30 (the default), ERROR=40, CRITICAL=50')
 
-parser.add_argument('-X','--contest-names', dest='contestNames', default="../contest-names/canonical-contests.csv",
+parser.add_argument('-X','--contest-names', dest='contestNames', default="../test-data/contest-names/canonical-contests.csv",
                     help='Path to a valid CSV file of canonical names')
 
 parser.add_argument('commands', metavar="COMMAND", nargs='*',

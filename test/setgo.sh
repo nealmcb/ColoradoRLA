@@ -3,7 +3,7 @@
 set -m #job control
 
 function go() {
-    pushd ../../server/eclipse-project
+    pushd ../server/eclipse-project
     mvn clean compile
     if [ $? -ge 1 ]; then
         exit 1
@@ -24,7 +24,7 @@ else
     fi
     createdb -U postgres corla --owner corla
     go
-    psql -h 127.0.0.1 -U corla -d corla -a -f ../corla-test-credentials.psql
+    psql -h 127.0.0.1 -U corla -d corla -a -f ./sql/corla-test-credentials.psql
     fg
 
 fi
