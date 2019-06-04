@@ -97,9 +97,14 @@ class CVRExportFormContainer extends React.Component<ContainerProps, ContainerSt
     }
 
     public componentDidUpdate(prevProps: ContainerProps) {
-        // Remove temporary state override if anything at all changed
-        if (!_.isEqual(prevProps, this.props)) {
-            this.setState({ uploadClicked: false });
+        // XXX: Paper over the gap between uploading a file and triggering its
+        // subsequent import so we don't see the widget flash.
+        //
+        // The upload/import API separation is sub-optimal, to say the least.
+        if (prevProps.uploadingFile && !this.props.uploadingFile) {
+            setTimeout(() => {
+                this.setState({ uploadClicked: false });
+            }, 1000);
         }
     }
 

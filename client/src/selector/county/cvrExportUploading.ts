@@ -6,7 +6,8 @@ const UPLOADING = [
 ];
 
 function cvrExportUploading(state: County.AppState): boolean {
-    return _.includes(UPLOADING, state.asm.county);
+    return _.includes(UPLOADING, state.asm.county)
+        || !!state.uploadingCVRExport;
 }
 
 export default cvrExportUploading;
