@@ -10,7 +10,10 @@ with the following tags indicating the components affected:
 - `TOOLING` refers to changes to tooling that falls outside the UI or API, such
   as the RLA export.
 
-## 2.3.7 - UNRELEASED
+## 2.3.7 - Bugfix release
+- Make standardization process more robust
+- Fix unchecked list index access during report generation
+- Fix CVR export indicator not correctly showing up
 
 ## 2.3.6 - Bugfix release
 - [API - allow report to run before any audit submissions][pr165]

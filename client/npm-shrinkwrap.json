@@ -1,6 +1,6 @@
 {
   "name": "corla-client",
-  "version": "2.3.7-SNAPSHOT",
+  "version": "2.3.7",
   "lockfileVersion": 1,
   "requires": true,
   "dependencies": {
