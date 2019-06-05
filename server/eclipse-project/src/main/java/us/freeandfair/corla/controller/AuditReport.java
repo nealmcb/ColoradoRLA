@@ -97,8 +97,9 @@ public final class AuditReport {
 
   /** all the reports in one "package" **/
   public static void generateZip(final OutputStream os) {
+    final ZipOutputStream zos = new ZipOutputStream(os);
+
     try {
-      final ZipOutputStream zos = new ZipOutputStream(os);
       final Map<String,String> files = ExportQueries.sqlFiles();
 
       for (final Map.Entry<String,String> entry: files.entrySet()) {
@@ -131,12 +132,14 @@ public final class AuditReport {
       zos.putNextEntry(new ZipEntry(sr.filenameExcel()));
       zos.write(sr.generateExcel());
       zos.closeEntry();
-
-
-
-      zos.close();
     } catch (IOException e) {
       LOGGER.error(e.getMessage());
+    } finally {
+      try {
+        zos.close();
+      } catch (IOException e) {
+        LOGGER.warn(String.format("Cannot close stream: %s", e.getMessage()));
+      }
     }
   }
 }

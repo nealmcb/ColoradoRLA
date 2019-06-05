@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.OptionalInt;
 
@@ -402,8 +403,22 @@ public class ReportRows {
       // very detailed extra info
       row.put("ballot count", toString(ca.contestResult().getBallotCount()));
       row.put("min margin", toString(ca.contestResult().getMinMargin()));
-      row.put("votes for winner", toString(ContestCounter.rankTotals(ca.contestResult().getVoteTotals()).get(0).getValue()));
-      row.put("votes for runner up", toString(ContestCounter.rankTotals(ca.contestResult().getVoteTotals()).get(1).getValue()));
+
+      final List<Entry<String, Integer>> rankedTotals =
+          ContestCounter.rankTotals(ca.contestResult().getVoteTotals());
+
+      try {
+        row.put("votes for winner", toString(rankedTotals.get(0).getValue()));
+      } catch (IndexOutOfBoundsException e) {
+        row.put("votes for winner", "");
+      }
+
+      try {
+        row.put("votes for runner up", toString(rankedTotals.get(1).getValue()));
+      } catch (IndexOutOfBoundsException e) {
+        row.put("votes for runner up", "");
+      }
+
       row.put("total votes", toString(ca.contestResult().totalVotes()));
       row.put("disagreement count (included in +2 and +1)", toString(ca.disagreementCount()));
 
