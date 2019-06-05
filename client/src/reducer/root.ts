@@ -125,6 +125,44 @@ export default function root(state: AppState, action: Action.App) {
         return nextState;
     }
 
+    case 'SET_AUDIT_INFO': {
+        const nextState = { ...state } as DOS.AppState;
+
+        nextState.settingAuditInfo = true;
+        delete nextState.canonicalContests;
+        delete nextState.canonicalChoices;
+
+        return nextState;
+    }
+
+    case 'SET_AUDIT_INFO_FAIL':
+    case 'SET_AUDIT_INFO_NETWORK_FAIL':
+    case 'SET_AUDIT_INFO_OK': {
+        const nextState = { ...state } as DOS.AppState;
+
+        nextState.settingAuditInfo = false;
+
+        return nextState;
+    }
+
+    case 'STANDARDIZE_CONTESTS_FOR_AUDIT': {
+        const nextState = { ...state } as DOS.AppState;
+
+        nextState.standardizingContests = true;
+
+        return nextState;
+    }
+
+    case 'STANDARDIZE_CONTESTS_FOR_AUDIT_FAIL':
+    case 'STANDARDIZE_CONTESTS_FOR_AUDIT_NETWORK_FAIL':
+    case 'STANDARDIZE_CONTESTS_FOR_AUDIT_OK': {
+        const nextState = { ...state } as DOS.AppState;
+
+        nextState.standardizingContests = false;
+
+        return nextState;
+    }
+
     case 'UPDATE_ACVR_FORM': {
         return updateAcvrForm(state as County.AppState, action);
     }

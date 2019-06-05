@@ -89,7 +89,8 @@ const mapStateToProps = (state: DOS.AppState) => {
     const canonicalContests = state.canonicalContests;
     const contests = state.contests;
     const areContestsLoaded = !_.isEmpty(contests)
-        && !_.isEmpty(canonicalContests);
+        && !_.isEmpty(canonicalContests)
+        && !state.settingAuditInfo;
 
     return {
         areContestsLoaded,

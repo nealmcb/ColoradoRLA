@@ -13,6 +13,8 @@ declare namespace DOS {
         publicMeetingDate?: Date;
         riskLimit?: number;
         seed?: string;
+        settingAuditInfo?: boolean;
+        standardizingContests?: boolean;
         type: 'DOS';
     }
 

@@ -109,7 +109,8 @@ const mapStateToProps = (state: DOS.AppState) => {
     const contests = state.contests;
     const canonicalChoices = state.canonicalChoices;
     const areChoicesLoaded = !_.isEmpty(contests)
-        && !_.isEmpty(canonicalChoices);
+        && !_.isEmpty(canonicalChoices)
+        && !state.standardizingContests;
 
     return {
         areChoicesLoaded,

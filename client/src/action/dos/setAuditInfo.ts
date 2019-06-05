@@ -2,6 +2,7 @@ import { get, isNil, omitBy } from 'lodash';
 
 import { endpoint } from 'corla/config';
 
+import action from 'corla/action';
 import createSubmitAction from 'corla/action/createSubmitAction';
 
 const url = endpoint('update-audit-info');
@@ -30,4 +31,7 @@ function format(info: DOS.AuditInfo) {
     return omitBy(data, isNil);
 }
 
-export default (info: DOS.AuditInfo) => setAuditInfo(format(info));
+export default (info: DOS.AuditInfo) => {
+    action('SET_AUDIT_INFO');
+    setAuditInfo(format(info));
+};

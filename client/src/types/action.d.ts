@@ -30,6 +30,14 @@ declare namespace Action {
         | ReAuditCvr
         | SelectContestsForAuditOk
         | SetAuditBoard
+        | SetAuditInfo
+        | SetAuditInfoFail
+        | SetAuditInfoNetworkFail
+        | SetAuditInfoOk
+        | StandardizeContestsForAudit
+        | StandardizeContestsForAuditFail
+        | StandardizeContestsForAuditNetworkFail
+        | StandardizeContestsForAuditOk
         | UpdateAcvrForm
         | UploadBallotManifestOk
         | UploadAcvrFail
@@ -161,6 +169,46 @@ declare namespace Action {
         data: {
             auditBoardIndex: number;
         };
+    }
+
+    interface SetAuditInfo {
+        type: 'SET_AUDIT_INFO';
+        data: any;
+    }
+
+    interface SetAuditInfoFail {
+        type: 'SET_AUDIT_INFO_FAIL';
+        data: any;
+    }
+
+    interface SetAuditInfoNetworkFail {
+        type: 'SET_AUDIT_INFO_NETWORK_FAIL';
+        data: any;
+    }
+
+    interface SetAuditInfoOk {
+        type: 'SET_AUDIT_INFO_OK';
+        data: any;
+    }
+
+    interface StandardizeContestsForAudit {
+        type: 'STANDARDIZE_CONTESTS_FOR_AUDIT';
+        data: any;
+    }
+
+    interface StandardizeContestsForAuditFail {
+        type: 'STANDARDIZE_CONTESTS_FOR_AUDIT_FAIL';
+        data: any;
+    }
+
+    interface StandardizeContestsForAuditNetworkFail {
+        type: 'STANDARDIZE_CONTESTS_FOR_AUDIT_NETWORK_FAIL';
+        data: any;
+    }
+
+    interface StandardizeContestsForAuditOk {
+        type: 'STANDARDIZE_CONTESTS_FOR_AUDIT_OK';
+        data: any;
     }
 
     interface ReAuditCvr {
