@@ -10,6 +10,9 @@ with the following tags indicating the components affected:
 - `TOOLING` refers to changes to tooling that falls outside the UI or API, such
   as the RLA export.
 
+## 2.3.8 - Bugfix release
+- Fix timing bug in standardization process
+
 ## 2.3.7 - Bugfix release
 - Make standardization process more robust
 - Fix unchecked list index access during report generation
