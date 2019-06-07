@@ -141,6 +141,9 @@ export default function root(state: AppState, action: Action.App) {
         const nextState = { ...state } as DOS.AppState;
 
         nextState.settingAuditInfo = false;
+        // XXX: Done to force component to wait for contests to load after audit
+        // info was set.
+        nextState.contests = [];
 
         return nextState;
     }
@@ -159,6 +162,9 @@ export default function root(state: AppState, action: Action.App) {
         const nextState = { ...state } as DOS.AppState;
 
         nextState.standardizingContests = false;
+        // XXX: Done to force component to wait for choices to load after
+        // contest standardization was done.
+        nextState.contests = [];
 
         return nextState;
     }
