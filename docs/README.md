@@ -40,6 +40,11 @@ Guides to the source code can be found below:
 There is still a lot of work to do! If you would like to start improving the
 software, the [next steps][next] document can get you started.
 
+## Known Quirks
+
+Read over the [list of inherited quirks][quirks] with the way the software and
+development environment work.
+
 ## Free and Fair documentation
 
 The original documentation for this software is available under the `freeandfair` directory.
@@ -51,6 +56,7 @@ The original documentation for this software is available under the `freeandfair
 [client-source-guide]: client/source-guide.md
 [dashboards]: dashboards.md
 [next]: next.md
+[quirks]: quirks.md
 [server-readme]: server/README.md
 [server-source-guide]: server/source-guide.md
 [test]: ../test/README.md
