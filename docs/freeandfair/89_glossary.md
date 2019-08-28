@@ -167,10 +167,17 @@ certification if the margin is too tight, or if a candidate requests
 it. A recount doesn't have to involve manual interpretation of each
 ballot.  Cf. *full hand count*.
 
-* **overstatement of the margin** An error whose correction reduces the margin
+* **discrepancy** An overstatement or understatement of the margin.
 https://www.stat.berkeley.edu/~stark/Preprints/evidenceVote12.pdf
 
-* **understatement of the margin** An error whose correction increases the margin
+* **disagreement** If members of the audit board don't agree on the interpretation of
+one or more marks on a ballot, they can indicate a "disagreement", which is
+tracked and recorded. Cf. *discrepancy*.
+
+* **overstatement of the margin** A discrepancy whose correction reduces the margin
+https://www.stat.berkeley.edu/~stark/Preprints/evidenceVote12.pdf
+
+* **understatement of the margin** A discrepancy whose correction increases the margin
 https://www.stat.berkeley.edu/~stark/Preprints/evidenceVote12.pdf
 
 * **evidence-based elections** - An approach to achieving election integrity
